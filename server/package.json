@@ -1,0 +1,18 @@
+{
+  "name": "zanahorario.api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "kiwi-server": "^1.1.31",
+    "mssql": "^4.2.1",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "kc build"
+  },
+  "author": "",
+  "license": "ISC"
+}
