@@ -1,0 +1,25 @@
+{
+  "name": "zanahorario",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm-run-all --parallel client-start kiwi-start",
+    "client-start": "cd client && npm start",
+    "kiwi-start": "node server/dist/default/src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cavepotcode/zanahorario.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cavepotcode/zanahorario/issues"
+  },
+  "homepage": "https://github.com/cavepotcode/zanahorario#readme",
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}
