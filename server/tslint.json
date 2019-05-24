@@ -4,6 +4,10 @@
       "tslint-config-airbnb"
     ],
     "jsRules": {},
-    "rules": {},
+    "rules": {
+      "trailing-comma": "never",
+      "space-before-function-paren": ["error", "always"],
+      "max-line-length": [true, 120]
+    },
     "rulesDirectory": []
 }

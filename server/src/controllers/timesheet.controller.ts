@@ -9,38 +9,35 @@ import { AddTimesheetDataIn } from '../sdk/data_in/addTimeSheetDataIn';
 @Authorize()
 @JsonController('/timesheet')
 export class TimesheetController {
-    constructor(private manager: TimesheetManager){}
+  constructor(private manager: TimesheetManager) {}
 
-    @Get('/getProjectTimesheetHours/:month/:year')
-    public GetCurrentUser(@Param('month') month: number, @Param('year') year: number) {
-        try {
-            return this.manager.GetProjectTimesheetHours(month, year);
-        }
-        catch (err) {
-            Log.LogError('timesheet/getProjectTimesheetHours', err);
-            return new ResponseOut(Enums.responseCode.Error, environment.common.genericErrorMessage);
-        }
+  @Get('/getProjectTimesheetHours/:month/:year')
+  public getCurrentUser(@Param('month') month: number, @Param('year') year: number) {
+    try {
+      return this.manager.getProjectTimesheetHours(month, year);
+    } catch (err) {
+      Log.logError('timesheet/getProjectTimesheetHours', err);
+      return new ResponseOut(Enums.responseCode.Error, environment.common.genericErrorMessage);
     }
+  }
 
-    @Get('/getByUser/:month/:year')
-    public GetByUser(@Param('month') month: number, @Param('year') year: number) {
-        try {
-            return this.manager.GetByUser(month, year);
-        }
-        catch (err) {
-            Log.LogError('timesheet/getProjectTimesheetHours', err);
-            return new ResponseOut(Enums.responseCode.Error, environment.common.genericErrorMessage);
-        }
+  @Get('/getByUser/:month/:year')
+  public getByUser(@Param('month') month: number, @Param('year') year: number) {
+    try {
+      return this.manager.getByUser(month, year);
+    } catch (err) {
+      Log.logError('timesheet/getProjectTimesheetHours', err);
+      return new ResponseOut(Enums.responseCode.Error, environment.common.genericErrorMessage);
     }
+  }
 
-    @Post('/add')
-    public Add(@Body() body: AddTimesheetDataIn) {
-        try {
-            return this.manager.Add(body);
-        }
-        catch (err) {
-            Log.LogError('timesheet/add', err);
-            return new ResponseOut(Enums.responseCode.Error, environment.common.genericErrorMessage);
-        }
+  @Post('/add')
+  public add(@Body() body: AddTimesheetDataIn) {
+    try {
+      return this.manager.add(body);
+    } catch (err) {
+      Log.logError('timesheet/add', err);
+      return new ResponseOut(Enums.responseCode.Error, environment.common.genericErrorMessage);
     }
+  }
 }

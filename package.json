@@ -29,13 +29,13 @@
   },
   "lint-staged": {
     "*.js": [
-      "npm run eslint",
       "prettier --write",
+      "npm run eslint",
       "git add"
     ],
     "*.ts": [
-      "npm run tslint",
-      "prettier --write"
+      "prettier --write",
+      "npm run tslint"
     ]
   },
   "husky": {

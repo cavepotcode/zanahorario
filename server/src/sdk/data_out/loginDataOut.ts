@@ -1,4 +1,4 @@
 export class LoginDataOut {
-    email: string;
-    token: string;
+  email: string;
+  token: string;
 }
