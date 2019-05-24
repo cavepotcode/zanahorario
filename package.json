@@ -8,7 +8,8 @@
     "start": "npm-run-all --parallel client-start kiwi-start",
     "client-start": "cd client && npm start",
     "kiwi-start": "node server/dist/default/src/server.js",
-    "eslint": "cd client && npm run eslint"
+    "eslint": "cd client && npm run eslint",
+    "tslint": "cd server && npm run tslint"
   },
   "repository": {
     "type": "git",
@@ -33,7 +34,7 @@
       "git add"
     ],
     "*.ts": [
-      "tslint",
+      "npm run tslint",
       "prettier --write"
     ]
   },

@@ -11,11 +11,15 @@
   "devDependencies": {
     "chokidar": "^3.0.0",
     "nodemon": "^1.19.0",
-    "tslint": "^5.16.0"
+    "tslint": "^5.16.0",
+    "tslint-config-airbnb": "^5.11.1",
+    "typescript": "^3.4.5"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile": "kc build"
+    "compile": "kc build",
+    "tslint": "tslint -c tslint.json --project .",
+    "tslint-fix": "tslint -c tslint.json --project . --fix"
   },
   "author": "",
   "license": "ISC"
