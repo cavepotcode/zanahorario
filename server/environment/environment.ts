@@ -1,8 +1,8 @@
 export const environment = {
   db: {
     user: 'sa',
-    password: 'pepe',
-    server: 'localhost',
+    password: 'n1rvanA!',
+    server: 'cavepotlab.com',
     database: 'timetracker',
     options: {
       encrypt: false
@@ -17,5 +17,9 @@ export const environment = {
     defaultIcono: 'default.png',
     defaultImage: 'vickgenerico.png',
     domain: 'http://localhost:4200/ '
+  },
+  jwt: {
+    secret: 'esto es zanahorario',
+    timestamp: 15
   }
 };
