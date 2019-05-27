@@ -9,50 +9,45 @@ import { ProjectManager } from '../data_access/projectManager';
 @Authorize()
 @JsonController('/project')
 export class ProjectController {
-    constructor(private manager: ProjectManager){}
+  constructor(private manager: ProjectManager) {}
 
-    @Put('/create')
-    public Create(@Body() body: ProjectDataInfo) {
-        try {
-            return this.manager.Create(body);
-        }
-        catch (err) {
-            Log.LogError('project/create', err);
-            return new ResponseOut(Enums.responseCode.Error, environment.common.genericErrorMessage);
-        }
+  @Put('/create')
+  public create(@Body() body: ProjectDataInfo) {
+    try {
+      return this.manager.create(body);
+    } catch (err) {
+      Log.logError('project/create', err);
+      return new ResponseOut(Enums.responseCode.Error, environment.common.genericErrorMessage);
     }
+  }
 
-    @Post('/update')
-    public Update(@Body() body: ProjectDataInfo) {
-        try {
-            return this.manager.Update(body);
-        }
-        catch (err) {
-            Log.LogError('project/update', err);
-            return new ResponseOut(Enums.responseCode.Error, environment.common.genericErrorMessage);
-        }
+  @Post('/update')
+  public update(@Body() body: ProjectDataInfo) {
+    try {
+      return this.manager.update(body);
+    } catch (err) {
+      Log.logError('project/update', err);
+      return new ResponseOut(Enums.responseCode.Error, environment.common.genericErrorMessage);
     }
+  }
 
-    @Delete('/delete/:id')
-    public Delete(@Param('id') id: string) {
-        try {
-            return this.manager.Delete(id);
-        }
-        catch (err) {
-            Log.LogError('project/delete', err);
-            return new ResponseOut(Enums.responseCode.Error, environment.common.genericErrorMessage);
-        }
+  @Delete('/delete/:id')
+  public delete(@Param('id') id: string) {
+    try {
+      return this.manager.delete(id);
+    } catch (err) {
+      Log.logError('project/delete', err);
+      return new ResponseOut(Enums.responseCode.Error, environment.common.genericErrorMessage);
     }
+  }
 
-    @Get('/getAll')
-    public GetAll() {
-        try {
-            return this.manager.GetAll();
-        }
-        catch (err) {
-            Log.LogError('project/getAll', err);
-            return new ResponseOut(Enums.responseCode.Error, environment.common.genericErrorMessage);
-        }
+  @Get('/getAll')
+  public getAll() {
+    try {
+      return this.manager.getAll();
+    } catch (err) {
+      Log.logError('project/getAll', err);
+      return new ResponseOut(Enums.responseCode.Error, environment.common.genericErrorMessage);
     }
-
+  }
 }

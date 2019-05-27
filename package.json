@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm-run-all --parallel client-start kiwi-start",
     "client-start": "cd client && npm start",
-    "kiwi-start": "node server/dist/default/src/server.js"
+    "kiwi-start": "node server/dist/default/src/server.js",
+    "eslint": "cd client && npm run eslint",
+    "tslint": "cd server && npm run tslint"
   },
   "repository": {
     "type": "git",
@@ -20,6 +22,25 @@
   },
   "homepage": "https://github.com/cavepotcode/zanahorario#readme",
   "devDependencies": {
-    "npm-run-all": "^4.1.5"
+    "husky": "^2.3.0",
+    "lint-staged": "^8.1.7",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^1.17.1"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "npm run eslint",
+      "git add"
+    ],
+    "*.ts": [
+      "prettier --write",
+      "npm run tslint"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }

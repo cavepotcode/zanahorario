@@ -8,16 +8,15 @@ import { UserManager } from '../data_access/userManager';
 
 @JsonController('/security')
 export class SecurityController {
-    constructor(private manager: UserManager){}
+  constructor(private manager: UserManager) {}
 
-    @Post('/login')
-    public Login(@Body() body: LoginDataIn) {
-        try {
-            return this.manager.Login(body);
-        }
-        catch (err) {
-            Log.LogError('security/login', err);
-            return new ResponseOut(Enums.responseCode.Error, environment.common.genericErrorMessage);
-        }
+  @Post('/login')
+  public login(@Body() body: LoginDataIn) {
+    try {
+      return this.manager.login(body);
+    } catch (err) {
+      Log.logError('security/login', err);
+      return new ResponseOut(Enums.responseCode.Error, environment.common.genericErrorMessage);
     }
+  }
 }

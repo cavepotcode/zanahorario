@@ -1,0 +1,16 @@
+{
+  "extends": "react-app",
+  "rules": {
+    "curly": ["error"],
+    "import/order": [
+      "error",
+      {
+        "groups": ["builtin", "external", "index", "sibling", "parent"]
+      }
+    ],
+    "react/prefer-stateless-function": [2, { "ignorePureComponents": true }],
+    "react/sort-comp": [2],
+    "no-console": 2
+  }
+}
+
