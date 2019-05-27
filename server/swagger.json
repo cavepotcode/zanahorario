@@ -498,6 +498,22 @@
                 "required": [
                     "id"
                 ]
+            },
+            "LoginDataIn": {
+                "properties": {
+                    "email": {
+                        "format": "email",
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "email",
+                    "password"
+                ]
             }
         }
     }

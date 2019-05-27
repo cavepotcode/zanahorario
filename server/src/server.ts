@@ -2,7 +2,7 @@ import { createKiwiServer, IKiwiOptions } from 'kiwi-server';
 import { UserController } from './controllers/user.controller';
 import { RequestFilterMiddleware } from './middlewares/RequestFilter.middleware.before';
 import { IncomingMessage } from 'http';
-import { SecurityManager } from './data_access/securityManager';
+import { UserManager } from './data_access/userManager';
 import { TimesheetController } from './controllers/timesheet.controller';
 import { ProjectController } from './controllers/project.controller';
 import { ReportsController } from './controllers/reports.controller';
@@ -12,9 +12,9 @@ import { SecurityController } from './controllers/security.controller';
 import { BillController } from './controllers/bill.controller';
 
 async function validateAuthentication(request: IncomingMessage, roles: string[]) {
-  const token = request.headers['token'];
+  const token = request.headers['authorization'];
   if (token) {
-    const manager = new SecurityManager();
+    const manager = new UserManager();
     return await manager.validateAction(token.toString());
   }
   return false;

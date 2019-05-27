@@ -1,3 +1,4 @@
 server/dist/
 node_modules/
 *.map
+*.env

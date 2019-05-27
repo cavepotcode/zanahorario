@@ -11,6 +11,7 @@ import { StatusConstants } from '../sdk/constatnts';
 const path = require('path');
 const mssql = require('mssql');
 const uuidv1 = require('uuid/v1');
+const jwt = require('jsonwebtoken');
 
 export class UserManager {
   async login(data: LoginDataIn) {
@@ -29,12 +30,20 @@ export class UserManager {
       return new ResponseOut(1, 'Username or password is invalid. Please try again');
     }
 
-    sql = 'UPDATE Users set Token = @Token, TokenTimeStamp=@TokenTimeStamp where Email=@Email';
+    sql = 'UPDATE Users set Token = @Token where Email=@Email';
     params = Array<SqlParameter>();
     params.push(new SqlParameter('Email', mssql.VarChar(50), data.email));
-    const token = uuidv1();
-    params.push(new SqlParameter('Token', mssql.VarChar(36), token));
-    params.push(new SqlParameter('TokenTimeStamp', mssql.DateTime, new Date()));
+    // const token = uuidv1();
+
+    const tokenData: any = {
+      email: data.email
+    };
+
+    const token = jwt.sign(tokenData, environment.jwt.secret, {
+      expiresIn: 60 * environment.jwt.timestamp
+    });
+
+    params.push(new SqlParameter('Token', mssql.VarChar(), token));
 
     await manager.executeNonQuery(sql, params);
 
@@ -43,6 +52,16 @@ export class UserManager {
     login.token = token;
 
     return new ResponseOut(Enums.responseCode.Ok, '', login);
+  }
+
+  async validateAction(token: string) {
+    const newToken = token.replace('Bearer ', '');
+    try {
+      const jwtResult = await jwt.verify(newToken, environment.jwt.secret);
+      return true;
+    } catch (ex) {
+      return false;
+    }
   }
 
   async getCurrentUser() {
