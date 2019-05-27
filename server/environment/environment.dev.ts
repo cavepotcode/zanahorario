@@ -1,9 +1,10 @@
 export const environment = {
+  name: 'dev',
   db: {
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    server: process.env.DB_SERVER,
-    database: process.env.DB_NAME,
+    user: '****',
+    password: '*************!',
+    server: '**************',
+    database: '********',
     options: {
       encrypt: false
     }
@@ -16,10 +17,10 @@ export const environment = {
     iconPath2: 'Iconos\\',
     defaultIcono: 'default.png',
     defaultImage: 'vickgenerico.png',
-    domain: process.env.CLIENT_URL
+    domain: 'http://localhost:4200/ '
   },
   jwt: {
-    secret: process.env.JWT_SECRET,
+    secret: '*************************',
     timestamp: 15
   }
 };
