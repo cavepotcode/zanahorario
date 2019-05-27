@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm-run-all --parallel client-start kiwi-start",
+    "dev": "npm-run-all --parallel client-start kiwi-start",
+    "start": "echo \"Error: not specified\" && exit 1",
     "client-start": "cd client && npm start",
     "kiwi-start": "node server/dist/default/src/server.js",
     "eslint": "cd client && npm run eslint",
