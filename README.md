@@ -11,6 +11,8 @@ npm install
 ```bash
 npm run dev
 ```
+This command will start kiwi-server (port 8086) in watch mode (automatically detecting and compiling any changes in the server source code), and start the client-side server (port 3000)
+
 
 * Build for production
 ```bash
