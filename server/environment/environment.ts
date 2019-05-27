@@ -1,3 +1,6 @@
+// Load variables defined in the `.env` file
+require('dotenv').config();
+
 export const environment = {
   db: {
     user: process.env.DB_USER,
