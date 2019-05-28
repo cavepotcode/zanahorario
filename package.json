@@ -5,12 +5,19 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npm-run-all --parallel client-start kiwi-start",
+    "dev": "npm-run-all --parallel client-start kiwi-build kiwi-dev",
     "start": "echo \"Error: not specified\" && exit 1",
     "client-start": "cd client && npm start",
-    "kiwi-start": "node server/dist/default/src/server.js",
+    "kiwi-build": "cd server && npm run build-watch",
+    "kiwi-dev": "cd server && npm run dev",
     "eslint": "cd client && npm run eslint",
-    "tslint": "cd server && npm run tslint"
+    "tslint": "cd server && npm run tslint",
+    "build-client": "cd client && npm run build",
+    "build-server": "cd server && npm run compile",
+    "build": "npm-run-all build-client build-server",
+    "install-client": "cd client && npm install",
+    "install-server": "cd server && npm install",
+    "postinstall": "npm-run-all install-client install-server"
   },
   "repository": {
     "type": "git",
