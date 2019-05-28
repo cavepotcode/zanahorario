@@ -4,12 +4,14 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "dotenv": "^8.0.0",
+    "jsonwebtoken": "^8.5.1",
     "kiwi-server": "^1.1.31",
     "mssql": "^4.2.1",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "chokidar": "^3.0.0",
+    "kiwi-server-cli": "^1.0.15",
     "nodemon": "^1.19.0",
     "tslint": "^5.16.0",
     "tslint-config-airbnb": "^5.11.1",
@@ -18,7 +20,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "kc build",
-    "tslint": "tslint -c tslint.json"
+    "tslint": "tslint -c tslint.json",
+    "build-watch": "kc build --watch",
+    "dev": "nodemon ./dist/default/src/server.js --ignore swagger.json"
   },
   "author": "",
   "license": "ISC"
