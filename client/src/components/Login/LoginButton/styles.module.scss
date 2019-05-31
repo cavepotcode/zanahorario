@@ -1,0 +1,15 @@
+@import '../../../styles/_palette';
+@import '../../../styles/_variables';
+
+.button {
+  background-color: $primary;
+  border-radius: $radius;
+  border: 0;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+  margin-bottom: 20px;
+  margin-top: 40px;
+  outline: none;
+  padding: 6px 44px;
+}

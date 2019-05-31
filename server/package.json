@@ -11,7 +11,7 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "kiwi-server-cli": "^1.0.15",
+    "kiwi-server-cli": "^1.1.0",
     "nodemon": "^1.19.0",
     "tslint": "^5.16.0",
     "tslint-config-airbnb": "^5.11.1",
