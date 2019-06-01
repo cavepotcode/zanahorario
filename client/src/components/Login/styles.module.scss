@@ -2,9 +2,12 @@
 @import '../../styles/_variables';
 
 .section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  &,
+  & > form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
   .logo {
     height: 250px;
@@ -28,7 +31,7 @@
     width: 100%;
   }
 
-  a {
+  span {
     text-decoration: none;
     &:visited {
       color: inherit;
