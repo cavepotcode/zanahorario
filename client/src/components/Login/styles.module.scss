@@ -15,24 +15,18 @@
     margin-top: 80px;
   }
 
-  .logInGrass {
-    bottom: 0;
-    left: 0;
-    opacity: 0.8;
-    position: absolute;
-    width: 100vw;
-  }
-
   .footer {
     background: url(../../assets/logInGrass.png);
     bottom: 0;
     height: 176px;
-    position: absolute;
     width: 100%;
   }
 
   span {
+    display: inline-block;
+    height: 24px;
     text-decoration: none;
+
     &:visited {
       color: inherit;
     }

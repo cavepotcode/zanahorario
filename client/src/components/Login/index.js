@@ -5,19 +5,22 @@ import styles from './styles.module.scss';
 import logo from '../../assets/zanaLogo.png';
 import api from '../../utils/api';
 import { apiUrls } from '../../urls';
+import useSnackbar from '../Snackbar/useSnackbar';
 
 export default function Login() {
+  const { addNotification } = useSnackbar();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
 
   return (
     <section className={styles.section}>
       <img src={logo} alt="zanahorario" className={styles.logo} />
       <form onSubmit={onSubmit}>
-        <LoginInput type="email" name="email" onChange={e => setEmail(e.target.value)} />
-        <LoginInput type="password" name="password" onChange={e => setPassword(e.target.value)} />
-        <Button>Log in</Button>
-        <span className={styles.link}>&iquest;Has olvidado tu contrase&ntilde;a?</span>
+        <LoginInput type="email" onChange={e => setEmail(e.target.value)} />
+        <LoginInput type="password" onChange={e => setPassword(e.target.value)} />
+        <Button loading={loading}>Log in</Button>
+        <span>&iquest;Olvidaste tu contrase&ntilde;a?</span>
       </form>
       <footer className={styles.footer} />
     </section>
@@ -26,18 +29,16 @@ export default function Login() {
   async function onSubmit(event) {
     event.preventDefault();
     try {
+      setLoading(true);
       const { data, meta } = await api.post(apiUrls.login, { email, password });
       if (meta && meta.code) {
-        return handleError(meta);
+        return addNotification(meta.message);
       }
       localStorage.setItem('access_token', data.token);
-      alert('login succeeded');
     } catch (err) {
-      handleError(err);
+      addNotification(err.message);
+    } finally {
+      setLoading(false);
     }
-  }
-
-  function handleError(err) {
-    alert(err.message);
   }
 }
