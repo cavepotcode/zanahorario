@@ -1,8 +1,14 @@
 import React from 'react';
+import { BasicText, asField } from 'informed';
 import styles from './styles.module.scss';
-import classes from '../../../utils/classes';
 
-export default function LoginInput({ type, className, ...props }) {
-  const cssClass = classes(styles.input, className);
-  return <input className={cssClass} type={type || 'text'} {...props} />;
+function LoginInput({ fieldState, ...props }) {
+  return (
+    <div className={styles.container}>
+      <BasicText fieldState={fieldState} {...props} style={fieldState.error ? { border: '4px solid red' } : null} />
+      <div className={styles.error}>{fieldState.error}</div>
+    </div>
+  );
 }
+
+export default asField(LoginInput);

@@ -5,7 +5,6 @@ import Context from './context';
 export default function SnackbarProvider({ children }) {
   const [snacks, setSnacks] = React.useState([]);
   const defaults = {
-    message: `Notification ipsum...`,
     action: 'Dismiss',
     dismissAfter: 4000,
     key: new Date().getTime(),

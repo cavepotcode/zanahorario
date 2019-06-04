@@ -1,36 +1,36 @@
 import React from 'react';
+import { Form } from 'informed';
 import LoginInput from './LoginInput';
 import Button from './LoginButton';
 import styles from './styles.module.scss';
-import logo from '../../assets/zanaLogo.png';
+import validators from './validators';
 import api from '../../utils/api';
 import { apiUrls } from '../../urls';
 import useSnackbar from '../Snackbar/useSnackbar';
+import logo from '../../assets/zanaLogo.png';
 
 export default function Login() {
   const { addNotification } = useSnackbar();
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
   const [loading, setLoading] = React.useState(false);
+  const validatePassword = val => validators.required(val, 'Password');
 
   return (
     <section className={styles.section}>
       <img src={logo} alt="zanahorario" className={styles.logo} />
-      <form onSubmit={onSubmit}>
-        <LoginInput type="email" onChange={e => setEmail(e.target.value)} />
-        <LoginInput type="password" onChange={e => setPassword(e.target.value)} />
+      <Form noValidate onSubmit={onSubmit}>
+        <LoginInput validateOnChange validate={validators.email} field="email" type="email" />
+        <LoginInput validateOnChange validate={validatePassword} field="password" type="password" />
         <Button loading={loading}>Log in</Button>
         <span>&iquest;Olvidaste tu contrase&ntilde;a?</span>
-      </form>
+      </Form>
       <footer className={styles.footer} />
     </section>
   );
 
-  async function onSubmit(event) {
-    event.preventDefault();
+  async function onSubmit(creds) {
     try {
       setLoading(true);
-      const { data, meta } = await api.post(apiUrls.login, { email, password });
+      const { data, meta } = await api.post(apiUrls.login, creds);
       if (meta && meta.code) {
         return addNotification(meta.message);
       }
