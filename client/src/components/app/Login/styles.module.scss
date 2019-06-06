@@ -21,7 +21,6 @@
 
     @media screen and (min-width: $mobile-breakpoint) {
       margin-top: 60px;
-      background-color: red;
     }
   }
 
@@ -36,6 +35,7 @@
 
   span {
     display: inline-block;
+    font-family: Roboto;
     height: 24px;
     text-decoration: none;
 

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import 'whatwg-fetch';
 import App from './components/app/App';
 import * as serviceWorker from './serviceWorker';
-import './index.css';
+import './index.scss';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
