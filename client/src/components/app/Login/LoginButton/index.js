@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './styles.module.scss';
-import whiteSpinner from '../../../assets/white-spinner.gif';
+import whiteSpinner from '../../../../assets/white-spinner.gif';
 
 export default function LoginButton({ onClick, loading }) {
   return (

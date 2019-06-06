@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'whatwg-fetch';
-import App from './components/App';
+import App from './components/app/App';
 import * as serviceWorker from './serviceWorker';
 import './index.css';
 

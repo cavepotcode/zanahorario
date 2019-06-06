@@ -5,10 +5,10 @@ import LoginInput from './LoginInput';
 import Button from './LoginButton';
 import styles from './styles.module.scss';
 import validators from './validators';
-import api from '../../utils/api';
-import { apiUrls } from '../../urls';
-import useSnackbar from '../Snackbar/useSnackbar';
-import logo from '../../assets/zanaLogo.png';
+import api from '../../../utils/api';
+import { apiUrls } from '../../../urls';
+import useSnackbar from '../../Snackbar/useSnackbar';
+import logo from '../../../assets/zanaLogo.png';
 
 export default function Login() {
   const { dispatch } = useStoreon();

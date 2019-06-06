@@ -1,11 +1,11 @@
 import React from 'react';
 import { Router } from '@reach/router';
 import StoreContext from 'storeon/react/context';
-import { PrivateRoute, PublicRoute } from '../Route';
+import { PrivateRoute, PublicRoute } from '../../Route';
 import Home from '../Home';
 import Login from '../Login';
-import SnackbarProvider from '../Snackbar';
-import { store } from '../../store';
+import SnackbarProvider from '../../Snackbar';
+import { store } from '../../../store';
 import './App.css';
 
 function App() {

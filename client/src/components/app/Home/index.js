@@ -1,7 +1,7 @@
 import React from 'react';
 import { Router, Link } from '@reach/router';
 import styles from './styles.module.scss';
-import { PrivateRoute, PublicRoute } from '../Route';
+import { PrivateRoute, PublicRoute } from '../../Route';
 import Bills from '../Bills';
 import Expenses from '../Expenses';
 import Projects from '../Projects';
