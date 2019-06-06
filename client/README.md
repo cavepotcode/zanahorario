@@ -1,4 +1,63 @@
+# zanahorario frontend
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Folder structure
+```
+src
+├── assets # images
+├── styles
+├── store
+├── components
+│   ├── app
+│   │	└── App
+│   ├── ui
+│   │	└── ...
+│   ├── Route
+│   └── Snackbar
+└── utils
+```
+
+The components are split in `app` for applications specific code, and `ui` for reusable components.
+
+## Color palette
+All the colors of the application are to be defined in the `src/styles/_palette.scss` file, and imported when needed.
+
+## Font
+[Bebas Neue](https://www.dafont.com/bebas-neue.font)
+
+## Breakpoints
+Defined in `src/styles/_variables` as follow:
+
+| Name | up to px |
+|:---|:---|
+| Mobile | 448 |
+| Tablet portrait | 768 |
+| Tablet landscape |1024 |
+| Desktop | 1280 |
+
+All the rules will apply to all the breakpoints, so by default the rules apply to mobiles and up.
+To define styles that overwrite the defaults (mobile breakpoint), use a media query like this:
+```css
+@media screen and (min-width: $mobile-breakpoint) {
+  ...
+}
+```
+
+## Store
+To make use of the data in the store, in this case the user object:
+
+```javascript
+import useStoreon from 'storeon/react';
+
+function MyComponent() {
+  const { dispatch, user } = useStoreon('user');
+  return ...;
+}
+```
+
+To dispatch actions, call the `dispatch` function with the action name and any arguments it may take.
+The actions are specified in the file `src/store/user.js`.
+
 
 ## Available Scripts
 
