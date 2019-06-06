@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './components/App';
+import 'whatwg-fetch';
+import App from './components/app/App';
 import * as serviceWorker from './serviceWorker';
+import './index.scss';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

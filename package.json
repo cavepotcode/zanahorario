@@ -5,11 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npm-run-all --parallel client-start kiwi-build kiwi-dev",
+    "dev": "npm-run-all --parallel client-start kiwi-dev",
     "start": "echo \"Error: not specified\" && exit 1",
     "client-start": "cd client && npm start",
-    "kiwi-build": "cd server && npm run build-watch",
-    "kiwi-dev": "cd server && npm run dev",
+    "kiwi-dev": "cd server && npm-run-all --parallel build-watch dev",
     "eslint": "cd client && npm run eslint",
     "tslint": "cd server && npm run tslint",
     "build-client": "cd client && npm run build",
