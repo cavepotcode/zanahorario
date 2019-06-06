@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form } from 'informed';
+import useStoreon from 'storeon/react';
 import LoginInput from './LoginInput';
 import Button from './LoginButton';
 import styles from './styles.module.scss';
@@ -10,6 +11,7 @@ import useSnackbar from '../Snackbar/useSnackbar';
 import logo from '../../assets/zanaLogo.png';
 
 export default function Login() {
+  const { dispatch } = useStoreon();
   const { addNotification } = useSnackbar();
   const [loading, setLoading] = React.useState(false);
   const validatePassword = val => validators.required(val, 'Password');
@@ -35,8 +37,9 @@ export default function Login() {
         return addNotification(meta.message);
       }
       localStorage.setItem('access_token', data.token);
+      dispatch('authenticate', data.email);
     } catch (err) {
-      addNotification(err.message);
+      addNotification(err.message || `Unexpected error :/`);
     } finally {
       setLoading(false);
     }

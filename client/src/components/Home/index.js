@@ -1,6 +1,7 @@
 import React from 'react';
-import { Router } from '@reach/router';
+import { Router, Link } from '@reach/router';
 import styles from './styles.module.scss';
+import { PrivateRoute, PublicRoute } from '../Route';
 import Bills from '../Bills';
 import Expenses from '../Expenses';
 import Projects from '../Projects';
@@ -14,14 +15,23 @@ export default function Home() {
       <header>header here</header>
       <div>side bar</div>
 
+      <Link to="/projects">Projects</Link>
+      <Link to="/expenses">Expenses</Link>
+      <Link to="/who">Somewhere</Link>
+
       <Router>
-        <Bills path="bills" />
-        <Expenses path="expenses" />
-        <Projects path="projects" />
-        <Settings path="settings" />
-        <Timesheet path="timesheet" />
-        <Users path="users" />
+        <PrivateRoute component={Bills} path="bills" />
+        <PrivateRoute component={Expenses} path="expenses" />
+        <PrivateRoute component={Projects} path="projects" />
+        <PrivateRoute component={Settings} path="settings" />
+        <PrivateRoute component={Timesheet} path="timesheet" />
+        <PrivateRoute component={Users} path="users" />
+        <PublicRoute component={NotFound} path="*" default />
       </Router>
     </section>
   );
+}
+
+function NotFound() {
+  return <div>Page Not Found</div>;
 }
