@@ -1,5 +1,6 @@
 import React from 'react';
-import { Router, Link } from '@reach/router';
+import { Router } from '@reach/router';
+import NavBar from './NavBar';
 import styles from './styles.module.scss';
 import { PrivateRoute, PublicRoute } from '../../Route';
 import Bills from '../Bills';
@@ -11,24 +12,20 @@ import Users from '../Users';
 
 export default function Home() {
   return (
-    <section className={styles.home}>
-      <header>header here</header>
-      <div>side bar</div>
-
-      <Link to="/projects">Projects</Link>
-      <Link to="/expenses">Expenses</Link>
-      <Link to="/who">Somewhere</Link>
-
-      <Router>
-        <PrivateRoute component={Bills} path="bills" />
-        <PrivateRoute component={Expenses} path="expenses" />
-        <PrivateRoute component={Projects} path="projects" />
-        <PrivateRoute component={Settings} path="settings" />
-        <PrivateRoute component={Timesheet} path="timesheet" />
-        <PrivateRoute component={Users} path="users" />
-        <PublicRoute component={NotFound} path="*" default />
-      </Router>
-    </section>
+    <div className={styles.home}>
+      <NavBar />
+      <section>
+        <Router>
+          <PrivateRoute component={Bills} path="billing" />
+          <PrivateRoute component={Expenses} path="accounting" />
+          <PrivateRoute component={Projects} path="projects" />
+          <PrivateRoute component={Settings} path="settings" />
+          <PrivateRoute component={Users} path="users" />
+          <PrivateRoute component={Timesheet} path="timesheet" />
+          <PublicRoute component={NotFound} path="*" default />
+        </Router>
+      </section>
+    </div>
   );
 }
 

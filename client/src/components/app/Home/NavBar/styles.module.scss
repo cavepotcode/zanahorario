@@ -1,0 +1,52 @@
+@import '../../../../styles/_palette';
+@import '../../../../styles/_variables';
+
+.nav {
+  box-sizing: border-box;
+  flex: 0 0 320px;
+  position: relative;
+
+  header {
+    margin: 36px 36px 0;
+  }
+
+  footer {
+    height: 120px;
+    img {
+      bottom: 0;
+      left: 0;
+      position: absolute;
+      width: 100%;
+    }
+  }
+
+  .logo {
+    width: 100%;
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 56px;
+    text-align: left;
+  }
+}
+
+a {
+  color: $foreground;
+  font-size: 36px;
+  font-weight: 100;
+  line-height: 2;
+  text-decoration: none;
+
+  &:visited {
+    color: $foreground;
+  }
+
+  &:hover {
+    color: #c7845d;
+  }
+
+  &.active {
+    color: $primary;
+  }
+}
