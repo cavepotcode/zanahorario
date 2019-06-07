@@ -1,0 +1,46 @@
+@import '../../../styles/_palette';
+@import '../../../styles/_variables';
+
+.section {
+  height: 100vh;
+  min-height: 735px;
+  position: relative;
+
+  &,
+  & > form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .logo {
+    margin-bottom: 30px;
+    margin-top: 30px;
+    max-width: 525px;
+    width: 100%;
+
+    @media screen and (min-width: $mobile-breakpoint) {
+      margin-top: 60px;
+    }
+  }
+
+  .footer {
+    background: url(../../../assets/logInGrass.png);
+    bottom: 0;
+    height: 176px;
+    opacity: 0.7;
+    position: absolute;
+    width: 100%;
+  }
+
+  span {
+    display: inline-block;
+    font-family: Roboto;
+    height: 24px;
+    text-decoration: none;
+
+    &:visited {
+      color: inherit;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 export class ProjectDataInfo {
-    id: string;
-    name: string;
-    description: string;
+  id: string;
+  name: string;
+  description: string;
 }

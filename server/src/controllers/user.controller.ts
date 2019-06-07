@@ -6,22 +6,21 @@ import { UserDataInfo } from '../sdk/data_info/user/userDataInfo';
 @JsonController('/user')
 @Authorize()
 export class UserController {
-    constructor(private manager: UserManager){}
+  constructor(private manager: UserManager) {}
 
-    @Get('/getCurrentUser')
-    public GetCurrentUser() {
-        var manager = new UserManager();
-        return manager.GetCurrentUser();
-    }
+  @Get('/getCurrentUser')
+  public getCurrentUser() {
+    const manager = new UserManager();
+    return manager.getCurrentUser();
+  }
 
-    @Get('/getUser')
-    public GetUser() {
-        return this.manager.GetUser();
-    }
+  @Get('/getUser')
+  public getUser() {
+    return this.manager.getUser();
+  }
 
-    @Post('/updateUser')
-    public UpdateUser(@Body() body: UserDataInfo) {
-        return this.manager.UpdateUser(body);
-    }
-
+  @Post('/updateUser')
+  public updateUser(@Body() body: UserDataInfo) {
+    return this.manager.updateUser(body);
+  }
 }
