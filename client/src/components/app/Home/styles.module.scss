@@ -3,13 +3,13 @@
 .home {
   display: flex;
   font-weight: bold;
-  height: 100%;
-  min-height: 100vh;
+  height: 100vh;
   text-align: center;
   width: 100%;
 
   section {
     background-color: $light-gray;
     flex: 1;
+    overflow-y: auto;
   }
 }
