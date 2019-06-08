@@ -19,7 +19,6 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile": "kc build",
     "tslint": "tslint -c tslint.json",
     "build-watch": "kc build --watch",
     "dev": "nodemon ./dist/default/src/server.js --ignore swagger.json"
