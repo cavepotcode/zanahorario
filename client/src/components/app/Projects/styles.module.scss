@@ -4,6 +4,10 @@
 .container {
   display: flex;
   flex-wrap: wrap;
+
+  &.loading {
+    opacity: 0.5;
+  }
 }
 
 .project {
