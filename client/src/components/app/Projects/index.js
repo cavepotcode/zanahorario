@@ -1,11 +1,14 @@
 import React from 'react';
 import styles from './styles.module.scss';
+import UsersCarousel from './UsersCarousel';
 import api from '../../../utils/api';
 import classes from '../../../utils/classes';
 import { apiUrls } from '../../../urls';
+import useSnackbar from '../../Snackbar/useSnackbar';
 
 export default function Projects() {
   const [projects, setProjects] = React.useState([]);
+  const { addNotification } = useSnackbar();
 
   React.useEffect(() => {
     const fetch = async () => {
@@ -20,12 +23,12 @@ export default function Projects() {
           }))
         );
       } catch (err) {
-        alert('There was an error getting the projects. Try again later.');
+        addNotification('There was an error getting the projects. Try again later.');
       }
     };
 
     fetch();
-  }, []);
+  }, [addNotification]);
 
   return (
     <div className={styles.container}>
@@ -34,7 +37,9 @@ export default function Projects() {
           <div className={styles.title}>
             <span>{item.project.name}</span>
           </div>
-          <div className={styles.selector}>hola</div>
+          <div className={styles.selector}>
+            <UsersCarousel users={item.usersHoursByProject} />
+          </div>
           <div className={styles.info}>
             <span>LAST DATE: {item.lastTime}</span>
             <span>MONTH HOURS: {item.monthHours}</span>
@@ -54,7 +59,24 @@ function getData() {
         lastTime: '2017-06-08T00:00:00.000Z',
         monthHours: 0,
         totalHours: 16,
-        usersHoursByProject: []
+        usersHoursByProject: [
+          {
+            initials: 'DC',
+            userMonthHours: 6
+          },
+          {
+            initials: 'BA',
+            userMonthHours: 8
+          },
+          {
+            initials: 'GF',
+            userMonthHours: 10
+          },
+          {
+            initials: 'MT',
+            userMonthHours: 12
+          }
+        ]
       },
       {
         project: { id: '1b34616f-3d03-45ed-9b44-5b5716cbe36c', name: 'Venttio', description: '' },
@@ -116,15 +138,20 @@ function getData() {
         totalHours: 1955,
         usersHoursByProject: [
           {
-            Id: null,
-            Email: 'diego.caraballo@cavepot.com',
-            Initials: 'DC',
-            Password: null,
-            UserMonthHours: 6,
-            Color: '#4a43f5',
-            Name: null,
-            Token: null,
-            ImageUrl: null
+            initials: 'DC',
+            userMonthHours: 6
+          },
+          {
+            initials: 'BA',
+            userMonthHours: 8
+          },
+          {
+            initials: 'GF',
+            userMonthHours: 10
+          },
+          {
+            initials: 'MT',
+            userMonthHours: 12
           }
         ]
       },
@@ -156,15 +183,15 @@ function getData() {
         totalHours: 80,
         usersHoursByProject: [
           {
-            Id: null,
-            Email: 'guillermo.fernandez@cavepot.com',
-            Initials: 'GF',
-            Password: null,
-            UserMonthHours: 28,
-            Color: '#8cc528',
-            Name: null,
-            Token: null,
-            ImageUrl: null
+            id: null,
+            email: 'guillermo.fernandez@cavepot.com',
+            initials: 'GF',
+            password: null,
+            userMonthHours: 28,
+            color: '#8cc528',
+            name: null,
+            token: null,
+            imageUrl: null
           }
         ]
       },
@@ -175,15 +202,15 @@ function getData() {
         totalHours: 718,
         usersHoursByProject: [
           {
-            Id: null,
-            Email: 'diego.caraballo@cavepot.com',
-            Initials: 'DC',
-            Password: null,
-            UserMonthHours: 28,
-            Color: '#4a43f5',
-            Name: null,
-            Token: null,
-            ImageUrl: null
+            id: null,
+            email: 'diego.caraballo@cavepot.com',
+            initials: 'DC',
+            password: null,
+            userMonthHours: 28,
+            color: '#4a43f5',
+            name: null,
+            token: null,
+            imageUrl: null
           }
         ]
       },
@@ -194,15 +221,15 @@ function getData() {
         totalHours: 5998,
         usersHoursByProject: [
           {
-            Id: null,
-            Email: 'santiago.bermudez@cavepot.com',
-            Initials: 'SB',
-            Password: null,
-            UserMonthHours: 160,
-            Color: '#cac423',
-            Name: null,
-            Token: null,
-            ImageUrl: null
+            id: null,
+            email: 'santiago.bermudez@cavepot.com',
+            initials: 'SB',
+            password: null,
+            userMonthHours: 160,
+            color: '#cac423',
+            name: null,
+            token: null,
+            imageUrl: null
           }
         ]
       },
