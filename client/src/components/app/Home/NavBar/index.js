@@ -25,7 +25,7 @@ export default function NavBar() {
   );
 }
 
-function MenuItem({ title, to }) {
+function MenuItem({ to, title }) {
   const isActive = ({ isCurrent }) => {
     return isCurrent ? { className: styles.active } : null;
   };
