@@ -2,7 +2,6 @@
 
 .home {
   display: flex;
-  font-weight: bold;
   height: 100vh;
   text-align: center;
   width: 100%;
@@ -11,5 +10,6 @@
     background-color: $light-gray;
     flex: 1;
     overflow-y: auto;
+    padding: 8px;
   }
 }

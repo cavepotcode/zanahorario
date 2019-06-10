@@ -1,0 +1,33 @@
+@import '../../../../styles/_palette';
+@import '../../../../styles/_variables';
+
+.arrow {
+  border-bottom: 10px solid transparent;
+  border-top: 10px solid transparent;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+
+  &.right {
+    border-left: 10px solid $primary;
+    margin-left: 8px;
+
+    &.disabled {
+      border-left: 10px solid $primary-50;
+    }
+  }
+
+  &.left {
+    border-right: 10px solid $primary;
+    margin-right: 8px;
+
+    &.disabled {
+      border-right: 10px solid $primary-50;
+    }
+  }
+
+  &.disabled {
+    cursor: default;
+  }
+}
+

@@ -39,7 +39,7 @@ export default function Login() {
       localStorage.setItem('access_token', data.token);
       dispatch('authenticate', data.email);
     } catch (err) {
-      addNotification(err.message || `Unexpected error :/`);
+      addNotification(err.message);
     } finally {
       setLoading(false);
     }

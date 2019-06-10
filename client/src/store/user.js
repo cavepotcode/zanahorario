@@ -4,7 +4,7 @@ export default function(store) {
   store.on('@init', () => ({ user: decodeToken() }));
 
   store.on('authenticate', (store, email) => {
-    navigate('/');
+    navigate('/projects');
     return { user: { email, isAuthenticated: true } };
   });
 }
