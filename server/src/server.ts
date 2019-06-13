@@ -35,7 +35,7 @@ const options: IKiwiOptions = {
   middlewares: [RequestFilterMiddleware],
   cors: {
     enabled: true,
-    domains: []
+    domains: ['']
   },
   documentation: {
     enabled: true,

@@ -12,7 +12,7 @@
             },
             "externalConsole": false,
             "name": "DEBUG",
-            "program": "${workspaceRoot}/dist/default/src/server.js",
+            "program": "${workspaceRoot}/server/dist/default/src/server.js",
             "request": "launch",
             "runtimeArgs": [
                 "--nolazy"

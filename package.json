@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test-server": "cd server && npm test",
     "dev": "npm-run-all --parallel client-start kiwi-dev",
     "start": "echo \"Error: not specified\" && exit 1",
     "client-start": "cd client && npm start",
@@ -16,7 +16,8 @@
     "build": "npm-run-all build-client build-server",
     "install-client": "cd client && npm install",
     "install-server": "cd server && npm install",
-    "postinstall": "npm-run-all install-client install-server"
+    "postinstall": "npm-run-all install-client install-server",
+    "compile": "cd server && kc build"
   },
   "repository": {
     "type": "git",
