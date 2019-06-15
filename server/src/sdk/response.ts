@@ -8,7 +8,7 @@ export class Metadata {
   }
 }
 
-export class ResponseOut {
+export class Response {
   data: any;
   meta: Metadata;
 

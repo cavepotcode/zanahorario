@@ -4,7 +4,7 @@ import { ProjectDataInfo } from '../sdk/data_info/project/projectDataInfo';
 import { UtilClass } from '../utilClass';
 import { ProjectManager } from './projectManager';
 import { environment } from '../../environment/environment';
-import { ResponseOut } from '../sdk/response';
+import { Response } from '../sdk/response';
 import { Enums } from '../sdk/enums';
 import { StatusConstants } from '../sdk/constatnts';
 import { ItemTimeSheetDataOut } from '../sdk/data_out/timesheet/itemTimeSheetDataOut';
@@ -57,7 +57,7 @@ export class TimesheetManager {
       result.push(data);
     }
 
-    return new ResponseOut(Enums.responseCode.Ok, '', result);
+    return new Response(Enums.responseCode.Ok, '', result);
   }
 
   async getByUser(month: number, year: number) {
@@ -107,7 +107,7 @@ export class TimesheetManager {
       res.push(aux);
     });
 
-    return new ResponseOut(Enums.responseCode.Ok, '', res);
+    return new Response(Enums.responseCode.Ok, '', res);
   }
 
   async add(data: AddTimesheetDataIn) {
@@ -123,7 +123,7 @@ export class TimesheetManager {
     data.items.forEach((element: any) => {
       if (!UtilClass.isNullOrWithSpaces(element.project.id)) {
         if (element.hours === 0) {
-          return new ResponseOut(Enums.responseCode.Error, 'All selected projects must have hours assigned.', {});
+          return new Response(Enums.responseCode.Error, 'All selected projects must have hours assigned.', {});
         }
         strBuilder.push(
           'INSERT INTO [TimeSheet] ([Id],[Date],[ProjectId],[Hours],[Observations],[UserId]) ' +
@@ -141,12 +141,12 @@ export class TimesheetManager {
     });
 
     if (count === 0) {
-      return new ResponseOut(Enums.responseCode.Error, 'No Timesheets to add. Please try again.', {});
+      return new Response(Enums.responseCode.Error, 'No Timesheets to add. Please try again.', {});
     }
 
     const manager = new SqlManager(environment.db);
     const str = strBuilder.join('');
     await manager.executeNonQuery(str, params);
-    return new ResponseOut(Enums.responseCode.Ok, 'Time added successfully.', {});
+    return new Response(Enums.responseCode.Ok, 'Time added successfully.', {});
   }
 }

@@ -2,7 +2,7 @@ import { JsonController, Get, Post, Param, Body, Authorize, Put, Delete } from '
 import { BillManager } from '../data_access/billManager';
 import { BillDataInfo } from '../sdk/data_info/bill/billDataInfo';
 import { Log } from '../sdk/logs';
-import { ResponseOut } from '../sdk/response';
+import { Response } from '../sdk/response';
 import { Enums } from '../sdk/enums';
 import { environment } from '../../environment/environment';
 
@@ -22,7 +22,7 @@ export class BillController {
       return this.manager.create(body);
     } catch (err) {
       Log.logError('bill/create', err);
-      return new ResponseOut(Enums.responseCode.Error, environment.common.genericErrorMessage);
+      return new Response(Enums.responseCode.Error, environment.common.genericErrorMessage);
     }
   }
 
@@ -32,7 +32,7 @@ export class BillController {
       return this.manager.update(body);
     } catch (err) {
       Log.logError('bill/update', err);
-      return new ResponseOut(Enums.responseCode.Error, environment.common.genericErrorMessage);
+      return new Response(Enums.responseCode.Error, environment.common.genericErrorMessage);
     }
   }
 
@@ -42,7 +42,7 @@ export class BillController {
       return this.manager.delete(id);
     } catch (err) {
       Log.logError('bill/delete', err);
-      return new ResponseOut(Enums.responseCode.Error, environment.common.genericErrorMessage);
+      return new Response(Enums.responseCode.Error, environment.common.genericErrorMessage);
     }
   }
 }

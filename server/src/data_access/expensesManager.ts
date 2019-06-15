@@ -1,7 +1,7 @@
 import { SqlParameter, SqlManager } from './sql_manager/sqlManager';
 import { environment } from '../../environment/environment';
 import { ExpenditureDataInfo } from '../sdk/data_info/expenditure/expenditureDataInfo';
-import { ResponseOut } from '../sdk/response';
+import { Response } from '../sdk/response';
 import { Enums } from '../sdk/enums';
 import { UtilClass } from '../utilClass';
 const mssql = require('mssql');
@@ -35,7 +35,7 @@ export class ExpensesManager {
       ret.push(aux);
     });
 
-    return new ResponseOut(Enums.responseCode.Ok, '', ret);
+    return new Response(Enums.responseCode.Ok, '', ret);
   }
 
   async create(data: ExpenditureDataInfo) {
@@ -56,7 +56,7 @@ export class ExpensesManager {
 
     const manager = new SqlManager(environment.db);
     await manager.executeNonQuery(sql, params);
-    return new ResponseOut(Enums.responseCode.Ok, 'Expenditure added successfully', {});
+    return new Response(Enums.responseCode.Ok, 'Expenditure added successfully', {});
     // if ((UtilClass.isNullOrWithSpaces(data.bill))) {
 
     // }

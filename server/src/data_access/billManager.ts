@@ -1,6 +1,6 @@
 import { environment } from '../../environment/environment';
 import { SqlManager, SqlParameter } from './sql_manager/sqlManager';
-import { ResponseOut } from '../sdk/response';
+import { Response } from '../sdk/response';
 import { Enums } from '../sdk/enums';
 import { BillDataInfo } from '../sdk/data_info/bill/billDataInfo';
 import { StatusConstants } from '../sdk/constatnts';
@@ -37,7 +37,7 @@ export class BillManager {
       ret.push(aux);
     });
 
-    return new ResponseOut(Enums.responseCode.Ok, '', ret);
+    return new Response(Enums.responseCode.Ok, '', ret);
   }
 
   async create(bill: BillDataInfo) {
@@ -59,7 +59,7 @@ export class BillManager {
 
     const manager = new SqlManager(environment.db);
     await manager.executeNonQuery(sql, params);
-    return new ResponseOut(Enums.responseCode.Ok, 'Bill added successfully', {});
+    return new Response(Enums.responseCode.Ok, 'Bill added successfully', {});
   }
 
   async update(bill: BillDataInfo) {
@@ -81,7 +81,7 @@ export class BillManager {
 
     const manager = new SqlManager(environment.db);
     await manager.executeNonQuery(sql, params);
-    return new ResponseOut(Enums.responseCode.Ok, 'Bill updated successfully', {});
+    return new Response(Enums.responseCode.Ok, 'Bill updated successfully', {});
   }
 
   async delete(id: string) {
@@ -92,6 +92,6 @@ export class BillManager {
 
     const manager = new SqlManager(environment.db);
     await manager.executeNonQuery(sql, params);
-    return new ResponseOut(Enums.responseCode.Ok, 'Bill deleted successfully', {});
+    return new Response(Enums.responseCode.Ok, 'Bill deleted successfully', {});
   }
 }

@@ -13,8 +13,8 @@ function decodeToken() {
   const token = localStorage.getItem('access_token');
   if (token) {
     const [, payload] = token.split('.');
-    const { email } = JSON.parse(atob(payload));
-    return { isAuthenticated: true, email };
+    const { userId } = JSON.parse(atob(payload));
+    return { isAuthenticated: true, userId };
   }
   return {};
 }

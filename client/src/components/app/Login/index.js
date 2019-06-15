@@ -36,8 +36,8 @@ export default function Login() {
       if (meta && meta.code) {
         return addNotification(meta.message);
       }
-      localStorage.setItem('access_token', data.token);
-      dispatch('authenticate', data.email);
+      localStorage.setItem('access_token', data);
+      dispatch('authenticate', creds.email);
     } catch (err) {
       addNotification(err.message);
     } finally {
