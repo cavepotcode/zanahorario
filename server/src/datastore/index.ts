@@ -2,7 +2,6 @@ import 'reflect-metadata';
 import { Repository, createConnection } from 'typeorm';
 import { User } from '../entities/User';
 
-// TODO: connection type??
 const connection: Promise<any> = createConnection({
   type: 'postgres',
   host: process.env.DB_SERVER || 'localhost',

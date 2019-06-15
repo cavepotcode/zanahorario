@@ -5,8 +5,7 @@ import { UtilClass } from '../utilClass';
 import { ProjectManager } from './projectManager';
 import { environment } from '../../environment/environment';
 import { Response } from '../sdk/response';
-import { Enums } from '../sdk/enums';
-import { StatusConstants } from '../sdk/constatnts';
+import { ResponseCode, StatusConstants } from '../sdk/constants';
 import { ItemTimeSheetDataOut } from '../sdk/data_out/timesheet/itemTimeSheetDataOut';
 import { AddTimesheetDataIn } from '../sdk/data_in/addTimeSheetDataIn';
 import { ProjectsHoursByYearDataInfo } from '../sdk/data_info/timeSheet/projectsHoursByYearDataInfo';
@@ -57,7 +56,7 @@ export class TimesheetManager {
       result.push(data);
     }
 
-    return new Response(Enums.responseCode.Ok, '', result);
+    return new Response(ResponseCode.OK, '', result);
   }
 
   async getByUser(month: number, year: number) {
@@ -107,7 +106,7 @@ export class TimesheetManager {
       res.push(aux);
     });
 
-    return new Response(Enums.responseCode.Ok, '', res);
+    return new Response(ResponseCode.OK, '', res);
   }
 
   async add(data: AddTimesheetDataIn) {
@@ -123,7 +122,7 @@ export class TimesheetManager {
     data.items.forEach((element: any) => {
       if (!UtilClass.isNullOrWithSpaces(element.project.id)) {
         if (element.hours === 0) {
-          return new Response(Enums.responseCode.Error, 'All selected projects must have hours assigned.', {});
+          return new Response(ResponseCode.ERROR, 'All selected projects must have hours assigned.', {});
         }
         strBuilder.push(
           'INSERT INTO [TimeSheet] ([Id],[Date],[ProjectId],[Hours],[Observations],[UserId]) ' +
@@ -141,12 +140,12 @@ export class TimesheetManager {
     });
 
     if (count === 0) {
-      return new Response(Enums.responseCode.Error, 'No Timesheets to add. Please try again.', {});
+      return new Response(ResponseCode.ERROR, 'No Timesheets to add. Please try again.', {});
     }
 
     const manager = new SqlManager(environment.db);
     const str = strBuilder.join('');
     await manager.executeNonQuery(str, params);
-    return new Response(Enums.responseCode.Ok, 'Time added successfully.', {});
+    return new Response(ResponseCode.OK, 'Time added successfully.', {});
   }
 }

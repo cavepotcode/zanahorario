@@ -1,6 +1,6 @@
 import { JsonController, Authorize, Get, Param, Put, Body } from 'kiwi-server';
 import { Response } from '../sdk/response';
-import { Enums } from '../sdk/enums';
+import { ResponseCode } from '../sdk/constants';
 import { environment } from '../../environment/environment';
 import { Log } from '../sdk/logs';
 import { ExpensesManager } from '../data_access/expensesManager';
@@ -17,7 +17,7 @@ export class ExpensesController {
       return this.manager.getAll(year, month);
     } catch (err) {
       Log.logError('category/getAll', err);
-      return new Response(Enums.responseCode.Error, environment.common.genericErrorMessage);
+      return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);
     }
   }
 
@@ -27,7 +27,7 @@ export class ExpensesController {
       return this.manager.create(body);
     } catch (err) {
       Log.logError('expenses/create', err);
-      return new Response(Enums.responseCode.Error, environment.common.genericErrorMessage);
+      return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);
     }
   }
 }

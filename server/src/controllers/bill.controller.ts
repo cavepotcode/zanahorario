@@ -3,7 +3,7 @@ import { BillManager } from '../data_access/billManager';
 import { BillDataInfo } from '../sdk/data_info/bill/billDataInfo';
 import { Log } from '../sdk/logs';
 import { Response } from '../sdk/response';
-import { Enums } from '../sdk/enums';
+import { ResponseCode } from '../sdk/constants';
 import { environment } from '../../environment/environment';
 
 @Authorize()
@@ -22,7 +22,7 @@ export class BillController {
       return this.manager.create(body);
     } catch (err) {
       Log.logError('bill/create', err);
-      return new Response(Enums.responseCode.Error, environment.common.genericErrorMessage);
+      return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);
     }
   }
 
@@ -32,7 +32,7 @@ export class BillController {
       return this.manager.update(body);
     } catch (err) {
       Log.logError('bill/update', err);
-      return new Response(Enums.responseCode.Error, environment.common.genericErrorMessage);
+      return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);
     }
   }
 
@@ -42,7 +42,7 @@ export class BillController {
       return this.manager.delete(id);
     } catch (err) {
       Log.logError('bill/delete', err);
-      return new Response(Enums.responseCode.Error, environment.common.genericErrorMessage);
+      return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);
     }
   }
 }

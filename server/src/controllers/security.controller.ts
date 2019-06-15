@@ -1,7 +1,7 @@
 import { JsonController, Post, Body } from 'kiwi-server';
 import { LoginDataIn } from '../sdk/data_in/login_data_in';
 import { Response } from '../sdk/response';
-import { Enums } from '../sdk/enums';
+import { ResponseCode } from '../sdk/constants';
 import { environment } from '../../environment/environment';
 import { Log } from '../sdk/logs';
 // import { UserManager } from '../data_access/userManager';
@@ -17,7 +17,7 @@ export class SecurityController {
       return this.auth.login(body);
     } catch (err) {
       Log.logError('security/login', err);
-      return new Response(Enums.responseCode.Error, environment.common.genericErrorMessage);
+      return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);
     }
   }
 }

@@ -1,13 +1,11 @@
 import { SqlManager, SqlParameter } from './sql_manager/sqlManager';
 import { LoginDataIn } from '../sdk/data_in/login_data_in';
-import { LoginDataOut } from '../sdk/data_out/loginDataOut';
 import { Response } from '../sdk/response';
-import { Enums } from '../sdk/enums';
 import { UtilClass } from '../utilClass';
 import { UserDataInfo } from '../sdk/data_info/user/userDataInfo';
 import { environment } from '../../environment/environment';
 import { encrypt } from '../encrypt';
-import { StatusConstants } from '../sdk/constatnts';
+import { ResponseCode, StatusConstants } from '../sdk/constants';
 const path = require('path');
 const mssql = require('mssql');
 const uuidv1 = require('uuid/v1');
@@ -36,10 +34,10 @@ export class UserManager {
         path.resolve('./', result[0].ImageUrl);
       }
     } else {
-      return new Response(Enums.responseCode.Error, 'Unable to obtain information requested from the user.', null);
+      return new Response(ResponseCode.ERROR, 'Unable to obtain information requested from the user.', null);
     }
 
-    return new Response(Enums.responseCode.Ok, '', userInfo);
+    return new Response(ResponseCode.OK, '', userInfo);
   }
 
   async getUser() {
@@ -66,10 +64,10 @@ export class UserManager {
         path.resolve('./', result[0].ImageUrl);
       }
     } else {
-      return new Response(Enums.responseCode.Error, 'Unable to obtain information requested from the user.', null);
+      return new Response(ResponseCode.ERROR, 'Unable to obtain information requested from the user.', null);
     }
 
-    return new Response(Enums.responseCode.Ok, '', userInfo);
+    return new Response(ResponseCode.OK, '', userInfo);
   }
 
   async updateUser(data: UserDataInfo) {
@@ -90,6 +88,6 @@ export class UserManager {
     // let str = strBuilder.join("");
 
     await manager.executeNonQuery(str, params);
-    return new Response(Enums.responseCode.Ok, 'User updated successfully.', {});
+    return new Response(ResponseCode.OK, 'User updated successfully.', {});
   }
 }

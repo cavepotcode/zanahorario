@@ -1,6 +1,6 @@
 import { JsonController, Get, Post, Param, Body, Authorize, Put, Delete } from 'kiwi-server';
 import { Response } from '../sdk/response';
-import { Enums } from '../sdk/enums';
+import { ResponseCode } from '../sdk/constants';
 import { environment } from '../../environment/environment';
 import { Log } from '../sdk/logs';
 import { ProjectDataInfo } from '../sdk/data_info/project/projectDataInfo';
@@ -17,7 +17,7 @@ export class ProjectController {
       return this.manager.create(body);
     } catch (err) {
       Log.logError('project/create', err);
-      return new Response(Enums.responseCode.Error, environment.common.genericErrorMessage);
+      return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);
     }
   }
 
@@ -27,7 +27,7 @@ export class ProjectController {
       return this.manager.update(body);
     } catch (err) {
       Log.logError('project/update', err);
-      return new Response(Enums.responseCode.Error, environment.common.genericErrorMessage);
+      return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);
     }
   }
 
@@ -37,7 +37,7 @@ export class ProjectController {
       return this.manager.delete(id);
     } catch (err) {
       Log.logError('project/delete', err);
-      return new Response(Enums.responseCode.Error, environment.common.genericErrorMessage);
+      return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);
     }
   }
 
@@ -47,7 +47,7 @@ export class ProjectController {
       return this.manager.getAll();
     } catch (err) {
       Log.logError('project/getAll', err);
-      return new Response(Enums.responseCode.Error, environment.common.genericErrorMessage);
+      return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);
     }
   }
 }
