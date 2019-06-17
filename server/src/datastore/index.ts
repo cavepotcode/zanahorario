@@ -12,12 +12,11 @@ const connection: Promise<void | Connection> = createConnection({
   entities: [User],
   synchronize: true,
   logging: false
-})
-.catch((error: any) => console.log(error));
+}).catch((error: any) => console.log(error));
 
 export async function getUserRepository(): Promise<Repository<User>> {
   const conn = await connection;
-  if (!conn) throw new Error("Connection to db not available");
+  if (!conn) throw new Error('Connection to db not available');
 
   return conn.getRepository(User);
 }

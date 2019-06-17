@@ -4,7 +4,6 @@ import { Response } from '../sdk/response';
 import { ResponseCode } from '../sdk/constants';
 import { environment } from '../../environment/environment';
 import { Log } from '../sdk/logs';
-// import { UserManager } from '../data_access/userManager';
 import { AuthService } from '../services/auth.service';
 
 @JsonController('/security')

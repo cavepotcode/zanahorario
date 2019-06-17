@@ -1,5 +1,4 @@
 import { SqlManager, SqlParameter } from './sql_manager/sqlManager';
-import { LoginDataIn } from '../sdk/data_in/login_data_in';
 import { Response } from '../sdk/response';
 import { UtilClass } from '../utilClass';
 import { UserDataInfo } from '../sdk/data_info/user/userDataInfo';

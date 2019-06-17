@@ -5,10 +5,10 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ length: 150 })
   password: string;
 
-  @Column()
+  @Column({ length: 50 })
   email: string;
 
   @Column()
@@ -20,15 +20,15 @@ export class User {
   @Column({ default: true })
   active: boolean;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, length: 20 })
   color: string;
 
-  @Column()
+  @Column({ nullable: true, length: 10 })
   initials: string;
 
-  @Column()
+  @Column({ nullable: true, length: 20 })
   name: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, length: 50 })
   photo: string;
 }
