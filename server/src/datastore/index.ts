@@ -1,8 +1,8 @@
 import 'reflect-metadata';
-import { Repository, createConnection } from 'typeorm';
+import { Connection, Repository, createConnection, getRepository } from 'typeorm';
 import { User } from '../entities/User';
 
-const connection: Promise<any> = createConnection({
+const connection: Promise<void | Connection> = createConnection({
   type: 'postgres',
   host: process.env.DB_SERVER || 'localhost',
   port: Number(process.env.DB_PORT || '5432'),
@@ -12,6 +12,12 @@ const connection: Promise<any> = createConnection({
   entities: [User],
   synchronize: true,
   logging: false
-}).catch((error: any) => console.log(error));
+})
+.catch((error: any) => console.log(error));
 
-export const userRepository: Promise<Repository<User>> = connection.then(connection => connection.getRepository(User));
+export async function getUserRepository(): Promise<Repository<User>> {
+  const conn = await connection;
+  if (!conn) throw new Error("Connection to db not available");
+
+  return conn.getRepository(User);
+}
