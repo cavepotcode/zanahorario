@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test-server": "cd server && npm test",
+    "test": "cd client && npm test",
     "dev": "npm-run-all --parallel client-start kiwi-dev",
     "start": "echo \"Error: not specified\" && exit 1",
     "client-start": "cd client && npm start",

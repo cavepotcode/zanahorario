@@ -10,16 +10,14 @@ import './App.css';
 
 function App() {
   return (
-    <main>
-      <StoreContext.Provider value={store}>
-        <SnackbarProvider>
-          <Router>
-            <PublicRoute component={Login} path="login" />
-            <PrivateRoute component={Home} path="/*" />
-          </Router>
-        </SnackbarProvider>
-      </StoreContext.Provider>
-    </main>
+    <StoreContext.Provider value={store}>
+      <SnackbarProvider>
+        <Router>
+          <PublicRoute component={Login} path="login" />
+          <PrivateRoute component={Home} path="/*" />
+        </Router>
+      </SnackbarProvider>
+    </StoreContext.Provider>
   );
 }
 

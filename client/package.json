@@ -38,6 +38,7 @@
   },
   "proxy": "http://localhost:8086",
   "devDependencies": {
+    "@testing-library/react": "^8.0.1",
     "source-map-explorer": "^1.8.0"
   }
 }
