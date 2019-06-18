@@ -35,7 +35,7 @@ export default function Projects() {
     };
 
     fetch();
-  }, [state.month]);
+  }, [state.month, addNotification]);
 
   return (
     <>

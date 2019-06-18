@@ -1,5 +1,4 @@
 import React from 'react';
-import { queryHelpers } from '@testing-library/dom';
 import Login from './index';
 import api from '../../../utils/api';
 import * as utils from '../../../test-utils';
