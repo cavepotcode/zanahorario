@@ -4,9 +4,8 @@ import { ProjectTimeSheetDataOut } from '../sdk/data_out/timesheet/projectTimeSh
 import { UserHoursByProject } from '../sdk/data_info/project/usersHoursByProject';
 import { UserDataInfo } from '../sdk/data_info/user/userDataInfo';
 import { ProjectDataInfo } from '../sdk/data_info/project/projectDataInfo';
-import { ResponseOut } from '../sdk/response';
-import { Enums } from '../sdk/enums';
-import { StatusConstants } from '../sdk/constatnts';
+import { Response } from '../sdk/response';
+import { ResponseCode, StatusConstants } from '../sdk/constants';
 const mssql = require('mssql');
 const uuidv1 = require('uuid/v1');
 
@@ -51,7 +50,7 @@ export class ProjectManager {
 
     const manager = new SqlManager(environment.db);
     await manager.executeNonQuery(sql, params);
-    return new ResponseOut(Enums.responseCode.Ok, 'Project added successfully', {});
+    return new Response(ResponseCode.OK, 'Project added successfully', {});
   }
 
   async update(project: ProjectDataInfo) {
@@ -63,9 +62,9 @@ export class ProjectManager {
     const manager = new SqlManager(environment.db);
     const result = await manager.executeQuery(sql, params);
     if (!result[0].Count || result[0].Count === 0) {
-      return new ResponseOut(Enums.responseCode.Error, 'There was a problem updating the project', {});
+      return new Response(ResponseCode.ERROR, 'There was a problem updating the project', {});
     }
-    return new ResponseOut(Enums.responseCode.Ok, 'Project updated successfully', {});
+    return new Response(ResponseCode.OK, 'Project updated successfully', {});
   }
 
   async delete(id: string) {
@@ -77,9 +76,9 @@ export class ProjectManager {
     const manager = new SqlManager(environment.db);
     const result = await manager.executeQuery(sql, params);
     if (!result[0].Count || result[0].Count === 0) {
-      return new ResponseOut(Enums.responseCode.Error, 'There was a problem deleting the project', {});
+      return new Response(ResponseCode.ERROR, 'There was a problem deleting the project', {});
     }
-    return new ResponseOut(Enums.responseCode.Ok, 'Project deleted successfully', {});
+    return new Response(ResponseCode.OK, 'Project deleted successfully', {});
   }
 
   async getAll() {
@@ -99,6 +98,6 @@ export class ProjectManager {
       ret.push(aux);
     });
 
-    return new ResponseOut(Enums.responseCode.Ok, '', ret);
+    return new Response(ResponseCode.OK, '', ret);
   }
 }

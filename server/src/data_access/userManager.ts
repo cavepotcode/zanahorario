@@ -1,69 +1,16 @@
 import { SqlManager, SqlParameter } from './sql_manager/sqlManager';
-import { LoginDataIn } from '../sdk/data_in/login_data_in';
-import { LoginDataOut } from '../sdk/data_out/loginDataOut';
-import { ResponseOut } from '../sdk/response';
-import { Enums } from '../sdk/enums';
+import { Response } from '../sdk/response';
 import { UtilClass } from '../utilClass';
 import { UserDataInfo } from '../sdk/data_info/user/userDataInfo';
 import { environment } from '../../environment/environment';
-import { SHAEncriptor } from '../encrypt';
-import { StatusConstants } from '../sdk/constatnts';
+import { encrypt } from '../encrypt';
+import { ResponseCode, StatusConstants } from '../sdk/constants';
 const path = require('path');
 const mssql = require('mssql');
 const uuidv1 = require('uuid/v1');
 const jwt = require('jsonwebtoken');
 
 export class UserManager {
-  async login(data: LoginDataIn) {
-    const manager = new SqlManager(environment.db);
-    let sql = 'SELECT 1 FROM Users WHERE Email=@Email And Password=@Password AND State=@State';
-    let params = Array<SqlParameter>();
-    params.push(new SqlParameter('Email', mssql.VarChar(50), data.email));
-
-    const sha = new SHAEncriptor();
-    const pasword = sha.encrypt(data.password);
-    params.push(new SqlParameter('Password', mssql.VarChar(150), pasword));
-    params.push(new SqlParameter('State', mssql.VarChar(20), StatusConstants.ACTIVE));
-
-    const result = await manager.executeQuery(sql, params);
-    if (result.length === 0) {
-      return new ResponseOut(1, 'Username or password is invalid. Please try again');
-    }
-
-    sql = 'UPDATE Users set Token = @Token where Email=@Email';
-    params = Array<SqlParameter>();
-    params.push(new SqlParameter('Email', mssql.VarChar(50), data.email));
-    // const token = uuidv1();
-
-    const tokenData: any = {
-      email: data.email
-    };
-
-    const token = jwt.sign(tokenData, environment.jwt.secret, {
-      expiresIn: 60 * environment.jwt.timestamp
-    });
-
-    params.push(new SqlParameter('Token', mssql.VarChar(), token));
-
-    await manager.executeNonQuery(sql, params);
-
-    const login = new LoginDataOut();
-    login.email = data.email;
-    login.token = token;
-
-    return new ResponseOut(Enums.responseCode.Ok, '', login);
-  }
-
-  async validateAction(token: string) {
-    const newToken = token.replace('Bearer ', '');
-    try {
-      const jwtResult = await jwt.verify(newToken, environment.jwt.secret);
-      return true;
-    } catch (ex) {
-      return false;
-    }
-  }
-
   async getCurrentUser() {
     const manager = new SqlManager(environment.db);
     const pathImage = environment.common.pathImage;
@@ -86,10 +33,10 @@ export class UserManager {
         path.resolve('./', result[0].ImageUrl);
       }
     } else {
-      return new ResponseOut(Enums.responseCode.Error, 'Unable to obtain information requested from the user.', null);
+      return new Response(ResponseCode.ERROR, 'Unable to obtain information requested from the user.', null);
     }
 
-    return new ResponseOut(Enums.responseCode.Ok, '', userInfo);
+    return new Response(ResponseCode.OK, '', userInfo);
   }
 
   async getUser() {
@@ -116,10 +63,10 @@ export class UserManager {
         path.resolve('./', result[0].ImageUrl);
       }
     } else {
-      return new ResponseOut(Enums.responseCode.Error, 'Unable to obtain information requested from the user.', null);
+      return new Response(ResponseCode.ERROR, 'Unable to obtain information requested from the user.', null);
     }
 
-    return new ResponseOut(Enums.responseCode.Ok, '', userInfo);
+    return new Response(ResponseCode.OK, '', userInfo);
   }
 
   async updateUser(data: UserDataInfo) {
@@ -140,6 +87,6 @@ export class UserManager {
     // let str = strBuilder.join("");
 
     await manager.executeNonQuery(str, params);
-    return new ResponseOut(Enums.responseCode.Ok, 'User updated successfully.', {});
+    return new Response(ResponseCode.OK, 'User updated successfully.', {});
   }
 }

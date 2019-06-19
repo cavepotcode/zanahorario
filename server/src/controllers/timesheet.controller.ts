@@ -1,6 +1,6 @@
 import { JsonController, Get, Post, Param, Body, Authorize } from 'kiwi-server';
-import { ResponseOut } from '../sdk/response';
-import { Enums } from '../sdk/enums';
+import { Response } from '../sdk/response';
+import { ResponseCode } from '../sdk/constants';
 import { environment } from '../../environment/environment';
 import { Log } from '../sdk/logs';
 import { TimesheetManager } from '../data_access/timesheetManager';
@@ -17,7 +17,7 @@ export class TimesheetController {
       return this.manager.getProjectTimesheetHours(month, year);
     } catch (err) {
       Log.logError('timesheet/getProjectTimesheetHours', err);
-      return new ResponseOut(Enums.responseCode.Error, environment.common.genericErrorMessage);
+      return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);
     }
   }
 
@@ -27,7 +27,7 @@ export class TimesheetController {
       return this.manager.getByUser(month, year);
     } catch (err) {
       Log.logError('timesheet/getProjectTimesheetHours', err);
-      return new ResponseOut(Enums.responseCode.Error, environment.common.genericErrorMessage);
+      return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);
     }
   }
 
@@ -37,7 +37,7 @@ export class TimesheetController {
       return this.manager.add(body);
     } catch (err) {
       Log.logError('timesheet/add', err);
-      return new ResponseOut(Enums.responseCode.Error, environment.common.genericErrorMessage);
+      return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);
     }
   }
 }

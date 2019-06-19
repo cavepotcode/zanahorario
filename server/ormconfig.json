@@ -1,0 +1,25 @@
+{
+   "type": "postgres",
+   "host": "localhost",
+   "port": 5432,
+   "username": "postgres",
+   "password": "Password.01",
+   "database": "zanahorario",
+   "synchronize": true,
+   "logging": false,
+   "entities": [
+      "dist/default/src/entities/**/*.js"
+   ],
+   "migrations": [
+      "dist/default/src/migrations/**/*.js"
+   ],
+   "subscribers": [
+      "src/subscriber/**/*.ts"
+   ],
+   "cli": {
+      "entitiesDir": "src/entities",
+      "migrationsDir": "src/migrations",
+      "subscribersDir": "src/subscribers"
+   }
+}
+

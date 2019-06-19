@@ -5,3 +5,9 @@ export class StatusConstants {
   static REJECTED: string = 'REJECTED';
   static DISABLED: string = 'DISABLED';
 }
+
+export class ResponseCode {
+  static OK = 0;
+  static ERROR = 1;
+  static WARNING = 2;
+}

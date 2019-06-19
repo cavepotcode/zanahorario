@@ -1,22 +1,22 @@
 import { JsonController, Post, Body } from 'kiwi-server';
 import { LoginDataIn } from '../sdk/data_in/login_data_in';
-import { ResponseOut } from '../sdk/response';
-import { Enums } from '../sdk/enums';
+import { Response } from '../sdk/response';
+import { ResponseCode } from '../sdk/constants';
 import { environment } from '../../environment/environment';
 import { Log } from '../sdk/logs';
-import { UserManager } from '../data_access/userManager';
+import { AuthService } from '../services/auth.service';
 
 @JsonController('/security')
 export class SecurityController {
-  constructor(private manager: UserManager) {}
+  constructor(private auth: AuthService) {}
 
   @Post('/login')
   public login(@Body() body: LoginDataIn) {
     try {
-      return this.manager.login(body);
+      return this.auth.login(body);
     } catch (err) {
       Log.logError('security/login', err);
-      return new ResponseOut(Enums.responseCode.Error, environment.common.genericErrorMessage);
+      return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);
     }
   }
 }

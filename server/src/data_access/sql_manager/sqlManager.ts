@@ -1,5 +1,5 @@
 import { forEach, isNil } from 'lodash';
-import { ResponseOut } from '../../sdk/response';
+import { Response } from '../../sdk/response';
 const sql = require('mssql');
 export { sql };
 
@@ -55,7 +55,7 @@ export class SqlManager {
     } catch (error) {
       console.log(error);
       await this.close();
-      throw new ResponseOut(1, error.message);
+      throw new Response(1, error.message);
     }
   }
 
@@ -79,7 +79,7 @@ export class SqlManager {
     } catch (error) {
       console.log(error);
       await this.close();
-      throw new ResponseOut(1, error.message);
+      throw new Response(1, error.message);
     }
   }
 }

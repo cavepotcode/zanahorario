@@ -1,9 +1,8 @@
 import { environment } from '../../environment/environment';
 import { SqlManager, SqlParameter } from './sql_manager/sqlManager';
-import { ResponseOut } from '../sdk/response';
-import { Enums } from '../sdk/enums';
+import { Response } from '../sdk/response';
 import { BillDataInfo } from '../sdk/data_info/bill/billDataInfo';
-import { StatusConstants } from '../sdk/constatnts';
+import { ResponseCode, StatusConstants } from '../sdk/constants';
 const mssql = require('mssql');
 const uuidv1 = require('uuid/v1');
 
@@ -37,7 +36,7 @@ export class BillManager {
       ret.push(aux);
     });
 
-    return new ResponseOut(Enums.responseCode.Ok, '', ret);
+    return new Response(ResponseCode.OK, '', ret);
   }
 
   async create(bill: BillDataInfo) {
@@ -59,7 +58,7 @@ export class BillManager {
 
     const manager = new SqlManager(environment.db);
     await manager.executeNonQuery(sql, params);
-    return new ResponseOut(Enums.responseCode.Ok, 'Bill added successfully', {});
+    return new Response(ResponseCode.OK, 'Bill added successfully', {});
   }
 
   async update(bill: BillDataInfo) {
@@ -81,7 +80,7 @@ export class BillManager {
 
     const manager = new SqlManager(environment.db);
     await manager.executeNonQuery(sql, params);
-    return new ResponseOut(Enums.responseCode.Ok, 'Bill updated successfully', {});
+    return new Response(ResponseCode.OK, 'Bill updated successfully', {});
   }
 
   async delete(id: string) {
@@ -92,6 +91,6 @@ export class BillManager {
 
     const manager = new SqlManager(environment.db);
     await manager.executeNonQuery(sql, params);
-    return new ResponseOut(Enums.responseCode.Ok, 'Bill deleted successfully', {});
+    return new Response(ResponseCode.OK, 'Bill deleted successfully', {});
   }
 }

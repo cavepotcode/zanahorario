@@ -1,8 +1,7 @@
 import { SqlManager, SqlParameter, sql } from './sql_manager/sqlManager';
 import { environment } from '../../environment/environment';
-import { ResponseOut } from '../sdk/response';
-import { Enums } from '../sdk/enums';
-import { StatusConstants } from '../sdk/constatnts';
+import { Response } from '../sdk/response';
+import { ResponseCode, StatusConstants } from '../sdk/constants';
 import { ProjectsHoursByYearDataInfo } from '../sdk/data_info/timeSheet/projectsHoursByYearDataInfo';
 import { ProjectHoursDataInfo } from '../sdk/data_info/project/projectHoursDataInfo';
 import { HoursByUserDataOut } from '../sdk/data_out/reports/hoursByUserDataOut';
@@ -43,7 +42,7 @@ export class ReportManager {
       aux.projects.push(hoursProject);
     });
 
-    return new ResponseOut(Enums.responseCode.Ok, '', res);
+    return new Response(ResponseCode.OK, '', res);
   }
 
   async getHoursByUser(year: number, month: number) {
@@ -82,7 +81,7 @@ export class ReportManager {
       res.push(aux);
     }
 
-    return new ResponseOut(Enums.responseCode.Ok, '', res);
+    return new Response(ResponseCode.OK, '', res);
   }
 
   async getProjectsHours(userId: string, year: number, month: number) {

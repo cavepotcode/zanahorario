@@ -1,8 +1,8 @@
 import { environment } from '../../environment/environment';
 import { SqlManager } from './sql_manager/sqlManager';
 import { CategoryDataInfo } from '../sdk/data_info/category/categoryDataInfo';
-import { ResponseOut } from '../sdk/response';
-import { Enums } from '../sdk/enums';
+import { Response } from '../sdk/response';
+import { ResponseCode } from '../sdk/constants';
 const path = require('path');
 
 export class CategoryManager {
@@ -28,6 +28,6 @@ export class CategoryManager {
       ret.push(aux);
     });
 
-    return new ResponseOut(Enums.responseCode.Ok, '', ret);
+    return new Response(ResponseCode.OK, '', ret);
   }
 }
