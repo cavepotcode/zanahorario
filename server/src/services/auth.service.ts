@@ -5,13 +5,13 @@ import { Response } from '../sdk/response';
 import { User } from '../entities/User';
 import { encrypt } from '../encrypt';
 import { environment } from '../../environment/environment';
-import { getUserRepository } from '../datastore';
+import { getRepository } from '../datastore';
 
 export class AuthService {
   async login({ email, password: plainPassword }: LoginDataIn) {
     const password = encrypt(plainPassword);
 
-    const userRepository = await getUserRepository();
+    const userRepository = await getRepository(User);
     const user: User = await userRepository.findOne({ email, password });
     if (!user) {
       return new Response(ResponseCode.ERROR, 'Username or password is invalid. Please try again');
