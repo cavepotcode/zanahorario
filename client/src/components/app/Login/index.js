@@ -20,8 +20,14 @@ export default function Login() {
     <section className={styles.section}>
       <img src={logo} alt="zanahorario" className={styles.logo} />
       <Form noValidate onSubmit={onSubmit}>
-        <LoginInput validateOnChange validate={validators.email} field="email" type="email" />
-        <LoginInput validateOnChange validate={validatePassword} field="password" type="password" />
+        <LoginInput validateOnChange validate={validators.email} field="email" type="email" placeholder="Email" />
+        <LoginInput
+          validateOnChange
+          validate={validatePassword}
+          field="password"
+          type="password"
+          placeholder="Password"
+        />
         <Button loading={loading}>Log in</Button>
         <span>&iquest;Olvidaste tu contrase&ntilde;a?</span>
       </Form>

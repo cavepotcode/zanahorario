@@ -21,10 +21,7 @@ export default function SnackbarProvider({ children }) {
     setSnacks(snacks.filter(n => n !== notification));
   };
 
-  const contextValue = {
-    addNotification,
-    removeNotification
-  };
+  const [contextValue] = React.useState({ addNotification, removeNotification });
 
   return (
     <Context.Provider value={contextValue}>
