@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { Connection, Repository, createConnection, getRepository } from 'typeorm';
+import { Connection, Repository, createConnection, EntitySchema } from 'typeorm';
 import { User } from '../entities/User';
 
 const connection: Promise<void | Connection> = createConnection({
@@ -14,9 +14,9 @@ const connection: Promise<void | Connection> = createConnection({
   logging: false
 }).catch((error: any) => console.log(error));
 
-export async function getUserRepository(): Promise<Repository<User>> {
+export async function getRepository<T>(entity: new () => T): Promise<Repository<T>> {
   const conn = await connection;
   if (!conn) throw new Error('Connection to db not available');
 
-  return conn.getRepository(User);
+  return conn.getRepository(entity);
 }
