@@ -23,43 +23,32 @@ it('should render all projects', () => {
     code: 0,
     data: [
       {
-        lastTime: '6/28/2019 12:00:00 AM',
-        totalHours: 6340,
+        lastEntry: '6/28/2019 12:00:00 AM',
+        total: 6340,
         monthHours: 160,
-        month: null,
         project: {
           id: 'project-1',
-          name: 'Project1',
-          description: '',
-          projectMonthHours: 0
+          name: 'Project1'
         },
-        projects: null,
-        usersHoursByProject: [
+        usersHours: [
           {
-            id: null,
-            email: 'sample@cavepot.com',
-            initials: 'S1',
-            userMonthHours: 160
+            user: { id: 1, initials: 'S1' },
+            hours: 160
           }
         ]
       },
       {
-        lastTime: '6/14/2019 12:00:00 AM',
-        totalHours: 1190,
+        lastEntry: '6/14/2019 12:00:00 AM',
+        total: 1190,
         monthHours: 80,
-        month: null,
         project: {
           id: 'project-2',
-          name: 'Project2',
-          description: 'Proyectos cerrados',
-          projectMonthHours: 0
+          name: 'Project2'
         },
-        projects: null,
-        usersHoursByProject: [
+        usersHours: [
           {
-            email: 'sample2@cavepot.com',
-            initials: 'S2',
-            userMonthHours: 80
+            user: { id: 2, initials: 'S2' },
+            hours: 80
           }
         ]
       }

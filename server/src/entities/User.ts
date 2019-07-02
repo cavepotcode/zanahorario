@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Timesheet } from './Timesheet';
 
 @Entity()
 export class User {
@@ -31,4 +32,7 @@ export class User {
 
   @Column({ nullable: true, length: 50 })
   photo: string;
+
+  @OneToMany(type => Timesheet, timesheet => timesheet.user)
+  timesheets: Timesheet[];
 }

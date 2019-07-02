@@ -23,6 +23,6 @@ export const environment = {
   },
   jwt: {
     secret: process.env.JWT_SECRET,
-    timestamp: 15
+    timestamp: 60
   }
 };
