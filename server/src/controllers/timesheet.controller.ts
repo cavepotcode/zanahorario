@@ -1,22 +1,26 @@
-import { JsonController, Get, Post, Param, Body, Authorize } from 'kiwi-server';
+import { Authorize, Body, Get, JsonController, Param, Post, QueryParam } from 'kiwi-server';
 import { Response } from '../sdk/response';
 import { ResponseCode } from '../sdk/constants';
 import { environment } from '../../environment/environment';
 import { Log } from '../sdk/logs';
 import { TimesheetManager } from '../data_access/timesheetManager';
 import { AddTimesheetDataIn } from '../sdk/data_in/addTimeSheetDataIn';
+import { TimesheetService } from '../services/timesheet.service';
+import { IDateFilter } from '../dto/date-filter.interface';
 
 @Authorize()
 @JsonController('/timesheet')
 export class TimesheetController {
-  constructor(private manager: TimesheetManager) {}
+  constructor(private timeSvc: TimesheetService, private manager: TimesheetManager) {}
 
-  @Get('/getProjectTimesheetHours/:month/:year')
-  public getCurrentUser(@Param('month') month: number, @Param('year') year: number) {
+  // TODO: move to project controller?
+  @Get('/project')
+  public async getProjectsTimesheets(@QueryParam() params: IDateFilter) {
     try {
-      return this.manager.getProjectTimesheetHours(month, year);
+      const { year, month } = params;
+      return this.timeSvc.projectHours(year, month);
     } catch (err) {
-      Log.logError('timesheet/getProjectTimesheetHours', err);
+      Log.logError('TimesheetController.getProjectsTimesheets', err);
       return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);
     }
   }
@@ -26,7 +30,7 @@ export class TimesheetController {
     try {
       return this.manager.getByUser(month, year);
     } catch (err) {
-      Log.logError('timesheet/getProjectTimesheetHours', err);
+      Log.logError('timesheet/getByUser', err);
       return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);
     }
   }

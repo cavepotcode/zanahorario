@@ -14,51 +14,6 @@ const mssql = require('mssql');
 const uuidv1 = require('uuid/v1');
 
 export class TimesheetManager {
-  async getProjectTimesheetHours(month: number, year: number) {
-    const str =
-      'SELECT *, ' +
-      '(SELECT sum ([Hours]) TotalHours ' +
-      'FROM TimeSheet WHERE [ProjectId] = p.Id) as TotalHours, ' +
-      '(SELECT sum ([Hours]) MonthHours ' +
-      'FROM TimeSheet WHERE [ProjectId] = p.Id AND DATEPART(mm, [Date]) = @Month AND ' +
-      'DATEPART(yyyy, [Date]) = @Year) as MonthHours, (SELECT TOP 1 [Date] ' +
-      'FROM TimeSheet WHERE [ProjectId] = p.Id ORDER BY ' +
-      '[Date] DESC) as LastTime FROM Projects p WHERE State=@State order by MonthHours desc';
-
-    const params = Array<SqlParameter>();
-    params.push(new SqlParameter('Year', mssql.Int, year));
-    params.push(new SqlParameter('Month', mssql.Int, month));
-    params.push(new SqlParameter('State', mssql.VarChar(50), StatusConstants.ACTIVE));
-
-    const manager = new SqlManager(environment.db);
-    const res = await manager.executeQuery(str, params);
-
-    const result = <ProjectTimeSheetDataOut[]>[];
-
-    const projManager = new ProjectManager();
-    for (const element of res) {
-      const data = new ProjectTimeSheetDataOut();
-      data.project = new ProjectDataInfo();
-
-      data.project.id = element.Id;
-      data.project.name = element.Name;
-      data.project.description = UtilClass.isNullOrWithSpaces(element.Description) ? '' : element.Description;
-
-      // new Date(-8640000000000000) = min date
-      data.lastTime = UtilClass.isNull(element.LastTime) ? new Date(-8640000000000000) : element.LastTime;
-      data.monthHours = UtilClass.isNull(element.MonthHours) ? 0 : element.MonthHours;
-      data.totalHours = UtilClass.isNull(element.TotalHours) ? 0 : element.TotalHours;
-
-      await projManager.getUserMonthHoursByProject(data.project.id, month, year).then((res: any) => {
-        data.usersHoursByProject = res;
-      });
-
-      result.push(data);
-    }
-
-    return new Response(ResponseCode.OK, '', result);
-  }
-
   async getByUser(month: number, year: number) {
     const sql =
       'SELECT ts.Id, ts.Date, ts.Hours, ts.Observations, p.Id AS ProjectId, ' +
