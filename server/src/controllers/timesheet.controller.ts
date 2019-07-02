@@ -18,7 +18,8 @@ export class TimesheetController {
   public async getProjectsTimesheets(@QueryParam() params: IDateFilter) {
     try {
       const { year, month } = params;
-      return this.timeSvc.projectHours(year, month);
+      const result = await this.timeSvc.projectHours(year, month);
+      return new Response(ResponseCode.OK, '', result);
     } catch (err) {
       Log.logError('TimesheetController.getProjectsTimesheets', err);
       return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);

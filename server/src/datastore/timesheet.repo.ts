@@ -3,8 +3,20 @@ import { Timesheet } from '../entities/Timesheet';
 
 @EntityRepository(Timesheet)
 export class TimesheetRepository extends Repository<Timesheet> {
+  lastEntryByProject(): any {
+    return this.createQueryBuilder('time')
+      .groupBy('time."projectId"')
+      .select('time."projectId"')
+      .addSelect('MAX(time.date)', 'date')
+      .getRawMany();
+  }
+
   hoursByProject(year: number, month: number): Promise<IHoursByProject[]> {
-    return this.getHoursByProject().getRawMany();
+    return this.getHoursByProject()
+      .innerJoin('time.project', 'project')
+      .addGroupBy('project.name')
+      .addSelect('project.name as "projectName"')
+      .getRawMany();
   }
 
   monthlyHoursByProject(year: number, month: number): Promise<IHoursByProject[]> {

@@ -9,7 +9,7 @@ import useSnackbar from '../../Snackbar/useSnackbar';
 const initialState = {
   loading: false,
   projects: [],
-  month: new Date().getMonth()
+  month: new Date().getMonth() + 1
 };
 
 export default function Projects() {
@@ -24,12 +24,12 @@ export default function Projects() {
         const response = await api.get(url);
         const projects = response.data.map(item => ({
           ...item,
-          lastTime: new Date(item.lastTime).toLocaleDateString('es-UY')
+          lastTime: new Date(item.lastEntry).toLocaleDateString('es-UY')
         }));
 
         dispatch({ type: 'fetch_success', projects });
-      } catch (err) {
-        dispatch({ type: 'fetch_failure' });
+      } catch (error) {
+        dispatch({ type: 'fetch_failure', error });
         addNotification('There was an error getting the projects. Try again later.');
       }
     };
@@ -48,15 +48,15 @@ export default function Projects() {
         {state.projects.map((item, index) => (
           <div className={classes(styles.project, index % 2 !== 0 && styles.odd)} key={item.project.id + state.month}>
             <div className={styles.title}>
-              <span>{item.project.name}</span>
+              <span title={item.project.name}>{item.project.name}</span>
             </div>
             <div className={styles.selector}>
-              <UsersCarousel entries={item.usersHoursByProject} />
+              <UsersCarousel entries={item.usersHours} />
             </div>
             <div className={styles.info}>
               <span>LAST DATE: {item.lastTime}</span>
               <span>MONTH HOURS: {item.monthHours}</span>
-              <span>TOTAL HOURS: {item.totalHours}</span>
+              <span>TOTAL HOURS: {item.total}</span>
             </div>
           </div>
         ))}
@@ -72,7 +72,7 @@ function reducer(state, action) {
     case 'fetch_success':
       return { ...state, loading: false, projects: action.projects };
     case 'fetch_failure':
-      return { ...state, loading: false, projects: [] };
+      return { ...state, loading: false, error: action.error, projects: [] };
     case 'increment':
       return { ...state, month: state.month + 1 };
     case 'decrement':
