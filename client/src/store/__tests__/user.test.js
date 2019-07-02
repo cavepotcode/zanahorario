@@ -9,7 +9,7 @@ describe('User Store', () => {
     const email = 'test@cavepot.com';
     const store = createStore([userStore]);
 
-    store.dispatch('authenticate', email);
+    store.dispatch('authenticate', { email, token: 'token' });
     expect(navigate).toHaveBeenCalled();
     expect(navigate).toHaveBeenCalledWith('/projects');
 
