@@ -2,27 +2,18 @@
 @import '../../../../styles/_variables';
 
 .container {
-  align-items: center;
-  display: flex;
-  justify-content: space-around;
   margin: 24px 0;
 
   .title {
     color: $primary-light;
-    flex: 1 1 0;
     font-size: 22px;
-    max-width: 80px;
     text-align: left;
   }
 
   input {
-    box-sizing: border-box;
-    max-width: 60px;
-
     border-radius: $radius;
     border: 1px solid black;
     font-size: 18px;
-    outline: none;
     padding: 4px;
   }
 }
