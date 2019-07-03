@@ -5,29 +5,25 @@
   align-items: center;
   display: flex;
   justify-content: space-around;
+  margin: 24px 0;
 
   .title {
+    color: $primary-light;
     flex: 1 1 0;
-    font-size: 28px;
+    font-size: 22px;
     max-width: 80px;
     text-align: left;
   }
 
-  .date {
-    background-color: $primary;
-    border-radius: $radius;
-    color: white;
-    flex: 1 1 0;
+  input {
+    box-sizing: border-box;
     max-width: 60px;
-    padding: 8px 0;
 
-    div:first-child {
-      font-size: 24px;
-    }
-
-    &.secondary {
-      background-color: $secondary;
-    }
+    border-radius: $radius;
+    border: 1px solid black;
+    font-size: 18px;
+    outline: none;
+    padding: 4px;
   }
 }
 

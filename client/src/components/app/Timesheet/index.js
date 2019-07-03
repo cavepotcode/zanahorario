@@ -1,13 +1,16 @@
 import React from 'react';
 import CalendarHeader from './CalendarHeader';
+import ProjectLine from './ProjectLine';
 import styles from './styles.module.scss';
 import ValueSlider from '../../ui/ValueSlider';
 import { getMonthShortName } from '../../../utils/date';
 import { lastMonday } from '../../../utils/date';
+import Button from '../../ui/Button';
 
 export default function Timesheet() {
   const [date, setDate] = React.useState(lastMonday);
   const [monthLabel, setMonthLabel] = React.useState(getMonthLabel(date));
+  const [projects, setProjects] = React.useState([{ name: 'Cavepot' }]);
 
   return (
     <div className={styles.container}>
@@ -17,7 +20,14 @@ export default function Timesheet() {
       </header>
       <section>
         <CalendarHeader startDate={date} />
+        {projects.map(project => (
+          <ProjectLine project={project} key={project.name} />
+        ))}
       </section>
+      <footer>
+        <Button>Add Project</Button>
+        <Button>Save</Button>
+      </footer>
     </div>
   );
 
