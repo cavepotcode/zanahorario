@@ -1,0 +1,30 @@
+@import '../../../../styles/_palette';
+@import '../../../../styles/_variables';
+
+.container {
+  align-items: center;
+  display: flex;
+  justify-content: space-around;
+
+  .title {
+    font-size: 28px;
+  }
+
+  .date {
+    background-color: $primary;
+    border-radius: $radius;
+    color: white;
+    flex: 1 1 0;
+    max-width: 60px;
+    padding: 8px 0;
+
+    div:first-child {
+      font-size: 24px;
+    }
+
+    &.secondary {
+      background-color: $secondary;
+    }
+  }
+}
+

@@ -6,6 +6,7 @@ import classes from '../../../utils/classes';
 import { apiUrls } from '../../../urls';
 import useSnackbar from '../../Snackbar/useSnackbar';
 import ValueSlider from '../../ui/ValueSlider';
+import { getMonthShortName } from '../../../utils/date';
 
 const selectedDate = new Date();
 const label = getLabel(selectedDate);
@@ -97,6 +98,6 @@ function reducer(state, action) {
 }
 
 function getLabel(date) {
-  const monthName = date.toLocaleString('en-us', { month: 'short' });
+  const monthName = getMonthShortName(date);
   return `${monthName}, ${date.getFullYear()}`;
 }

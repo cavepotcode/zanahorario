@@ -1,0 +1,12 @@
+@import '../../../styles/_palette';
+@import '../../../styles/_variables';
+
+.container {
+  border: 1px solid $dark-gray;
+  border-radius: $radius;
+
+  header {
+    display: flex;
+    justify-content: center;
+  }
+}
