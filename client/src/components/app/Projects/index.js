@@ -5,11 +5,16 @@ import api from '../../../utils/api';
 import classes from '../../../utils/classes';
 import { apiUrls } from '../../../urls';
 import useSnackbar from '../../Snackbar/useSnackbar';
+import ValueSlider from '../../ui/ValueSlider';
+
+const selectedDate = new Date();
+const label = getLabel(selectedDate);
 
 const initialState = {
   loading: false,
   projects: [],
-  month: new Date().getMonth() + 1
+  selectedDate,
+  label
 };
 
 export default function Projects() {
@@ -19,7 +24,7 @@ export default function Projects() {
   React.useEffect(() => {
     const fetch = async () => {
       dispatch({ type: 'fetch_start' });
-      const url = apiUrls.projects(state.month, 2019);
+      const url = apiUrls.projects(state.selectedDate.getMonth() + 1, state.selectedDate.getFullYear());
       try {
         const response = await api.get(url);
         const projects = response.data.map(item => ({
@@ -35,18 +40,21 @@ export default function Projects() {
     };
 
     fetch();
-  }, [state.month, addNotification]);
+  }, [state.selectedDate, addNotification]);
 
   return (
     <>
-      <div>
-        <button onClick={() => dispatch({ type: 'decrement' })}>&lt;</button>
-        move
-        <button onClick={() => dispatch({ type: 'increment' })}>&gt;</button>
-      </div>
+      <ValueSlider
+        onPrev={() => dispatch({ type: 'decrement' })}
+        onNext={() => dispatch({ type: 'increment' })}
+        value={state.label}
+      />
       <div className={classes(styles.container, state.loading && styles.loading)}>
         {state.projects.map((item, index) => (
-          <div className={classes(styles.project, index % 2 !== 0 && styles.odd)} key={item.project.id + state.month}>
+          <div
+            className={classes(styles.project, index % 2 !== 0 && styles.odd)}
+            key={item.project.id + state.selectedDate.toISOString()}
+          >
             <div className={styles.title}>
               <span title={item.project.name}>{item.project.name}</span>
             </div>
@@ -73,11 +81,22 @@ function reducer(state, action) {
       return { ...state, loading: false, projects: action.projects };
     case 'fetch_failure':
       return { ...state, loading: false, error: action.error, projects: [] };
-    case 'increment':
-      return { ...state, month: state.month + 1 };
-    case 'decrement':
-      return { ...state, month: state.month - 1 };
+    case 'increment': {
+      const newDate = new Date(state.selectedDate);
+      newDate.setMonth(newDate.getMonth() + 1);
+      return { ...state, selectedDate: newDate, label: getLabel(newDate) };
+    }
+    case 'decrement': {
+      const newDate = new Date(state.selectedDate);
+      newDate.setMonth(newDate.getMonth() - 1);
+      return { ...state, selectedDate: newDate, label: getLabel(newDate) };
+    }
     default:
       throw new Error();
   }
+}
+
+function getLabel(date) {
+  const monthName = date.toLocaleString('en-us', { month: 'short' });
+  return `${monthName}, ${date.getFullYear()}`;
 }
