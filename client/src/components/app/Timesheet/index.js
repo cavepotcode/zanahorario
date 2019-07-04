@@ -6,11 +6,21 @@ import ValueSlider from '../../ui/ValueSlider';
 import { getMonthShortName } from '../../../utils/date';
 import { lastMonday } from '../../../utils/date';
 import Button from '../../ui/Button';
+import api from '../../../utils/api';
+import { apiUrls } from '../../../urls';
 
 export default function Timesheet() {
   const [date, setDate] = React.useState(lastMonday);
   const [monthLabel, setMonthLabel] = React.useState(getMonthLabel(date));
-  const [projects, setProjects] = React.useState([{ name: 'Cavepot' }]);
+  const [projects, setProjects] = React.useState([{ name: 'Cavepot', id: 1 }]);
+
+  React.useEffect(() => {
+    async function fetch() {
+      const { data, meta } = await api.get(apiUrls.projects.index);
+    }
+
+    fetch();
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -21,15 +31,21 @@ export default function Timesheet() {
       <section>
         <CalendarHeader startDate={date} />
         {projects.map(project => (
-          <ProjectLine project={project} key={project.name} />
+          <ProjectLine startDate={date} project={project} key={project.name} onEntered={handleEntered} />
         ))}
       </section>
       <footer>
-        <Button>Add Project</Button>
+        <Button onClick={handleAddProject}>Add Project</Button>
         <Button>Save</Button>
       </footer>
     </div>
   );
+
+  function handleEntered(entry) {}
+
+  function handleAddProject() {
+    setProjects([...projects, { name: 'Random', id: 2 }]);
+  }
 
   function handleMonthChange(increment) {
     const newDate = new Date(date);

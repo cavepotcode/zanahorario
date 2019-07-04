@@ -13,9 +13,10 @@ export class ProjectController {
   constructor(private projectSvc: ProjectService, private manager: ProjectManager) {}
 
   @Get('')
-  public all() {
+  public async all() {
     try {
-      return this.projectSvc.all();
+      const projects = await this.projectSvc.all();
+      return new Response(ResponseCode.OK, '', projects);
     } catch (err) {
       Log.logError('project/all', err);
       return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);

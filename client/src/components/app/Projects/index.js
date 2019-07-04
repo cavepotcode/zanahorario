@@ -25,7 +25,7 @@ export default function Projects() {
   React.useEffect(() => {
     const fetch = async () => {
       dispatch({ type: 'fetch_start' });
-      const url = apiUrls.projects(state.selectedDate.getMonth() + 1, state.selectedDate.getFullYear());
+      const url = apiUrls.projectsTime(state.selectedDate.getMonth() + 1, state.selectedDate.getFullYear());
       try {
         const response = await api.get(url);
         const projects = response.data.map(item => ({
