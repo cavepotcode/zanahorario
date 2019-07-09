@@ -13,6 +13,7 @@ export class Log {
     const separator = '------------------------ \r\n';
 
     const text = `Hour: ${hour} - ${title}:\r\n${message}\r\n${separator}`;
+    console.error(message);
     if (fs.existsSync(completePath.toString())) {
       fs.appendFile(completePath, text, (err: any) => {
         if (err) {

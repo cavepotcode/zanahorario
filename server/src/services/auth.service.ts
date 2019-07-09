@@ -33,4 +33,14 @@ export class AuthService {
       return false;
     }
   }
+
+  decode(token: string) {
+    if (token) {
+      const [, payload] = token.split('.');
+      const decoded = Buffer.from(payload, 'base64').toString();
+      const { userId } = JSON.parse(decoded);
+      return { id: userId };
+    }
+    return {};
+  }
 }

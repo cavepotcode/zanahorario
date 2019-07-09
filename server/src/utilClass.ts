@@ -1,5 +1,13 @@
+export function groupBy(data: any[], key: string): any {
+  return data.reduce((acc: any, curr: any) => {
+    (acc[curr[key]] = acc[curr[key]] || []).push(curr);
+    return acc;
+  }, {});
+}
+
+// TODO: migrate to exported functions
 export class UtilClass {
-  static userId: string;
+  static userId: string; // TODO: ???
   static userEmail: string;
 
   static isNullOrWithSpaces(data: string): boolean {
@@ -11,7 +19,7 @@ export class UtilClass {
   }
 
   static setLoggedUser(id: string, email: string): void {
-    this.userId = id;
+    this.userId = id; // FIXME: these properties are static!
     this.userEmail = email;
   }
 

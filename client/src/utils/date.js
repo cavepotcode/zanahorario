@@ -14,3 +14,11 @@ export function lastMonday() {
   }
   return result;
 }
+
+export function parseDate(date) {
+  return {
+    year: date.getFullYear(),
+    month: date.getMonth() + 1,
+    day: date.getDate()
+  };
+}

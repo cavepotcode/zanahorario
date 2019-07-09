@@ -12,7 +12,7 @@ export default function CalendarHeader({ startDate }) {
       {week.map((_, index) => {
         const date = new Date(startDate);
         date.setDate(date.getDate() + index);
-        return <CalendarCard date={date} />;
+        return <CalendarCard date={date} key={date} />;
       })}
     </div>
   );

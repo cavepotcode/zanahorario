@@ -3,26 +3,26 @@ import styles from './styles.module.scss';
 import grid from '../grid.module.scss';
 import classes from '../../../../utils/classes';
 
-// TODO: validate input (numeric, lt 24)
-export default function ProjectLine({ startDate, project, hours, onEntered }) {
-  const week = new Array(7).fill(0);
-
+// TODO: validate input (numeric, <= 24)
+export default function ProjectLine({ project, entries, onEntered }) {
   return (
     <div className={classes(styles.container, grid.row)}>
       <div className={classes(styles.title, grid.cell, grid.first)}>{project.name}</div>
-      {week.map((_, index) => (
-        <input className={grid.cell} onBlur={e => handleEntered(e, index)} />
+      {entries.map(entry => (
+        <input
+          className={grid.cell}
+          key={entry.date}
+          onBlur={e => handleEntered(e, entry)}
+          defaultValue={entry.hours}
+        />
       ))}
     </div>
   );
 
-  function handleEntered(event, index) {
-    const date = new Date(startDate);
-    date.setDate(date.getDate() + index);
-    onEntered({
-      projectId: project.id,
-      date,
-      hours: Number(event.target.value)
-    });
+  function handleEntered(event, entry) {
+    const hours = Number(event.target.value) || null;
+    if (hours !== entry.hours) {
+      onEntered(project.id, { ...entry, hours });
+    }
   }
 }

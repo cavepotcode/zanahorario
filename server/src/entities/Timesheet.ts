@@ -19,6 +19,12 @@ export class Timesheet {
   @ManyToOne(type => Project, project => project.timesheets)
   project: Project;
 
+  @Column()
+  projectId: number;
+
   @ManyToOne(type => User, user => user.timesheets)
   user: User;
+
+  @Column()
+  userId: number;
 }

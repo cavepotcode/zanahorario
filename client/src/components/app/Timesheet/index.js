@@ -1,26 +1,51 @@
 import React from 'react';
+import update from 'immutability-helper';
 import CalendarHeader from './CalendarHeader';
 import ProjectLine from './ProjectLine';
 import styles from './styles.module.scss';
+import { generateInitialEntries, getTimeChanges } from './helper';
 import ValueSlider from '../../ui/ValueSlider';
 import { getMonthShortName } from '../../../utils/date';
 import { lastMonday } from '../../../utils/date';
 import Button from '../../ui/Button';
 import api from '../../../utils/api';
 import { apiUrls } from '../../../urls';
+import useSnackbar from '../../Snackbar/useSnackbar';
 
 export default function Timesheet() {
+  const { addNotification } = useSnackbar();
   const [date, setDate] = React.useState(lastMonday);
   const [monthLabel, setMonthLabel] = React.useState(getMonthLabel(date));
-  const [projects, setProjects] = React.useState([{ name: 'Cavepot', id: 1 }]);
+  const [projectsTime, setProjectsTime] = React.useState([]);
 
   React.useEffect(() => {
     async function fetch() {
-      const { data, meta } = await api.get(apiUrls.projects.index);
+      try {
+        const [projectsResp, timesheetsResp] = await Promise.all([
+          api.get(apiUrls.projects.index),
+          api.get(apiUrls.timesheets.user(date))
+        ]);
+
+        const { data: projects } = projectsResp;
+        const { data: timesheet } = timesheetsResp;
+
+        const projectsTime = [];
+        for (let [key, entries] of Object.entries(timesheet)) {
+          projectsTime.push({
+            project: projects.find(p => p.id === Number(key)),
+            entries: entries.map(e => ({ ...e, date: new Date(e.date) }))
+          });
+        }
+
+        const entries = generateInitialEntries(date, projectsTime);
+        setProjectsTime(entries);
+      } catch (err) {
+        addNotification(err.message);
+      }
     }
 
     fetch();
-  }, []);
+  }, [date, addNotification]);
 
   return (
     <div className={styles.container}>
@@ -30,21 +55,47 @@ export default function Timesheet() {
       </header>
       <section>
         <CalendarHeader startDate={date} />
-        {projects.map(project => (
-          <ProjectLine startDate={date} project={project} key={project.name} onEntered={handleEntered} />
+        {projectsTime.map(({ project, entries }) => (
+          <ProjectLine
+            entries={entries}
+            key={project.name}
+            onEntered={handleEntered}
+            project={project}
+            startDate={date}
+          />
         ))}
       </section>
       <footer>
         <Button onClick={handleAddProject}>Add Project</Button>
-        <Button>Save</Button>
+        <Button onClick={handleSave}>Save</Button>
       </footer>
     </div>
   );
 
-  function handleEntered(entry) {}
+  async function handleSave() {
+    const changes = getTimeChanges(projectsTime);
+    const { meta } = await api.post(apiUrls.timesheets.index, changes);
+
+    const message = !meta.code ? 'Changes saved correctly' : meta.message;
+    addNotification(message);
+  }
+
+  function handleEntered(projectId, entry) {
+    const projectIndex = projectsTime.findIndex(({ project }) => project.id === projectId);
+    const project = projectsTime[projectIndex];
+    const entryIndex = project.entries.findIndex(({ date }) => date === entry.date);
+    const oldEntry = project.entries[entryIndex];
+
+    if (entryIndex >= 0 && Number(entry.hours) !== Number(oldEntry.hours)) {
+      const newTimesheets = update(projectsTime, {
+        [projectIndex]: { entries: { [entryIndex]: { $merge: { hours: entry.hours, changed: true } } } }
+      });
+      setProjectsTime(newTimesheets);
+    }
+  }
 
   function handleAddProject() {
-    setProjects([...projects, { name: 'Random', id: 2 }]);
+    // setProjectsTime([...projects, { name: 'Random', id: 2 }]);
   }
 
   function handleMonthChange(increment) {
