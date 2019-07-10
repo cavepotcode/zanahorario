@@ -1,3 +1,5 @@
+import { navigate } from '@reach/router';
+
 async function get(url) {
   const result = await fetch(url, {
     method: 'GET',
@@ -6,6 +8,10 @@ async function get(url) {
       Authorization: getAuthHeader()
     }
   });
+
+  if (result.status === 401) {
+    return navigate('/login');
+  }
   return await result.json();
 }
 

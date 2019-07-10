@@ -5,11 +5,23 @@ import { environment } from '../../environment/environment';
 import { Log } from '../sdk/logs';
 import { ProjectDataInfo } from '../sdk/data_info/project/projectDataInfo';
 import { ProjectManager } from '../data_access/projectManager';
+import { ProjectService } from '../services/project.service';
 
 @Authorize()
 @JsonController('/project')
 export class ProjectController {
-  constructor(private manager: ProjectManager) {}
+  constructor(private projectSvc: ProjectService, private manager: ProjectManager) {}
+
+  @Get('')
+  public async all() {
+    try {
+      const projects = await this.projectSvc.all();
+      return new Response(ResponseCode.OK, '', projects);
+    } catch (err) {
+      Log.logError('project/all', err);
+      return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);
+    }
+  }
 
   @Put('/create')
   public create(@Body() body: ProjectDataInfo) {
@@ -37,16 +49,6 @@ export class ProjectController {
       return this.manager.delete(id);
     } catch (err) {
       Log.logError('project/delete', err);
-      return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);
-    }
-  }
-
-  @Get('/getAll')
-  public getAll() {
-    try {
-      return this.manager.getAll();
-    } catch (err) {
-      Log.logError('project/getAll', err);
       return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);
     }
   }

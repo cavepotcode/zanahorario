@@ -6,7 +6,9 @@ function LoginInput({ fieldState, ...props }) {
   return (
     <div className={styles.container}>
       <BasicText fieldState={fieldState} {...props} style={fieldState.error ? { border: '4px solid red' } : null} />
-      <div className={styles.error}>{fieldState.error}</div>
+      <div data-testid="error-msg" className={styles.error}>
+        {fieldState.error}
+      </div>
     </div>
   );
 }

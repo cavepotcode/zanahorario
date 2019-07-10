@@ -20,8 +20,14 @@ export default function Login() {
     <section className={styles.section}>
       <img src={logo} alt="zanahorario" className={styles.logo} />
       <Form noValidate onSubmit={onSubmit}>
-        <LoginInput validateOnChange validate={validators.email} field="email" type="email" />
-        <LoginInput validateOnChange validate={validatePassword} field="password" type="password" />
+        <LoginInput validateOnChange validate={validators.email} field="email" type="email" placeholder="Email" />
+        <LoginInput
+          validateOnChange
+          validate={validatePassword}
+          field="password"
+          type="password"
+          placeholder="Password"
+        />
         <Button loading={loading}>Log in</Button>
         <span>&iquest;Olvidaste tu contrase&ntilde;a?</span>
       </Form>
@@ -36,8 +42,7 @@ export default function Login() {
       if (meta && meta.code) {
         return addNotification(meta.message);
       }
-      localStorage.setItem('access_token', data);
-      dispatch('authenticate', creds.email);
+      dispatch('authenticate', { email: creds.email, token: data });
     } catch (err) {
       addNotification(err.message);
     } finally {

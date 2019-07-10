@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './styles.module.scss';
+import classes from '../../../../utils/classes';
 import Arrow from '../Arrow';
 
 export default function UsersCarousel({ entries, max = 3 }) {
@@ -7,9 +8,13 @@ export default function UsersCarousel({ entries, max = 3 }) {
   const [entriesWindow, setWindow] = React.useState([]);
 
   React.useEffect(() => {
-    if (userIndex >= 0 && userIndex + max <= entries.length) {
-      const entriesList = entries.slice(userIndex, userIndex + max);
-      setWindow(entriesList);
+    if (userIndex >= 0) {
+      if (userIndex + max <= entries.length) {
+        const entriesList = entries.slice(userIndex, userIndex + max);
+        setWindow(entriesList);
+      } else {
+        setWindow(entries);
+      }
     }
   }, [userIndex, max, entries]);
 
@@ -21,8 +26,8 @@ export default function UsersCarousel({ entries, max = 3 }) {
     <div className={styles.carousel}>
       <Arrow show={showArrows} left onClick={moveWindow} step={-1} disabled={disabledPrev} />
 
-      {entriesWindow.map(({ user, hours }) => (
-        <div className={styles.user} key={user.initials}>
+      {entriesWindow.map(({ user, hours }, index) => (
+        <div className={classes(styles.user, index === entriesWindow.length - 1 && styles.last)} key={user.id}>
           <div>{user.initials}</div>
           <div>{hours}</div>
         </div>
