@@ -80,24 +80,4 @@ export class ProjectManager {
     }
     return new Response(ResponseCode.OK, 'Project deleted successfully', {});
   }
-
-  async getAll() {
-    const sql = 'SELECT * FROM Projects WHERE State=@State ORDER BY Name';
-    const params = Array<SqlParameter>();
-    params.push(new SqlParameter('State', mssql.VarChar(50), StatusConstants.ACTIVE));
-
-    const manager = new SqlManager(environment.db);
-    const result = await manager.executeQuery(sql, params);
-
-    const ret = <ProjectDataInfo[]>[];
-    result.forEach((element: any) => {
-      const aux = new ProjectDataInfo();
-      aux.id = element.Id;
-      aux.description = element.Description;
-      aux.name = element.Name;
-      ret.push(aux);
-    });
-
-    return new Response(ResponseCode.OK, '', ret);
-  }
 }

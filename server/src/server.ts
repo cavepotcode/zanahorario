@@ -16,6 +16,7 @@ async function validateAuthentication(request: IncomingMessage, roles: string[])
   const token = request.headers['authorization'];
   if (token) {
     const auth = new AuthService();
+    request.user = auth.decode(token);
     return await auth.validate(token.toString());
   }
   return false;

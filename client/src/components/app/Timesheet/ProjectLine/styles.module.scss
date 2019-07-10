@@ -1,0 +1,21 @@
+@import '../../../../styles/_palette';
+@import '../../../../styles/_variables';
+
+.container {
+  margin: 24px 0;
+
+  .title {
+    color: $primary-light;
+    font-size: 22px;
+    text-align: left;
+  }
+
+  input {
+    border-radius: $radius;
+    border: 1px solid black;
+    font-size: 18px;
+    padding: 4px;
+    text-align: right;
+  }
+}
+

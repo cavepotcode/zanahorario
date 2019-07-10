@@ -1,8 +1,6 @@
-import React from 'react';
 import createStore from 'storeon';
 import { navigate } from '@reach/router';
 import userStore from '../user';
-import * as utils from '../../test-utils';
 
 describe('User Store', () => {
   it('should authenticate user', async () => {

@@ -9,6 +9,9 @@
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true
     },
+    "files": [
+      "./src/types/IncomingMessage.d.ts"
+    ],
     "exclude": [
       "node_modules"
     ]

@@ -1,0 +1,16 @@
+.row {
+  align-items: center;
+  display: flex;
+  justify-content: space-around;
+}
+
+.cell {
+  box-sizing: border-box;
+  flex: 1 1 0;
+  max-width: 60px;
+
+  &.first {
+    max-width: 80px;
+    text-align: center;
+  }
+}

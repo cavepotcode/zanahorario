@@ -1,0 +1,19 @@
+@import '../../../styles/_palette';
+@import '../../../styles/_variables';
+
+.container {
+  font-size: 32px;
+
+  button {
+    border: 0;
+    background-color: $light-gray;
+    cursor: pointer;
+    font-size: inherit;
+    outline: none;
+    vertical-align: middle;
+
+    &:disabled {
+      cursor: default;
+    }
+  }
+}
