@@ -70,4 +70,8 @@ export class TimesheetService {
       .onConflict('("date", "project_id", "user_id") DO UPDATE SET "hours" = excluded.hours')
       .execute();
   }
+
+  validateEntries(entries: any[]): boolean {
+    return !entries.some(entry => entry.hours > 24 || !entry.projectId);
+  }
 }

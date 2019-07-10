@@ -43,6 +43,14 @@ export class TimesheetController {
   @Post('/')
   public async add(@Body() entries: TimesheetEntry[], req: IncomingMessage) {
     try {
+      const isValid = this.timeSvc.validateEntries(entries);
+      if (!isValid) {
+        return new Response(
+          ResponseCode.ERROR,
+          'Please make sure the entries do not exceed the daily limit, and all have a project assigned.'
+        );
+      }
+
       const result = await this.timeSvc.add(req.user.id, entries);
       return new Response(ResponseCode.OK, '');
     } catch (err) {
