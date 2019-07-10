@@ -11,5 +11,9 @@
     font-size: inherit;
     outline: none;
     vertical-align: middle;
+
+    &:disabled {
+      cursor: default;
+    }
   }
 }

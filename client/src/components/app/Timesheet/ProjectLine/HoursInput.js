@@ -18,8 +18,8 @@ const InputWithValidation = asField(Input);
 export default function HoursInput(props) {
   return <InputWithValidation validate={validateHours} validateOnBlur {...props} />;
 
-  function validateHours(val) {
-    const isValid = /^\d+$/.test(val) && Number(val) <= 24;
+  function validateHours(val = '') {
+    const isValid = /^\d*$/.test(val) && Number(val) <= 24;
     return isValid ? undefined : 'hours-exceeds-daily-limit';
   }
 }

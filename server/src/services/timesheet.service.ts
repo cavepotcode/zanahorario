@@ -53,13 +53,11 @@ export class TimesheetService {
   }
 
   async add(userId: number, data: any[]) {
-    const entries = <Timesheet[]>data
-      .map(entry => ({
-        ...entry,
-        userId,
-        date: normalize(entry.date) // remove the time, keep only the date
-      }))
-      .filter(entry => !!entry.hours);
+    const entries = <Timesheet[]>data.map(entry => ({
+      ...entry,
+      userId,
+      date: normalize(entry.date) // remove the time, keep only the date
+    }));
 
     const timeRepository = await getRepository(Timesheet);
     return await timeRepository

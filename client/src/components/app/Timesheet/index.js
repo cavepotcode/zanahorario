@@ -54,8 +54,18 @@ export default function Timesheet() {
       {({ formState }) => (
         <>
           <header>
-            <ValueSlider onPrev={() => handleMonthChange(-1)} onNext={() => handleMonthChange(1)} value={monthLabel} />
-            <ValueSlider onPrev={() => handleWeekChange(-7)} onNext={() => handleWeekChange(7)} value="WEEK" />
+            <ValueSlider
+              disabled={enableSubmit}
+              onPrev={() => handleMonthChange(-1)}
+              onNext={() => handleMonthChange(1)}
+              value={monthLabel}
+            />
+            <ValueSlider
+              disabled={enableSubmit}
+              onPrev={() => handleWeekChange(-7)}
+              onNext={() => handleWeekChange(7)}
+              value="WEEK"
+            />
           </header>
           <CalendarHeader startDate={date} />
           {projectsTime.map(({ project, entries }) => (
@@ -89,9 +99,12 @@ export default function Timesheet() {
     if (changes.length) {
       const { meta } = await api.post(apiUrls.timesheets.index, changes);
 
-      const message = !meta.code ? 'Changes saved correctly' : meta.message;
+      const message = meta.code ? meta.message : 'Changes saved correctly';
       addNotification(message);
-      setEnableSubmit(false);
+
+      if (!meta.code) {
+        setEnableSubmit(false);
+      }
     }
   }
 
