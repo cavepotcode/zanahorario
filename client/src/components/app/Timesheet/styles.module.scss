@@ -4,6 +4,8 @@
 .container {
   border: 1px solid $dark-gray;
   border-radius: $radius;
+  margin: 0 auto;
+  max-width: $max-width;
 
   header {
     display: flex;

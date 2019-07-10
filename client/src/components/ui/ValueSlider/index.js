@@ -4,9 +4,13 @@ import styles from './styles.module.scss';
 export default function ValueSlider({ onPrev, onNext, value }) {
   return (
     <div className={styles.container}>
-      <button onClick={onPrev}>&lt;</button>
+      <button onClick={onPrev} type="button">
+        &lt;
+      </button>
       <span>{value}</span>
-      <button onClick={onNext}>&gt;</button>
+      <button onClick={onNext} type="button">
+        &gt;
+      </button>
     </div>
   );
 }

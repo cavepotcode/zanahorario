@@ -7,7 +7,8 @@ export function getWeekdayName(date) {
 }
 
 export function lastMonday() {
-  const result = new Date();
+  const today = new Date();
+  const result = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
   const day = result.getDay();
   if (day !== 1) {
     result.setDate(result.getDate() - day + 1);

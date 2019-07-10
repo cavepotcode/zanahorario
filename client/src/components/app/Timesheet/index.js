@@ -1,5 +1,6 @@
 import React from 'react';
 import update from 'immutability-helper';
+import { Form } from 'informed';
 import CalendarHeader from './CalendarHeader';
 import ProjectLine from './ProjectLine';
 import styles from './styles.module.scss';
@@ -14,7 +15,7 @@ import useSnackbar from '../../Snackbar/useSnackbar';
 
 export default function Timesheet() {
   const { addNotification } = useSnackbar();
-  const [date, setDate] = React.useState(lastMonday);
+  const [date, setDate] = React.useState(lastMonday());
   const [monthLabel, setMonthLabel] = React.useState(getMonthLabel(date));
   const [projectsTime, setProjectsTime] = React.useState([]);
 
@@ -48,31 +49,41 @@ export default function Timesheet() {
   }, [date, addNotification]);
 
   return (
-    <div className={styles.container}>
-      <header>
-        <ValueSlider onPrev={() => handleMonthChange(-1)} onNext={() => handleMonthChange(1)} value={monthLabel} />
-        <ValueSlider onPrev={() => handleWeekChange(-7)} onNext={() => handleWeekChange(7)} value="WEEK" />
-      </header>
-      <section>
-        <CalendarHeader startDate={date} />
-        {projectsTime.map(({ project, entries }) => (
-          <ProjectLine
-            entries={entries}
-            key={project.name}
-            onEntered={handleEntered}
-            project={project}
-            startDate={date}
-          />
-        ))}
-      </section>
-      <footer>
-        <Button onClick={handleAddProject}>Add Project</Button>
-        <Button onClick={handleSave}>Save</Button>
-      </footer>
-    </div>
+    <Form className={styles.container}>
+      {({ formState }) => (
+        <>
+          <header>
+            <ValueSlider onPrev={() => handleMonthChange(-1)} onNext={() => handleMonthChange(1)} value={monthLabel} />
+            <ValueSlider onPrev={() => handleWeekChange(-7)} onNext={() => handleWeekChange(7)} value="WEEK" />
+          </header>
+          <CalendarHeader startDate={date} />
+          {projectsTime.map(({ project, entries }) => (
+            <ProjectLine
+              entries={entries}
+              key={project.name}
+              onEntered={handleEntered}
+              project={project}
+              startDate={date}
+            />
+          ))}
+          <footer>
+            <Button onClick={handleAddProject} type="button">
+              Add Project
+            </Button>
+            <Button onClick={() => handleSave(formState.invalid)} type="submit">
+              Save
+            </Button>
+          </footer>
+        </>
+      )}
+    </Form>
   );
 
-  async function handleSave() {
+  async function handleSave(invalid) {
+    if (invalid) {
+      return addNotification('Please fix the errors before submitting.');
+    }
+
     const changes = getTimeChanges(projectsTime);
     const { meta } = await api.post(apiUrls.timesheets.index, changes);
 
