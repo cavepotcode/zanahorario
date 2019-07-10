@@ -1,0 +1,3 @@
+Hour: 12:34:20 - security/login:
+TypeError: Cannot destructure property `email` of 'undefined' or 'null'.
+------------------------ 

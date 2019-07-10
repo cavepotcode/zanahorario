@@ -7,6 +7,7 @@
     "dotenv": "^8.0.0",
     "jsonwebtoken": "^8.5.1",
     "kiwi-server": "^1.1.31",
+    "mocha-typescript": "^1.1.17",
     "mssql": "^4.2.1",
     "pg": "^7.11.0",
     "reflect-metadata": "^0.1.13",
@@ -14,17 +15,22 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
+    "@types/chai": "^4.1.7",
     "@types/jsonwebtoken": "^8.3.2",
     "@types/node": "^12.0.8",
+    "chai": "^4.2.0",
     "kiwi-server-cli": "^1.1.0",
+    "node-mocks-http": "^1.7.6",
     "nodemon": "^1.19.0",
+    "nyc": "^14.1.1",
+    "sinon": "^7.3.2",
     "tslint": "^5.16.0",
     "tslint-config-airbnb": "^5.11.1",
     "typescript": "^3.4.5"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "tslint": "tslint -c tslint.json",
+    "test": "kc build && mocha ./dist/default/src/tests",
+    "tslint": "tslint -c ./tslint.json",
     "build-watch": "kc build --watch",
     "dev": "nodemon ./dist/default/src/server.js --ignore swagger.json"
   },

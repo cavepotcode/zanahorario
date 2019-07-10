@@ -24,6 +24,22 @@
             "type": "node"
         },
         {
+          "type": "node",
+          "request": "launch",
+          "name": "DEBUG Tests",
+          "program": "${workspaceFolder}/server/node_modules/mocha/bin/_mocha",
+          "args": [
+            "-u",
+            "tdd",
+            "--timeout",
+            "999999",
+            "--colors",
+            "${workspaceFolder}/server/dist/default/src/tests"
+          ],
+          "internalConsoleOptions": "openOnSessionStart",
+          "preLaunchTask": "compile"
+        },
+        {
             "name": "Attach",
             "type": "node",
             "request": "attach",
