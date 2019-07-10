@@ -18,6 +18,7 @@ export default function Timesheet() {
   const [date, setDate] = React.useState(lastMonday());
   const [monthLabel, setMonthLabel] = React.useState(getMonthLabel(date));
   const [projectsTime, setProjectsTime] = React.useState([]);
+  const [enableSubmit, setEnableSubmit] = React.useState(false);
 
   React.useEffect(() => {
     async function fetch() {
@@ -70,7 +71,7 @@ export default function Timesheet() {
             <Button onClick={handleAddProject} type="button">
               Add Project
             </Button>
-            <Button onClick={() => handleSave(formState.invalid)} type="submit">
+            <Button onClick={() => handleSave(formState.invalid)} type="submit" disabled={!enableSubmit}>
               Save
             </Button>
           </footer>
@@ -85,10 +86,13 @@ export default function Timesheet() {
     }
 
     const changes = getTimeChanges(projectsTime);
-    const { meta } = await api.post(apiUrls.timesheets.index, changes);
+    if (changes.length) {
+      const { meta } = await api.post(apiUrls.timesheets.index, changes);
 
-    const message = !meta.code ? 'Changes saved correctly' : meta.message;
-    addNotification(message);
+      const message = !meta.code ? 'Changes saved correctly' : meta.message;
+      addNotification(message);
+      setEnableSubmit(false);
+    }
   }
 
   function handleEntered(projectId, entry) {
@@ -102,6 +106,7 @@ export default function Timesheet() {
         [projectIndex]: { entries: { [entryIndex]: { $merge: { hours: entry.hours, changed: true } } } }
       });
       setProjectsTime(newTimesheets);
+      setEnableSubmit(true);
     }
   }
 
