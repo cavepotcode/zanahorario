@@ -6,6 +6,7 @@ import { User } from '../entities/User';
 import { Timesheet } from '../entities/Timesheet';
 import { getRepository } from '../datastore';
 import { groupBy } from '../utilClass';
+import { normalize } from '../utils/date';
 
 export class TimesheetService {
   async projectHours(year: number, month: number): Promise<any> {
@@ -52,11 +53,13 @@ export class TimesheetService {
   }
 
   async add(userId: number, data: any[]) {
-    const entries = <Timesheet[]>data.map(entry => ({
-      ...entry,
-      userId,
-      observations: ''
-    }));
+    const entries = <Timesheet[]>data
+      .map(entry => ({
+        ...entry,
+        userId,
+        date: normalize(entry.date) // remove the time, keep only the date
+      }))
+      .filter(entry => !!entry.hours);
 
     const timeRepository = await getRepository(Timesheet);
     return await timeRepository
@@ -64,6 +67,7 @@ export class TimesheetService {
       .insert()
       .into(Timesheet)
       .values(entries)
+      .onConflict('("date", "project_id", "user_id") DO UPDATE SET "hours" = excluded.hours')
       .execute();
   }
 }
