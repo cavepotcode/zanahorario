@@ -1,6 +1,7 @@
 import React, { useReducer } from 'react';
 import update from 'immutability-helper';
 import { Form } from 'informed';
+import useStoreon from 'storeon/react';
 import CalendarHeader from './CalendarHeader';
 import ProjectLine from './ProjectLine';
 import NewProject from './NewProject';
@@ -19,47 +20,34 @@ const initialState = {
   date,
   monthLabel: getMonthLabel(date),
   pendingChanges: false,
-  projects: [],
-  timesheet: []
+  timesheet: [],
+  remainingProjects: []
 };
 
 export default function Timesheet() {
   const { addNotification } = useSnackbar();
   const [state, dispatch] = useReducer(reducer, initialState);
+  const { dispatch: fetchProjects, projects } = useStoreon('projects');
 
   React.useEffect(() => {
-    async function fetch() {
-      const { data: projects } = await api.get(apiUrls.projects.index);
-      dispatch({ type: 'set_projects', projects });
-    }
-
-    fetch();
-  }, []);
+    fetchProjects('projects/fetch');
+  }, [fetchProjects]);
 
   React.useEffect(() => {
     async function fetch() {
       try {
         const { data: timesheet } = await api.get(apiUrls.timesheets.user(state.date));
-
-        const projectsTime = [];
-        for (let [key, entries] of Object.entries(timesheet)) {
-          projectsTime.push({
-            project: state.projects.find(p => p.id === Number(key)),
-            entries: entries.map(e => ({ ...e, date: new Date(e.date) }))
-          });
-        }
-
-        const entries = generateInitialEntries(state.date, projectsTime);
-        dispatch({ type: 'set_timesheet', timesheet: entries });
+        const entries = generateInitialEntries(state.date, timesheet, projects.items);
+        dispatch({ type: 'set_timesheet', timesheet: entries, projects: projects.items });
       } catch (err) {
         addNotification(err.message);
       }
     }
 
-    if (state.projects.length) {
+    if (projects.items.length) {
       fetch();
     }
-  }, [state.date, state.projects, addNotification]);
+  }, [state.date, projects.items, addNotification]);
 
   return (
     <Form className={styles.container}>
@@ -89,11 +77,19 @@ export default function Timesheet() {
               startDate={state.date}
             />
           ))}
-          {state.addingProject && <NewProject projects={state.projects} onSelect={handleNewProject} />}
+          {state.addingProject && (
+            <NewProject
+              projects={state.remainingProjects}
+              selectedIds={state.timesheet.map(t => t.project.id)}
+              onSelect={handleNewProject}
+            />
+          )}
           <footer>
-            <Button onClick={handleAddProject} type="button">
-              Add Project
-            </Button>
+            {state.remainingProjects.length > 0 && (
+              <Button onClick={handleAddProject} type="button">
+                Add Project
+              </Button>
+            )}
             <Button onClick={() => handleSave(formState.invalid)} type="submit" disabled={!state.pendingChanges}>
               Save
             </Button>
@@ -111,7 +107,7 @@ export default function Timesheet() {
         entries: getCompleteWeek(state.date, [])
       }
     ];
-    dispatch({ type: 'set_timesheet', timesheet });
+    dispatch({ type: 'set_timesheet', timesheet, projects: projects.items });
   }
 
   async function handleSave(invalid) {
@@ -148,7 +144,7 @@ export default function Timesheet() {
   }
 
   function handleAddProject() {
-    dispatch({ type: 'add_project', value: true });
+    dispatch({ type: 'add_project' });
   }
 
   function handleMonthChange(increment) {
@@ -169,13 +165,18 @@ function reducer(state, action) {
     case 'change_date':
       return { ...state, date: action.date, monthLabel: getMonthLabel(action.date) };
     case 'set_timesheet':
-      return { ...state, addingProject: false, timesheet: action.timesheet };
+      const remainingProjects =
+        action.projects && action.projects.filter(proj => !action.timesheet.map(e => e.project.id).includes(proj.id));
+      return {
+        ...state,
+        remainingProjects: remainingProjects || state.remainingProjects,
+        addingProject: false,
+        timesheet: action.timesheet
+      };
     case 'add_project':
-      return { ...state, addingProject: action.value };
+      return { ...state, addingProject: true };
     case 'pending_changes':
       return { ...state, pendingChanges: action.value };
-    case 'set_projects':
-      return { ...state, projects: action.projects };
     default:
       throw new Error();
   }

@@ -1,12 +1,14 @@
 import { getMonthShortName } from '../../../utils/date';
 
-export function generateInitialEntries(startDate, projectsTime) {
-  return projectsTime.map(({ project, entries }) => {
-    return {
-      project,
+export function generateInitialEntries(startDate, timesheet, projects) {
+  const result = [];
+  for (let [key, entries] of Object.entries(timesheet)) {
+    result.push({
+      project: projects.find(p => p.id === Number(key)),
       entries: getCompleteWeek(startDate, entries)
-    };
-  });
+    });
+  }
+  return result;
 }
 
 export function getCompleteWeek(startDate, availableEntries) {
@@ -14,7 +16,7 @@ export function getCompleteWeek(startDate, availableEntries) {
   let date = new Date(startDate);
   for (let day = 0; day < 7; day++) {
     // eslint-disable-next-line
-    const entry = availableEntries.find(e => e.date && e.date.toDateString() === date.toDateString());
+    const entry = availableEntries.find(e => e.date && new Date(e.date).toDateString() === date.toDateString());
     entries.push({
       date,
       hours: (entry && entry.hours) || null
