@@ -14,11 +14,11 @@ import api from '../../../utils/api';
 import { apiUrls } from '../../../urls';
 import useSnackbar from '../../Snackbar/useSnackbar';
 
-const date = lastMonday();
+const monday = lastMonday();
 const initialState = {
   addingProject: false,
-  date,
-  monthLabel: getMonthLabel(date),
+  date: monday,
+  monthLabel: getMonthLabel(monday),
   pendingChanges: false,
   timesheet: [],
   remainingProjects: []
@@ -149,13 +149,13 @@ export default function Timesheet() {
 
   function handleMonthChange(increment) {
     const newDate = new Date(state.date);
-    newDate.setMonth(date.getMonth() + increment);
+    newDate.setMonth(state.date.getMonth() + increment);
     dispatch({ type: 'change_date', date: newDate });
   }
 
   function handleWeekChange(increment) {
-    const newDate = new Date(date);
-    newDate.setDate(date.getDate() + increment);
+    const newDate = new Date(state.date);
+    newDate.setDate(state.date.getDate() + increment);
     dispatch({ type: 'change_date', date: newDate });
   }
 }
