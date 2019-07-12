@@ -3,7 +3,7 @@ node_js:
   - 10
 branches:
   only:
-    - "develop"
+    - "master"
 install:
   - npm install
 script:
