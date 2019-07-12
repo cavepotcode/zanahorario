@@ -12,6 +12,7 @@ const selectedDate = new Date();
 const label = getLabel(selectedDate);
 
 const initialState = {
+  error: null,
   loading: false,
   projects: [],
   selectedDate,

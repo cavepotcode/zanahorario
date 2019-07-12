@@ -1,4 +1,4 @@
-import { EntityRepository, Raw, Repository } from 'typeorm';
+import { Between, EntityRepository, IsNull, Not, Raw, Repository } from 'typeorm';
 import { Timesheet } from '../entities/Timesheet';
 
 @EntityRepository(Timesheet)
@@ -34,6 +34,16 @@ export class TimesheetRepository extends Repository<Timesheet> {
       .addSelect('user.initials as initials')
       .where("DATE_PART('year', date) = :year AND DATE_PART('month', date) = :month", { year, month })
       .getRawMany();
+  }
+
+  userTimesheets(userId: number, from: Date, to: Date): Promise<Timesheet[]> {
+    return this.find({
+      where: {
+        userId,
+        date: Between(from, to),
+        hours: Not(IsNull())
+      }
+    });
   }
 
   private getHoursByProject() {

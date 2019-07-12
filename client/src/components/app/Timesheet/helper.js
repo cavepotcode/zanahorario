@@ -1,20 +1,31 @@
-export function generateInitialEntries(startDate, projectsTime) {
-  return projectsTime.map(item => {
-    let date = new Date(startDate);
-    const entries = [];
-    for (let day = 0; day < 7; day++) {
-      // eslint-disable-next-line
-      const entry = item.entries.find(e => e.date && e.date.toDateString() === date.toDateString());
-      entries.push({
-        date,
-        hours: (entry && entry.hours) || null
-      });
+import { getMonthShortName } from '../../../utils/date';
 
-      date = new Date(date);
-      date.setDate(date.getDate() + 1);
-    }
-    return { project: item.project, entries };
-  });
+export function generateInitialEntries(startDate, timesheet, projects) {
+  const result = [];
+  for (let [key, entries] of Object.entries(timesheet)) {
+    result.push({
+      project: projects.find(p => p.id === Number(key)),
+      entries: getCompleteWeek(startDate, entries)
+    });
+  }
+  return result;
+}
+
+export function getCompleteWeek(startDate, availableEntries) {
+  const entries = [];
+  let date = new Date(startDate);
+  for (let day = 0; day < 7; day++) {
+    // eslint-disable-next-line
+    const entry = availableEntries.find(e => e.date && new Date(e.date).toDateString() === date.toDateString());
+    entries.push({
+      date,
+      hours: (entry && entry.hours) || null
+    });
+
+    date = new Date(date);
+    date.setDate(date.getDate() + 1);
+  }
+  return entries;
 }
 
 export function getTimeChanges(projectsTime) {
@@ -28,4 +39,8 @@ export function getTimeChanges(projectsTime) {
   });
 
   return changes;
+}
+
+export function getMonthLabel(date) {
+  return `MONTH: ${getMonthShortName(date)}`;
 }
