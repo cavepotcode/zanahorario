@@ -6,20 +6,20 @@
     "trailing-comma": "never",
     "space-before-function-paren": ["error", "always"],
     "max-line-length": [true, 120],
-    "align": [false]
+    "align": [false],
+    "function-name": [
+      true,
+      {
+        "method-regex": "^[a-z$][\\w\\d]+$",
+        "private-method-regex": "^[a-z][\\w\\d]+$",
+        "protected-method-regex": "^[a-z][\\w\\d]+$",
+        "static-method-regex": "^[A-Z_\\d]+$",
+        "function-regex": "^[a-z][\\w\\d]+$"
+      }
+    ]
   },
   "rulesDirectory": [],
   "linterOptions": {
     "exclude": ["src/migrations/*.ts", "**/*.json"]
-  },
-  "function-name": [
-    true,
-    {
-      "method-regex": "^[a-z$][\\w\\d]+$",
-      "private-method-regex": "^[a-z][\\w\\d]+$",
-      "protected-method-regex": "^[a-z][\\w\\d]+$",
-      "static-method-regex": "^[A-Z_\\d]+$",
-      "function-regex": "^[a-z][\\w\\d]+$"
-    }
-  ]
+  }
 }

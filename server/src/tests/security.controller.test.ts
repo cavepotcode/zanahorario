@@ -1,4 +1,4 @@
-import { suite, test } from 'mocha-typescript';
+/*import { suite, test } from 'mocha-typescript';
 import { assert } from 'chai';
 import { AuthService } from '../services/auth.service';
 import { SecurityController } from '../controllers/security.controller';
@@ -12,7 +12,7 @@ class SecurityControllerTest {
 
   before() {}
 
-  /*@test async 'It must auth service login'() {
+  @test async 'It must auth service login'() {
     sinon.stub(AuthService.prototype, 'login').callsFake(() => {
       return new Response(ResponseCode.OK, '', 'token');
     });
@@ -25,5 +25,5 @@ class SecurityControllerTest {
 
   static after() {}
 
-  after() {}*/
-}
+  after() {}
+}*/
