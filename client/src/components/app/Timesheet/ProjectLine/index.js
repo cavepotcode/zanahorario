@@ -6,7 +6,7 @@ import classes from '../../../../utils/classes';
 
 export default function ProjectLine({ project, entries, onEntered }) {
   return (
-    <div className={classes(styles.container, grid.row)}>
+    <div className={classes(styles.container, grid.row)} data-test-project={project.id}>
       <div className={classes(styles.title, grid.cell, grid.first)}>{project.name}</div>
       {entries.map(entry => (
         <HoursInput

@@ -1,4 +1,3 @@
-import { Raw, Between, LessThan, MoreThan } from 'typeorm';
 import { ResponseCode } from '../sdk/constants';
 import { LoginDataIn } from '../sdk/data_in/login_data_in';
 import { Response } from '../sdk/response';
@@ -43,12 +42,8 @@ export class TimesheetService {
     const to = new Date(from);
     to.setDate(to.getDate() + 7);
 
-    const result = await timeRepository.find({
-      where: {
-        userId,
-        date: Between(from, to)
-      }
-    });
+    const result = await timeRepository.userTimesheets(userId, from , to);
+    console.info(result);
     return groupBy(result, 'projectId');
   }
 
