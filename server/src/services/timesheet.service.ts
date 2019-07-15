@@ -43,7 +43,6 @@ export class TimesheetService {
     to.setDate(to.getDate() + 7);
 
     const result = await timeRepository.userTimesheets(userId, from , to);
-    console.info(result);
     return groupBy(result, 'projectId');
   }
 

@@ -117,7 +117,7 @@ export default function Timesheet() {
 
     const changes = getTimeChanges(state.timesheet);
     if (changes.length) {
-      const { meta } = await api.post(apiUrls.timesheets.index, changes);
+      const { meta } = await api.post(apiUrls.timesheets.index, { entries: changes });
 
       const message = meta.code ? meta.message : 'Changes saved correctly';
       addNotification(message);

@@ -6,6 +6,7 @@
   border-radius: $radius;
   margin: 0 auto;
   max-width: $max-width;
+  min-width: 580px;
 
   header {
     display: flex;

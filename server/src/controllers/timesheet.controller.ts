@@ -7,7 +7,7 @@ import { Log } from '../sdk/logs';
 import { TimesheetService } from '../services/timesheet.service';
 import { AuthService } from '../services/auth.service';
 import { IDateFilter } from '../dto/date-filter.interface';
-import { TimesheetEntry } from '../dto/timesheet-entry';
+import { TimesheetEntries, TimesheetEntry } from '../dto/timesheet-entry';
 
 @Authorize()
 @JsonController('/timesheet')
@@ -41,8 +41,9 @@ export class TimesheetController {
   }
 
   @Post('/')
-  public async add(@Body() entries: TimesheetEntry[], req: IncomingMessage) {
+  public async add(@Body() timesheet: TimesheetEntries, req: IncomingMessage) {
     try {
+      const { entries } = timesheet;
       const isValid = this.timeSvc.validateEntries(entries);
       if (!isValid) {
         return new Response(
