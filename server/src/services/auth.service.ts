@@ -1,4 +1,4 @@
-import * as jwt from 'jsonwebtoken';
+import { sign, verify } from 'jsonwebtoken';
 import { ResponseCode } from '../sdk/constants';
 import { LoginDataIn } from '../sdk/data_in/login_data_in';
 import { Response } from '../sdk/response';
@@ -17,7 +17,7 @@ export class AuthService {
       return new Response(ResponseCode.ERROR, 'Username or password is invalid. Please try again');
     }
 
-    const token = jwt.sign({ userId: user.id }, environment.jwt.secret, {
+    const token = sign({ userId: user.id }, environment.jwt.secret, {
       expiresIn: 60 * environment.jwt.timestamp
     });
 
@@ -27,7 +27,7 @@ export class AuthService {
   async validate(authHeader: string) {
     const token = authHeader.replace('Bearer ', '');
     try {
-      const jwtResult = await jwt.verify(token, environment.jwt.secret);
+      const jwtResult = await verify(token, environment.jwt.secret);
       return !!jwtResult;
     } catch (ex) {
       return false;

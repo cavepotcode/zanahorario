@@ -1,7 +1,8 @@
 import 'reflect-metadata';
 import { createKiwiServer, IKiwiOptions } from 'kiwi-server';
 import { UserController } from './controllers/user.controller';
-import { RequestFilterMiddleware } from './middlewares/RequestFilter.middleware.before';
+import { RequestFilterMiddleware } from './middlewares/requestFilter.middleware.before';
+import { StaticMiddleware } from './middlewares/static.middleware';
 import { IncomingMessage } from 'http';
 import { AuthService } from './services/auth.service';
 import { TimesheetController } from './controllers/timesheet.controller';
@@ -34,7 +35,7 @@ const options: IKiwiOptions = {
     BillController
   ],
   authorization: validateAuthentication,
-  middlewares: [RequestFilterMiddleware],
+  middlewares: [StaticMiddleware, RequestFilterMiddleware],
   cors: {
     enabled: true,
     domains: ['']
@@ -45,6 +46,7 @@ const options: IKiwiOptions = {
   },
   prefix: '/v1',
   log: true,
-  port: 8086
+  port: Number(process.env.PORT) || 8086
 };
-const server = createKiwiServer(options);
+
+createKiwiServer(options);
