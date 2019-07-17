@@ -5,8 +5,8 @@ import { Timesheet } from '../entities/Timesheet';
 export class TimesheetRepository extends Repository<Timesheet> {
   lastEntryByProject(): any {
     return this.createQueryBuilder('time')
-      .groupBy('time."project_id"')
-      .select('time."project_id"')
+      .groupBy('time.project_id')
+      .select('time.project_id as "projectId"')
       .addSelect('MAX(time.date)', 'date')
       .getRawMany();
   }
@@ -27,10 +27,10 @@ export class TimesheetRepository extends Repository<Timesheet> {
 
   monthlyHoursByProjectByUser(year: number, month: number): Promise<IHoursByUserProject[]> {
     return this.getHoursByProject()
-      .addGroupBy('time."user_id"')
+      .addGroupBy('time.user_id')
       .addGroupBy('user.initials')
       .innerJoin('time.user', 'user')
-      .addSelect('"user_id"')
+      .addSelect('user_id as "userId"')
       .addSelect('user.initials as initials')
       .where("DATE_PART('year', date) = :year AND DATE_PART('month', date) = :month", { year, month })
       .getRawMany();
@@ -50,7 +50,7 @@ export class TimesheetRepository extends Repository<Timesheet> {
     return this.createQueryBuilder('time')
       .groupBy('time."project_id"')
       .select('SUM(time.hours) as total')
-      .addSelect('"project_id"');
+      .addSelect('project_id as "projectId"');
   }
 }
 
