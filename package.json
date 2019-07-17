@@ -7,18 +7,18 @@
     "test-server": "cd server && npm test",
     "test": "cd client && npm test",
     "dev": "npm-run-all --parallel client-start kiwi-dev",
-    "start": "echo \"Error: not specified\" && exit 1",
+    "start": "node server/dist/default/src/server.js",
     "client-start": "cd client && npm start",
     "kiwi-dev": "cd server && npm-run-all --parallel build-watch dev",
     "eslint": "cd client && npm run eslint",
     "tslint": "cd server && npm run tslint",
     "build-client": "cd client && npm run build",
     "build-server": "cd server && npm run compile",
-    "build": "npm-run-all build-client build-server",
+    "build": "npm run build-client && npm run build-server",
     "install-client": "cd client && npm install",
     "install-server": "cd server && npm install",
-    "postinstall": "npm-run-all install-client install-server",
-    "compile": "cd server && kc build"
+    "postinstall": "npm run install-client  && npm run install-server",
+    "migration:run": "cd server && npx typeorm migration:run"
   },
   "repository": {
     "type": "git",
@@ -31,10 +31,12 @@
   },
   "homepage": "https://github.com/cavepotcode/zanahorario#readme",
   "devDependencies": {
+    "@types/jsonwebtoken": "^8.3.2",
     "husky": "^2.3.0",
     "lint-staged": "^8.1.7",
     "npm-run-all": "^4.1.5",
-    "prettier": "^1.17.1"
+    "prettier": "^1.17.1",
+    "typescript": "^3.5.3"
   },
   "lint-staged": {
     "*.js": [
