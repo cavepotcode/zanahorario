@@ -23,6 +23,8 @@ async function validateAuthentication(request: IncomingMessage, roles: string[])
   return false;
 }
 
+StaticMiddleware.setConfig({ index: '/index.html', prefix: '/v1', root: './client/build' });
+
 const options: IKiwiOptions = {
   controllers: [
     UserController,

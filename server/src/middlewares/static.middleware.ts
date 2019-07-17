@@ -3,21 +3,27 @@ import { createReadStream } from 'fs';
 import { extname, resolve } from 'path';
 import { IncomingMessage, ServerResponse } from 'http';
 
-const staticRoot = './client/build';
+const defaultConfig: IStaticContentConfig = {
+  debug: false,
+  index: '/index.html',
+  prefix: '/v1',
+  root: './client/build'
+};
 
 @MiddlewareBefore()
 export class StaticMiddleware implements IMiddleware {
-  // static debug = false;
-  // static root = '../client/build';
-  // static index = './index.html';
+  private static config: IStaticContentConfig;
+  public static setConfig(config: IStaticContentConfig) {
+    StaticMiddleware.config = { ...defaultConfig, ...config };
+  }
 
   execute(request: IncomingMessage, response: ServerResponse, next: any) {
-    if (request.url.includes('/v1')) {
+    if (request.method !== 'GET' || request.url.includes(StaticMiddleware.config.prefix)) {
       return next();
     }
 
-    const url = extname(request.url) ? request.url : '/index.html';
-    const stream = createReadStream(`${staticRoot}${url}`);
+    const url = extname(request.url) ? request.url : StaticMiddleware.config.index;
+    const stream = createReadStream(`${StaticMiddleware.config.root}${url}`);
 
     stream.on('error', (err: any) => {
       if (!(err.statusCode < 500)) {
@@ -30,4 +36,11 @@ export class StaticMiddleware implements IMiddleware {
 
     stream.pipe(response);
   }
+}
+
+export interface IStaticContentConfig {
+  debug?: boolean;
+  index?: string;
+  prefix?: string;
+  root?: string;
 }
