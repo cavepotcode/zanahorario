@@ -6,6 +6,13 @@ export function getWeekdayName(date) {
   return date.toLocaleString('en-us', { weekday: 'long' });
 }
 
+export function format(date) {
+  if (!date) {
+    return null;
+  }
+  return date.toISOString().slice(0, 10);
+}
+
 export function lastMonday() {
   const today = new Date();
   const result = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));

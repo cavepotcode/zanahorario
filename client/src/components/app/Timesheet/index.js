@@ -1,33 +1,22 @@
 import React, { useReducer } from 'react';
-import update from 'immutability-helper';
-import { Form } from 'informed';
+import { Form, Formik } from 'formik';
 import useStoreon from 'storeon/react';
 import CalendarHeader from './CalendarHeader';
 import ProjectLine from './ProjectLine';
 import NewProject from './NewProject';
+import { reducer, initialState } from './reducer';
 import styles from './styles.module.scss';
-import { getCompleteWeek, generateInitialEntries, getTimeChanges, getMonthLabel } from './helper';
+import { getCompleteWeek, generateInitialEntries, getTimeChanges, updateEntries } from './helper';
 import ValueSlider from '../../ui/ValueSlider';
-import { lastMonday } from '../../../utils/date';
 import Button from '../../ui/Button';
 import api from '../../../utils/api';
 import { apiUrls } from '../../../urls';
 import useSnackbar from '../../Snackbar/useSnackbar';
 
-const monday = lastMonday();
-const initialState = {
-  addingProject: false,
-  date: monday,
-  monthLabel: getMonthLabel(monday),
-  pendingChanges: false,
-  timesheet: [],
-  remainingProjects: []
-};
-
 export default function Timesheet() {
   const { addNotification } = useSnackbar();
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { dispatch: fetchProjects, projects } = useStoreon('projects');
+  const { dispatch: fetchProjects, projects, user } = useStoreon('projects', 'user');
 
   React.useEffect(() => {
     fetchProjects('projects/fetch');
@@ -36,9 +25,11 @@ export default function Timesheet() {
   React.useEffect(() => {
     async function fetch() {
       try {
-        const { data: timesheet } = await api.get(apiUrls.timesheets.user(state.date));
-        const entries = generateInitialEntries(state.date, timesheet, projects.items);
-        dispatch({ type: 'set_timesheet', timesheet: entries, projects: projects.items });
+        const { data: entries } = await api.get(apiUrls.timesheets.user(state.date));
+        dispatch({ type: 'set_entries', entries });
+
+        const timesheet = generateInitialEntries(state.date, entries, projects.items);
+        dispatch({ type: 'set_timesheet', timesheet, projects: projects.items });
       } catch (err) {
         addNotification(err.message);
       }
@@ -49,39 +40,46 @@ export default function Timesheet() {
     }
   }, [state.date, projects.items, addNotification]);
 
+  if (!state.ready) {
+    return null;
+  }
+
   return (
-    <Form className={styles.container}>
-      {({ formState }) => (
-        <>
+    <Formik
+      onSubmit={handleSubmit}
+      initialValues={state.timesheet}
+      validateOnBlur
+      validateOnChange={false}
+      render={props => (
+        <Form className={styles.container}>
           <header>
             <ValueSlider
-              disabled={state.pendingChanges}
+              disabled={props.dirty}
               onPrev={() => handleMonthChange(-1)}
               onNext={() => handleMonthChange(1)}
               value={state.monthLabel}
             />
             <ValueSlider
-              disabled={state.pendingChanges}
+              disabled={props.dirty}
               onPrev={() => handleWeekChange(-7)}
               onNext={() => handleWeekChange(7)}
               value="WEEK"
             />
           </header>
           <CalendarHeader startDate={state.date} />
-          {state.timesheet.map(({ project, entries }) => (
+          {Object.keys(state.timesheet.hours).map(projectId => (
             <ProjectLine
-              entries={entries}
-              key={project.name}
-              onEntered={handleEntered}
-              project={project}
+              errors={props.errors.hours ? props.errors.hours[projectId] || {} : {}}
+              key={projectId}
+              project={projects.items.find(p => p.id === Number(projectId))}
               startDate={state.date}
             />
           ))}
           {state.addingProject && (
             <NewProject
               projects={state.remainingProjects}
-              selectedIds={state.timesheet.map(t => t.project.id)}
-              onSelect={handleNewProject}
+              selectedIds={Object.keys(state.timesheet.hours).map(Number)}
+              onSelect={project => handleNewProject(project, props)}
             />
           )}
           <footer>
@@ -90,32 +88,33 @@ export default function Timesheet() {
                 Add Project
               </Button>
             )}
-            <Button onClick={() => handleSave(formState.invalid)} type="submit" disabled={!state.pendingChanges}>
+            <Button type="submit" disabled={!props.isValid || (props.isValid && !props.dirty)}>
               Save
             </Button>
           </footer>
-        </>
+        </Form>
       )}
-    </Form>
+    />
   );
 
-  function handleNewProject(project) {
-    const timesheet = [
-      ...state.timesheet,
-      {
-        project,
-        entries: getCompleteWeek(state.date, [])
+  function handleNewProject(project, props) {
+    const timesheet = {
+      hours: {
+        ...props.values.hours,
+        [project.id]: getCompleteWeek(state.date, [])
       }
-    ];
+    };
+    if (props.dirty) {
+      props.setValues(timesheet);
+    } else {
+      props.resetForm(timesheet);
+    }
     dispatch({ type: 'set_timesheet', timesheet, projects: projects.items });
   }
 
-  async function handleSave(invalid) {
-    if (invalid) {
-      return addNotification('Please fix the errors before submitting.');
-    }
-
-    const changes = getTimeChanges(state.timesheet);
+  async function handleSubmit(values, actions) {
+    debugger;
+    const changes = getTimeChanges(user.userId, state.entries, values.hours);
     if (changes.length) {
       const { meta } = await api.post(apiUrls.timesheets.index, { entries: changes });
 
@@ -123,23 +122,12 @@ export default function Timesheet() {
       addNotification(message);
 
       if (!meta.code) {
-        dispatch({ type: 'pending_changes', value: false });
+        actions.resetForm(values);
+        const newEntries = updateEntries(state.entries, changes);
+        dispatch({ type: 'set_entries', entries: newEntries });
       }
-    }
-  }
-
-  function handleEntered(projectId, entry) {
-    const projectIndex = state.timesheet.findIndex(({ project }) => project.id === projectId);
-    const project = state.timesheet[projectIndex];
-    const entryIndex = project.entries.findIndex(({ date }) => date === entry.date);
-    const oldEntry = project.entries[entryIndex];
-
-    if (entryIndex >= 0 && Number(entry.hours) !== Number(oldEntry.hours)) {
-      const newTimesheets = update(state.timesheet, {
-        [projectIndex]: { entries: { [entryIndex]: { $merge: { hours: entry.hours, changed: true } } } }
-      });
-      dispatch({ type: 'set_timesheet', timesheet: newTimesheets });
-      dispatch({ type: 'pending_changes', value: true });
+    } else {
+      actions.resetForm(values);
     }
   }
 
@@ -157,27 +145,5 @@ export default function Timesheet() {
     const newDate = new Date(state.date);
     newDate.setDate(state.date.getDate() + increment);
     dispatch({ type: 'change_date', date: newDate });
-  }
-}
-
-function reducer(state, action) {
-  switch (action.type) {
-    case 'change_date':
-      return { ...state, date: action.date, monthLabel: getMonthLabel(action.date) };
-    case 'set_timesheet':
-      const remainingProjects =
-        action.projects && action.projects.filter(proj => !action.timesheet.map(e => e.project.id).includes(proj.id));
-      return {
-        ...state,
-        remainingProjects: remainingProjects || state.remainingProjects,
-        addingProject: false,
-        timesheet: action.timesheet
-      };
-    case 'add_project':
-      return { ...state, addingProject: true };
-    case 'pending_changes':
-      return { ...state, pendingChanges: action.value };
-    default:
-      throw new Error();
   }
 }
