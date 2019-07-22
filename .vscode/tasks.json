@@ -6,7 +6,7 @@
         {
             "label": "compile",
             "type": "npm",
-            "script": "compile",
+            "script": "build-server",
             "problemMatcher": []
         }
     ]
