@@ -10,6 +10,7 @@ import { getCompleteWeek, generateInitialEntries, getTimeChanges, updateEntries 
 import ValueSlider from '../../ui/ValueSlider';
 import Button from '../../ui/Button';
 import api from '../../../utils/api';
+import { lastMonday } from '../../../utils/date';
 import { apiUrls } from '../../../urls';
 import useSnackbar from '../../Snackbar/useSnackbar';
 
@@ -138,7 +139,7 @@ export default function Timesheet() {
   function handleMonthChange(increment, resetForm) {
     const newDate = new Date(state.date);
     newDate.setMonth(state.date.getMonth() + increment);
-    dispatch({ type: 'change_date', date: newDate });
+    dispatch({ type: 'change_date', date: lastMonday(newDate) });
     resetForm({});
   }
 

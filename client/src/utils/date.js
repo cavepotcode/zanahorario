@@ -13,8 +13,7 @@ export function format(date) {
   return date.toISOString().slice(0, 10);
 }
 
-export function lastMonday() {
-  const today = new Date();
+export function lastMonday(today = new Date()) {
   const result = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
   const day = result.getDay();
   if (day !== 1) {
