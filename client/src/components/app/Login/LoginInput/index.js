@@ -1,16 +1,14 @@
 import React from 'react';
-import { BasicText, asField } from 'informed';
+import { Field } from 'formik';
 import styles from './styles.module.scss';
 
-function LoginInput({ fieldState, ...props }) {
+export default function LoginInput({ error, ...props }) {
   return (
     <div className={styles.container}>
-      <BasicText fieldState={fieldState} {...props} style={fieldState.error ? { border: '4px solid red' } : null} />
-      <div data-testid="error-msg" className={styles.error}>
-        {fieldState.error}
+      <Field {...props} style={error ? { border: '4px solid red' } : null} />
+      <div data-testid={error ? 'error-msg' : ''} className={styles.error}>
+        {error}
       </div>
     </div>
   );
 }
-
-export default asField(LoginInput);

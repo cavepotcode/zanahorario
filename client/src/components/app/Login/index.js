@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form } from 'informed';
+import { Formik, Form } from 'formik';
 import useStoreon from 'storeon/react';
 import LoginInput from './LoginInput';
 import Button from './LoginButton';
@@ -19,18 +19,31 @@ export default function Login() {
   return (
     <section className={styles.section}>
       <img src={logo} alt="zanahorario" className={styles.logo} />
-      <Form noValidate onSubmit={onSubmit}>
-        <LoginInput validateOnChange validate={validators.email} field="email" type="email" placeholder="Email" />
-        <LoginInput
-          validateOnChange
-          validate={validatePassword}
-          field="password"
-          type="password"
-          placeholder="Password"
-        />
-        <Button loading={loading}>Log in</Button>
-        <span>&iquest;Olvidaste tu contrase&ntilde;a?</span>
-      </Form>
+      <Formik initialValues={{ password: '', email: '' }} onSubmit={onSubmit}>
+        {({ errors, touched, isValidating }) => (
+          <Form noValidate>
+            <LoginInput
+              error={touched.email && errors.email}
+              name="email"
+              placeholder="Email"
+              type="email"
+              validate={validators.email}
+            />
+            <LoginInput
+              error={touched.password && errors.password}
+              name="password"
+              placeholder="Password"
+              type="password"
+              validate={validatePassword}
+            />
+            <Button type="submit" loading={loading}>
+              Log in
+            </Button>
+            <span>&iquest;Olvidaste tu contrase&ntilde;a?</span>
+          </Form>
+        )}
+      </Formik>
+
       <footer className={styles.footer} />
     </section>
   );

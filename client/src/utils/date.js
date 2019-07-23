@@ -6,8 +6,14 @@ export function getWeekdayName(date) {
   return date.toLocaleString('en-us', { weekday: 'long' });
 }
 
-export function lastMonday() {
-  const today = new Date();
+export function format(date) {
+  if (!date) {
+    return null;
+  }
+  return date.toISOString().slice(0, 10);
+}
+
+export function lastMonday(today = new Date()) {
   const result = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
   const day = result.getDay();
   if (day !== 1) {
