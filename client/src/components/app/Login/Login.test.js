@@ -21,24 +21,27 @@ it('should prevent the user to continue if there are missing fields', async () =
 
   const submit = container.querySelector('button');
   utils.fireEvent.click(submit);
+  await utils.nextTick();
 
   let errors = getErrors(container);
   expect(errors).toHaveLength(2);
 
   const email = container.querySelector('[type=email]');
   utils.fireEvent.change(email, { target: { value: 'si@example.com' } });
+  await utils.nextTick();
 
   errors = getErrors(container);
   expect(errors).toHaveLength(1);
 
   const password = container.querySelector('[type=password]');
   utils.fireEvent.change(password, { target: { value: 'pwd123' } });
+  await utils.nextTick();
 
   errors = getErrors(container);
   expect(errors).toHaveLength(0);
 });
 
-it('should call api when submitted', () => {
+it('should call api when submitted', async () => {
   const creds = { email: 'user@example.com', password: 'pwd123' };
   const { container } = utils.render(<Login />);
   const submit = container.querySelector('button');
@@ -48,6 +51,7 @@ it('should call api when submitted', () => {
   utils.fireEvent.change(email, { target: { value: creds.email } });
   utils.fireEvent.change(password, { target: { value: creds.password } });
   utils.fireEvent.click(submit);
+  await utils.nextTick();
 
   expect(api.post).toHaveBeenCalled();
   expect(api.post).toHaveBeenCalledWith(expect.any(String), creds);
@@ -56,6 +60,10 @@ it('should call api when submitted', () => {
 // Helpers
 
 function getErrors(container) {
-  const errors = utils.getAllByTestId(container, 'error-msg');
-  return errors.map(e => e.textContent).filter(e => e);
+  try {
+    const errors = utils.getAllByTestId(container, 'error-msg');
+    return errors.map(e => e.textContent).filter(e => e);
+  } catch (err) {
+    return [];
+  }
 }

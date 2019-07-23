@@ -6,7 +6,7 @@ export default function LoginInput({ error, ...props }) {
   return (
     <div className={styles.container}>
       <Field {...props} style={error ? { border: '4px solid red' } : null} />
-      <div data-testid="error-msg" className={styles.error}>
+      <div data-testid={error ? 'error-msg' : ''} className={styles.error}>
         {error}
       </div>
     </div>

@@ -21,8 +21,12 @@ const customRender = (ui, options, data) => {
   return render(ui, { wrapper: AllTheProviders, ...options });
 };
 
+const nextTick = () => {
+  return new Promise(resolve => setImmediate(resolve));
+};
+
 // re-export everything
 export * from '@testing-library/react';
 
 // override render method
-export { customRender as render };
+export { customRender as render, nextTick };
