@@ -46,8 +46,9 @@ export default function Timesheet() {
 
   return (
     <Formik
-      onSubmit={handleSubmit}
+      enableReinitialize
       initialValues={state.timesheet}
+      onSubmit={handleSubmit}
       validateOnBlur
       validateOnChange={false}
       render={props => (
@@ -55,14 +56,14 @@ export default function Timesheet() {
           <header>
             <ValueSlider
               disabled={props.dirty}
-              onPrev={() => handleMonthChange(-1)}
-              onNext={() => handleMonthChange(1)}
+              onPrev={() => handleMonthChange(-1, props.resetForm)}
+              onNext={() => handleMonthChange(1, props.resetForm)}
               value={state.monthLabel}
             />
             <ValueSlider
               disabled={props.dirty}
-              onPrev={() => handleWeekChange(-7)}
-              onNext={() => handleWeekChange(7)}
+              onPrev={() => handleWeekChange(-7, props.resetForm)}
+              onNext={() => handleWeekChange(7, props.resetForm)}
               value="WEEK"
             />
           </header>
@@ -113,7 +114,6 @@ export default function Timesheet() {
   }
 
   async function handleSubmit(values, actions) {
-    debugger;
     const changes = getTimeChanges(user.userId, state.entries, values.hours);
     if (changes.length) {
       const { meta } = await api.post(apiUrls.timesheets.index, { entries: changes });
@@ -135,15 +135,17 @@ export default function Timesheet() {
     dispatch({ type: 'add_project' });
   }
 
-  function handleMonthChange(increment) {
+  function handleMonthChange(increment, resetForm) {
     const newDate = new Date(state.date);
     newDate.setMonth(state.date.getMonth() + increment);
     dispatch({ type: 'change_date', date: newDate });
+    resetForm({});
   }
 
-  function handleWeekChange(increment) {
+  function handleWeekChange(increment, resetForm) {
     const newDate = new Date(state.date);
     newDate.setDate(state.date.getDate() + increment);
     dispatch({ type: 'change_date', date: newDate });
+    resetForm({});
   }
 }
