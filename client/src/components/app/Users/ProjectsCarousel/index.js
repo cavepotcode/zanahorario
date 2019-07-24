@@ -3,32 +3,32 @@ import styles from './styles.module.scss';
 import classes from '../../../../utils/classes';
 import Arrow from '../../../ui/Arrow';
 
-export default function UsersCarousel({ entries, max = 3 }) {
-  const [userIndex, setIndex] = React.useState(0);
+export default function ProjectsCarousel({ entries, max }) {
+  const [index, setIndex] = React.useState(0);
   const [entriesWindow, setWindow] = React.useState([]);
 
   React.useEffect(() => {
-    if (userIndex >= 0) {
-      if (userIndex + max <= entries.length) {
-        const entriesList = entries.slice(userIndex, userIndex + max);
+    if (index >= 0) {
+      if (index + max <= entries.length) {
+        const entriesList = entries.slice(index, index + max);
         setWindow(entriesList);
       } else {
         setWindow(entries);
       }
     }
-  }, [userIndex, max, entries]);
+  }, [index, max, entries]);
 
   const showArrows = entries.length > max;
-  const disabledPrev = userIndex === 0;
-  const disableNext = userIndex + max >= entries.length;
+  const disabledPrev = index === 0;
+  const disableNext = index + max >= entries.length;
 
   return (
     <div className={styles.carousel}>
       <Arrow show={showArrows} left onClick={moveWindow} step={-1} disabled={disabledPrev} />
 
-      {entriesWindow.map(({ user, hours }, index) => (
-        <div className={classes(styles.user, index === entriesWindow.length - 1 && styles.last)} key={user.id}>
-          <div>{user.initials}</div>
+      {entriesWindow.map(({ project, hours }, index) => (
+        <div className={classes(styles.project, index === entriesWindow.length - 1 && styles.last)} key={project.id}>
+          <div className={styles.name}>{project.name}</div>
           <div>{hours}</div>
         </div>
       ))}
@@ -38,6 +38,6 @@ export default function UsersCarousel({ entries, max = 3 }) {
   );
 
   function moveWindow(step) {
-    setIndex(userIndex + step);
+    setIndex(index + step);
   }
 }

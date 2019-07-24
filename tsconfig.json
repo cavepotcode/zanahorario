@@ -1,11 +1,18 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "target": "es6",
-    "noImplicitAny": true,
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "compilerOptions": {
+      "module": "commonjs",
+      "target": "es6",
+      "noImplicitAny": true,
+      "moduleResolution": "node",
+      "sourceMap": true,
+      "baseUrl": "./src",
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true
+    },
+    "files": [
+      "./src/types/IncomingMessage.d.ts"
+    ],
+    "exclude": [
+      "node_modules"
+    ]
   }
-}

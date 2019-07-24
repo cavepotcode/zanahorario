@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './styles.module.scss';
-import classes from '../../../../utils/classes';
+import classes from '../../../utils/classes';
 
 export default function Arrow({ disabled, left, onClick, right, show, step }) {
   if (!show) {
