@@ -14,7 +14,7 @@ export class TimesheetService {
       timeRepository.hoursByProject(year, month),
       timeRepository.monthlyHoursByProject(year, month),
       timeRepository.monthlyHoursByProjectByUser(year, month),
-      timeRepository.lastEntryByProject()
+      timeRepository.projectsLastEntry()
     ]);
 
     return projectsTime.map((pTime: any) => {
@@ -42,7 +42,7 @@ export class TimesheetService {
     const to = new Date(from);
     to.setDate(to.getDate() + 7);
 
-    const result = await timeRepository.userTimesheets(userId, from , to);
+    const result = await timeRepository.userTimesheets(userId, from, to);
     return groupBy(result, 'projectId');
   }
 

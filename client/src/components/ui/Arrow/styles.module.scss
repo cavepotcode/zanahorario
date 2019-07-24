@@ -1,5 +1,5 @@
-@import '../../../../styles/_palette';
-@import '../../../../styles/_variables';
+@import '../../../styles/_palette';
+@import '../../../styles/_variables';
 
 .arrow {
   border-bottom: 10px solid transparent;
@@ -30,4 +30,3 @@
     cursor: default;
   }
 }
-
