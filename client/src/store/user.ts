@@ -19,8 +19,8 @@ function decodeToken() {
   const token = localStorage.getItem(STORAGE_KEY);
   if (token) {
     const [, payload] = token.split('.');
-    const { userId } = JSON.parse(atob(payload));
-    return { userId, isAuthenticated: true };
+    const { userId, recentProjects } = JSON.parse(atob(payload));
+    return { userId, recentProjects, isAuthenticated: true };
   }
   return {};
 }

@@ -66,4 +66,19 @@ export class TimesheetService {
   validateEntries(entries: any[]): boolean {
     return !entries.some(entry => entry.hours > 24 || !entry.projectId);
   }
+
+  async mostRecentProjects(userId: number, count: number = 2): Promise<number[]> {
+    const timeRepository = await getRepository(Timesheet);
+    const entries = await timeRepository
+      .createQueryBuilder()
+      .where('user_id = :id', { id: userId })
+      .limit(2)
+      .groupBy('project_id')
+      .addGroupBy('user_id')
+      .select('project_id as "projectId"')
+      .orderBy('MAX(date)', 'DESC')
+      .getRawMany();
+
+    return entries.map((entry: any) => entry.projectId);
+  }
 }

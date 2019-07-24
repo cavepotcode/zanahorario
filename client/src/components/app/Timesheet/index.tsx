@@ -27,8 +27,13 @@ export default function Timesheet() {
   React.useEffect(() => {
     async function fetch() {
       try {
-        const { data: entries } = await api.get(apiUrls.timesheets.user(state.date));
+        let { data: entries } = await api.get(apiUrls.timesheets.user(state.date));
         dispatch({ type: 'set_entries', entries });
+
+        // If week is empty, show the most recent projects
+        if (Object.keys(entries).length === 0) {
+          user.recentProjects.forEach((proj: number) => entries[proj] = []);
+        }
 
         const timesheet = generateInitialEntries(state.date, entries, projects.items);
         dispatch({ type: 'set_timesheet', timesheet, projects: projects.items });
@@ -40,7 +45,7 @@ export default function Timesheet() {
     if (projects.items.length) {
       fetch();
     }
-  }, [state.date, projects.items, addNotification]);
+  }, [state.date, projects.items, user, addNotification]);
 
   if (!state.ready) {
     return null;
