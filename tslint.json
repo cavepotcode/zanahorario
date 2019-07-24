@@ -1,0 +1,18 @@
+{
+  "defaultSeverity": "error",
+  "extends": ["tslint-config-airbnb"],
+  "jsRules": {},
+  "rules": {
+    "trailing-comma": "never",
+    "space-before-function-paren": ["error", "always"],
+    "max-line-length": [true, 120],
+    "align": [false],
+    "import-name": [false],
+    "increment-decrement": [true, "allow-post"]
+  },
+  "rulesDirectory": [],
+  "linterOptions": {
+    "exclude": ["**/*.json"]
+  }
+}
+
