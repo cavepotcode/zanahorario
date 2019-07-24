@@ -14,7 +14,7 @@ export class TimesheetService {
       timeRepository.hoursByProject(year, month),
       timeRepository.monthlyHoursByProject(year, month),
       timeRepository.monthlyHoursByProjectByUser(year, month),
-      timeRepository.lastEntryByProject()
+      timeRepository.projectsLastEntry()
     ]);
 
     return projectsTime.map((pTime: any) => {

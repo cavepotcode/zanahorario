@@ -20,9 +20,9 @@ export const apiUrls = {
   },
   users: {
     index: `${prefix}/user`,
-    user: date => {
+    timesheets: date => {
       const { year, month } = parseDate(date);
-      return `${prefix}/user/users?year=${year}&month=${month}`;
+      return `${prefix}/user/?year=${year}&month=${month}`;
     }
   }
 };

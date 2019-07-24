@@ -3,7 +3,7 @@ import { Timesheet } from '../entities/Timesheet';
 
 @EntityRepository(Timesheet)
 export class TimesheetRepository extends Repository<Timesheet> {
-  lastEntryByProject(): any {
+  projectsLastEntry(): any {
     return this.createQueryBuilder('time')
       .groupBy('time.project_id')
       .select('time.project_id as "projectId"')
@@ -11,10 +11,10 @@ export class TimesheetRepository extends Repository<Timesheet> {
       .getRawMany();
   }
 
-  lastEntryByUser(): any {
+  usersLastEntry(): any {
     return this.createQueryBuilder('time')
       .groupBy('time."user_id"')
-      .select('time."user_id"')
+      .select('time.user_id as "userId"')
       .addSelect('MAX(time.date)', 'date')
       .getRawMany();
   }
@@ -60,11 +60,11 @@ export class TimesheetRepository extends Repository<Timesheet> {
 
   monthlyHoursByUserByProject(year: number, month: number): Promise<IHoursByProjectUser[]> {
     return this.getHoursByUser()
-      .addGroupBy('time."project_id"')
+      .addGroupBy('time.project_id')
       .addGroupBy('project.name')
       .innerJoin('time.project', 'project')
-      .addSelect('"project_id"')
-      .addSelect('project.name')
+      .addSelect('project_id as "projectId"')
+      .addSelect('project.name as "projectName"')
       .where("DATE_PART('year', date) = :year AND DATE_PART('month', date) = :month", { year, month })
       .getRawMany();
   }
@@ -73,16 +73,6 @@ export class TimesheetRepository extends Repository<Timesheet> {
     return this.find({
       where: {
         userId,
-        date: Between(from, to),
-        hours: Not(IsNull())
-      }
-    });
-  }
-
-  proyectTimesheets(projectId: number, from: Date, to: Date): Promise<Timesheet[]> {
-    return this.find({
-      where: {
-        projectId,
         date: Between(from, to),
         hours: Not(IsNull())
       }
@@ -100,7 +90,7 @@ export class TimesheetRepository extends Repository<Timesheet> {
     return this.createQueryBuilder('time')
       .groupBy('time."user_id"')
       .select('SUM(time.hours) as total')
-      .addSelect('"user_id"');
+      .addSelect('user_id as "userId"');
   }
 }
 

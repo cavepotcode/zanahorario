@@ -26,7 +26,7 @@ export default function Users() {
   React.useEffect(() => {
     const fetch = async () => {
       dispatch({ type: 'fetch_start' });
-      const url = apiUrls.users.user(state.selectedDate);
+      const url = apiUrls.users.timesheets(state.selectedDate);
       try {
         const response = await api.get(url);
         const users = response.data.map(item => ({

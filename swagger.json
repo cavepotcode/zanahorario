@@ -57,7 +57,7 @@
                 }
             }
         },
-        "/v1/user/users": {
+        "/v1/user/": {
             "get": {
                 "consumes": [
                     "application/json"

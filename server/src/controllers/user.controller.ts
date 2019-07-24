@@ -29,7 +29,7 @@ export class UserController {
     return this.manager.updateUser(body);
   }
 
-  @Get('/users')
+  @Get('/')
   public async getUsersTimesheets(@QueryParam() params: IDateFilter) {
     try {
       const { year, month } = params;
