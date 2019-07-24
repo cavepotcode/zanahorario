@@ -62,7 +62,7 @@ export default function Projects() {
             </div>
             <div className={styles.selector}>
               <UsersCarousel
-                entries={item.usersHours.map(item => ({
+                entries={item.usersHours.map((item: any) => ({
                   id: item.user.id,
                   name: item.user.initials,
                   hours: item.hours

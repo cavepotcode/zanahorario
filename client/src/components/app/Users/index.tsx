@@ -6,18 +6,7 @@ import { apiUrls } from '../../../urls';
 import api from '../../../utils/api';
 import classes from '../../../utils/classes';
 import ValueSlider from '../../ui/ValueSlider';
-import { getMonthShortName } from '../../../utils/date';
-
-const selectedDate = new Date();
-const label = getLabel(selectedDate);
-
-const initialState = {
-  error: null,
-  loading: false,
-  users: [],
-  selectedDate,
-  label
-};
+import { reducer, initialState } from './reducer';
 
 export default function Users() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -29,7 +18,7 @@ export default function Users() {
       const url = apiUrls.users.timesheets(state.selectedDate);
       try {
         const response = await api.get(url);
-        const users = response.data.map(item => ({
+        const users = response.data.map((item: any) => ({
           ...item,
           lastTime: new Date(item.lastEntry).toLocaleDateString('es-UY')
         }));
@@ -52,7 +41,7 @@ export default function Users() {
         value={state.label}
       />
       <div className={classes(styles.container, state.loading && styles.loading)}>
-        {state.users.map((item, index) => (
+        {state.users.map((item: any, index: number) => (
           <div
             className={classes(styles.user, index % 2 !== 0 && styles.odd)}
             key={item.user.id + state.selectedDate.toISOString()}
@@ -62,7 +51,7 @@ export default function Users() {
             </div>
             <div className={styles.selector}>
               <ProjectsCarousel
-                entries={item.projectsHours.map(item => ({
+                entries={item.projectsHours.map((item: any) => ({
                   id: item.project.id,
                   name: item.project.name,
                   hours: item.hours
@@ -79,32 +68,4 @@ export default function Users() {
       </div>
     </>
   );
-}
-
-function reducer(state, action) {
-  switch (action.type) {
-    case 'fetch_start':
-      return { ...state, loading: true };
-    case 'fetch_success':
-      return { ...state, loading: false, users: action.users };
-    case 'fetch_failure':
-      return { ...state, loading: false, error: action.error, users: [] };
-    case 'increment': {
-      const newDate = new Date(state.selectedDate);
-      newDate.setMonth(newDate.getMonth() + 1);
-      return { ...state, selectedDate: newDate, label: getLabel(newDate) };
-    }
-    case 'decrement': {
-      const newDate = new Date(state.selectedDate);
-      newDate.setMonth(newDate.getMonth() - 1);
-      return { ...state, selectedDate: newDate, label: getLabel(newDate) };
-    }
-    default:
-      throw new Error();
-  }
-}
-
-function getLabel(date) {
-  const monthName = getMonthShortName(date);
-  return `${monthName}, ${date.getFullYear()}`;
 }

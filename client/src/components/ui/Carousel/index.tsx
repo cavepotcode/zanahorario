@@ -1,10 +1,16 @@
 import React from 'react';
 import styles from './styles.module.scss';
-import classes from '../../../../utils/classes';
+import classes from '../../../utils/classes';
 import Arrow from '../Arrow';
 
+export interface ICarouselItem {
+  id: number;
+  name: string;
+  hours: number;
+}
+
 type Props = {
-  entries: any;
+  entries: ICarouselItem[];
   max?: number;
 };
 
@@ -16,7 +22,7 @@ type ItemEntry = {
 
 export default function Carousel({ entries, max = 3 }: Props) {
   const [itemIndex, setIndex] = React.useState(0);
-  const [entriesWindow, setWindow] = React.useState([]);
+  const [entriesWindow, setWindow] = React.useState([] as ICarouselItem[]);
 
   React.useEffect(() => {
     if (itemIndex >= 0) {
