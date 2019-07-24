@@ -1,17 +1,17 @@
-@import '../../../../styles/_palette';
-@import '../../../../styles/_variables';
+@import '../../../styles/_palette';
+@import '../../../styles/_variables';
 
 .carousel {
   align-items: center;
   display: flex;
 
-  .project {
+  .item {
     border: 4px solid $primary;
     border-radius: $radius;
     margin-right: 20px;
     width: 40%;
 
-    .name{
+    .name {
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;

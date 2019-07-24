@@ -1,6 +1,6 @@
 import React, { useReducer } from 'react';
 import styles from './styles.module.scss';
-import UsersCarousel from './UsersCarousel';
+import UsersCarousel from '../../ui/Carousel';
 import api from '../../../utils/api';
 import classes from '../../../utils/classes';
 import { apiUrls } from '../../../urls';
@@ -61,7 +61,14 @@ export default function Projects() {
               <span title={item.project.name}>{item.project.name}</span>
             </div>
             <div className={styles.selector}>
-              <UsersCarousel entries={item.usersHours} />
+              <UsersCarousel
+                entries={item.usersHours.map(item => ({
+                  id: item.user.id,
+                  name: item.user.initials,
+                  hours: item.hours
+                }))}
+                max={3}
+              />
             </div>
             <div className={styles.info}>
               <span>LAST DATE: {item.lastTime}</span>

@@ -1,9 +1,9 @@
 import React from 'react';
 import styles from './styles.module.scss';
-import classes from '../../../../utils/classes';
-import Arrow from '../../../ui/Arrow';
+import classes from '../../../utils/classes';
+import Arrow from '../Arrow';
 
-export default function ProjectsCarousel({ entries, max }) {
+export default function Carousel({ entries, max }) {
   const [index, setIndex] = React.useState(0);
   const [entriesWindow, setWindow] = React.useState([]);
 
@@ -26,9 +26,9 @@ export default function ProjectsCarousel({ entries, max }) {
     <div className={styles.carousel}>
       <Arrow show={showArrows} left onClick={moveWindow} step={-1} disabled={disabledPrev} />
 
-      {entriesWindow.map(({ project, hours }, index) => (
-        <div className={classes(styles.project, index === entriesWindow.length - 1 && styles.last)} key={project.id}>
-          <div className={styles.name}>{project.name}</div>
+      {entriesWindow.map(({ id, name, hours }, index) => (
+        <div className={classes(styles.item, index === entriesWindow.length - 1 && styles.last)} key={id}>
+          <div className={styles.name}>{name}</div>
           <div>{hours}</div>
         </div>
       ))}
