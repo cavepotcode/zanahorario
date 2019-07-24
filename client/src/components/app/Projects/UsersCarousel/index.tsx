@@ -8,38 +8,37 @@ type Props = {
   max?: number;
 };
 
-type ItemEntry = {
-  id: number;
-  name: string;
+type UserEntry = {
+  user: any;
   hours?: number;
 };
 
-export default function Carousel({ entries, max = 3 }: Props) {
-  const [itemIndex, setIndex] = React.useState(0);
+export default function UsersCarousel({ entries, max = 3 }: Props) {
+  const [userIndex, setIndex] = React.useState(0);
   const [entriesWindow, setWindow] = React.useState([]);
 
   React.useEffect(() => {
-    if (itemIndex >= 0) {
-      if (itemIndex + max <= entries.length) {
-        const entriesList = entries.slice(itemIndex, itemIndex + max);
+    if (userIndex >= 0) {
+      if (userIndex + max <= entries.length) {
+        const entriesList = entries.slice(userIndex, userIndex + max);
         setWindow(entriesList);
       } else {
         setWindow(entries);
       }
     }
-  }, [itemIndex, max, entries]);
+  }, [userIndex, max, entries]);
 
   const showArrows = entries.length > max;
-  const disabledPrev = itemIndex === 0;
-  const disableNext = itemIndex + max >= entries.length;
+  const disabledPrev = userIndex === 0;
+  const disableNext = userIndex + max >= entries.length;
 
   return (
     <div className={styles.carousel}>
       <Arrow show={showArrows} left onClick={moveWindow} step={-1} disabled={disabledPrev} />
 
-      {entriesWindow.map(({ id, name, hours }: ItemEntry, index: number) => (
-        <div className={classes(styles.item, index === entriesWindow.length - 1 && styles.last)} key={id}>
-          <div>{name}</div>
+      {entriesWindow.map(({ user, hours }: UserEntry, index: number) => (
+        <div className={classes(styles.user, index === entriesWindow.length - 1 && styles.last)} key={user.id}>
+          <div>{user.initials}</div>
           <div>{hours}</div>
         </div>
       ))}
@@ -49,6 +48,6 @@ export default function Carousel({ entries, max = 3 }: Props) {
   );
 
   function moveWindow(step: number): void {
-    setIndex(itemIndex + step);
+    setIndex(userIndex + step);
   }
 }

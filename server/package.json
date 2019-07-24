@@ -23,14 +23,10 @@
     "node-mocks-http": "^1.7.6",
     "nodemon": "^1.19.0",
     "nyc": "^14.1.1",
-    "sinon": "^7.3.2",
-    "tslint": "^5.16.0",
-    "tslint-config-airbnb": "^5.11.1",
-    "typescript": "^3.5.3"
+    "sinon": "^7.3.2"
   },
   "scripts": {
     "test": "kc build && mocha ./dist/default/src/tests",
-    "tslint": "tslint -c ./tslint.json",
     "build-watch": "kc build --watch",
     "dev": "nodemon ./dist/default/src/server.js --ignore swagger.json",
     "compile": "npx kiwi-server-cli build"

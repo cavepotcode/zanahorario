@@ -1,12 +1,8 @@
 {
   "defaultSeverity": "error",
-  "extends": ["tslint-config-airbnb"],
+  "extends": ["../tslint.json"],
   "jsRules": {},
   "rules": {
-    "trailing-comma": "never",
-    "space-before-function-paren": ["error", "always"],
-    "max-line-length": [true, 120],
-    "align": [false],
     "function-name": [
       true,
       {
