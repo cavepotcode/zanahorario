@@ -3,7 +3,11 @@ import { IStore, IState } from './store';
 
 const STORAGE_KEY = 'access_token';
 
-export interface IUserState {}
+export interface IUserState {
+  userId: number;
+  recentProjects: number[];
+  isAuthenticated: boolean;
+}
 
 export default function(store: IStore) {
   store.on('@init', () => ({ user: decodeToken() }));
@@ -19,8 +23,8 @@ function decodeToken() {
   const token = localStorage.getItem(STORAGE_KEY);
   if (token) {
     const [, payload] = token.split('.');
-    const { userId } = JSON.parse(atob(payload));
-    return { userId, isAuthenticated: true };
+    const { userId, recentProjects } = JSON.parse(atob(payload));
+    return { userId, recentProjects, isAuthenticated: true };
   }
-  return {};
+  return { recentProjects: [] };
 }

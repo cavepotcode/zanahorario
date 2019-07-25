@@ -79,6 +79,17 @@ export class TimesheetRepository extends Repository<Timesheet> {
     });
   }
 
+  mostRecentProjects(userId: number, count: number = 2): Promise<{ projectId: number }[]> {
+    return this.createQueryBuilder()
+      .where('user_id = :id', { id: userId })
+      .limit(count)
+      .groupBy('project_id')
+      .addGroupBy('user_id')
+      .select('project_id as "projectId"')
+      .orderBy('MAX(date)', 'DESC')
+      .getRawMany();
+  }
+
   private getHoursByProject() {
     return this.createQueryBuilder('time')
       .groupBy('time."project_id"')

@@ -2,10 +2,11 @@ import { sign, verify } from 'jsonwebtoken';
 import { ResponseCode } from '../sdk/constants';
 import { LoginDataIn } from '../sdk/data_in/login_data_in';
 import { Response } from '../sdk/response';
-import { User } from '../entities/User';
+import { Timesheet, User } from '../entities';
 import { encrypt } from '../encrypt';
 import { environment } from '../../environment/environment';
 import { getRepository } from '../datastore';
+import { TimesheetService } from './timesheet.service';
 
 export class AuthService {
   async login({ email, password: plainPassword }: LoginDataIn) {
@@ -17,7 +18,10 @@ export class AuthService {
       return new Response(ResponseCode.ERROR, 'Username or password is invalid. Please try again');
     }
 
-    const token = sign({ userId: user.id }, environment.jwt.secret, {
+    const timeSvc = new TimesheetService();
+    const recentProjects = await timeSvc.mostRecentProjects(user.id);
+
+    const token = sign({ recentProjects, userId: user.id }, environment.jwt.secret, {
       expiresIn: 60 * environment.jwt.timestamp
     });
 
