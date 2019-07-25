@@ -1,0 +1,25 @@
+@import '../../../styles/_palette';
+@import '../../../styles/_variables';
+
+.hotkey {
+  background-color: $light-gray;
+  border-bottom-color: $dark-gray;
+  border-radius: 3px;
+  border: solid 1px $medium-gray;
+  box-shadow: inset 0 -1px 0 #959da5;
+  color: #444d56;
+  display: inline-block;
+  font-size: 16px;
+  left: 0;
+  line-height: 10px;
+  padding: 1px 3px 5px;
+  pointer-events: none;
+  position: absolute;
+  top: -4px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.small {
+  left: 6px;
+}

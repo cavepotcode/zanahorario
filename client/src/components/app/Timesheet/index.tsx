@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import { Form, Formik, FormikProps} from 'formik';
+import { Form, Formik, FormikProps } from 'formik';
 import useStoreon from 'storeon/react';
 import CalendarHeader from './CalendarHeader';
 import ProjectLine from './ProjectLine';
@@ -14,6 +14,7 @@ import { lastMonday } from '../../../utils/date';
 import { apiUrls } from '../../../urls';
 import useSnackbar from '../../Snackbar/useSnackbar';
 import { IProject, ITimesheet } from './interfaces';
+import hotkeys from '../../../hotkeys';
 
 export default function Timesheet() {
   const { addNotification } = useSnackbar();
@@ -32,7 +33,7 @@ export default function Timesheet() {
 
         // If week is empty, show the most recent projects
         if (Object.keys(entries).length === 0) {
-          user.recentProjects.forEach((proj: number) => entries[proj] = []);
+          user.recentProjects.forEach((proj: number) => (entries[proj] = []));
         }
 
         const timesheet = generateInitialEntries(state.date, entries, projects.items);
@@ -50,6 +51,16 @@ export default function Timesheet() {
   if (!state.ready) {
     return null;
   }
+  const weekHotkeys = {
+    hotkeyPrev: hotkeys.timesheet.prevWeek,
+    hotkeyNext: hotkeys.timesheet.nextWeek,
+    hotkeyReset: hotkeys.timesheet.today
+  };
+  const monthHotkeys = {
+    hotkeyPrev: hotkeys.timesheet.prevMonth,
+    hotkeyNext: hotkeys.timesheet.nextMonth,
+    hotkeyReset: hotkeys.timesheet.today
+  };
 
   return (
     <Formik
@@ -66,12 +77,15 @@ export default function Timesheet() {
               onPrev={() => handleMonthChange(-1, props.resetForm)}
               onNext={() => handleMonthChange(1, props.resetForm)}
               value={state.monthLabel}
+              {...monthHotkeys}
             />
             <ValueSlider
               disabled={props.dirty}
               onPrev={() => handleWeekChange(-7, props.resetForm)}
               onNext={() => handleWeekChange(7, props.resetForm)}
+              onReset={() => resetDate(props.resetForm)}
               value="WEEK"
+              {...weekHotkeys}
             />
           </header>
           <CalendarHeader startDate={state.date} />
@@ -151,6 +165,12 @@ export default function Timesheet() {
   function handleWeekChange(increment: number, resetForm: Function) {
     const newDate = new Date(state.date);
     newDate.setDate(state.date.getDate() + increment);
+    dispatch({ type: 'change_date', date: newDate });
+    resetForm({});
+  }
+
+  function resetDate(resetForm: Function) {
+    const newDate = new Date(initialState.date);
     dispatch({ type: 'change_date', date: newDate });
     resetForm({});
   }

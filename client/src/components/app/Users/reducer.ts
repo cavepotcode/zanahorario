@@ -37,6 +37,10 @@ export function reducer(state: State, action: any) {
       newDate.setMonth(newDate.getMonth() - 1);
       return { ...state, selectedDate: newDate, label: getLabel(newDate) };
     }
+    case 'reset_date': {
+      const newDate = new Date(initialState.selectedDate);
+      return { ...state, selectedDate: newDate, label: getLabel(newDate) };
+    }
     default:
       throw new Error();
   }

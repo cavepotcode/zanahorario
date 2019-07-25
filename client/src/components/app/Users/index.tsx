@@ -7,6 +7,7 @@ import api from '../../../utils/api';
 import classes from '../../../utils/classes';
 import ValueSlider from '../../ui/ValueSlider';
 import { reducer, initialState } from './reducer';
+import hotkeys from '../../../hotkeys';
 
 export default function Users() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -33,11 +34,19 @@ export default function Users() {
     fetch();
   }, [state.selectedDate, addNotification]);
 
+  const prev = React.useCallback(() => dispatch({ type: 'decrement' }), []);
+  const next = React.useCallback(() => dispatch({ type: 'increment' }), []);
+  const reset = React.useCallback(() => dispatch({ type: 'reset_date' }), []);
+
   return (
     <>
       <ValueSlider
-        onPrev={() => dispatch({ type: 'decrement' })}
-        onNext={() => dispatch({ type: 'increment' })}
+        onPrev={prev}
+        onNext={next}
+        onReset={reset}
+        hotkeyPrev={hotkeys.users.prev}
+        hotkeyNext={hotkeys.users.next}
+        hotkeyReset={hotkeys.users.today}
         value={state.label}
       />
       <div className={classes(styles.container, state.loading && styles.loading)}>

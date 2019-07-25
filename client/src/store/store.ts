@@ -7,6 +7,7 @@ export interface IStore {
 }
 
 export interface IState {
+  help: boolean;
   user: IUserState;
   projects: IProjectState;
 }
