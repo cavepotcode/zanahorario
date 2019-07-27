@@ -45,7 +45,7 @@ export function reducer(state: State, action: any) {
         timesheet: action.timesheet
       };
     case 'add_project':
-      return { ...state, addingProject: true };
+      return { ...state, addingProject: !state.addingProject };
     default:
       throw new Error();
   }

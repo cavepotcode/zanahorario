@@ -1,6 +1,6 @@
 import update from 'immutability-helper';
 import { getMonthShortName } from '../../../utils/date';
-import { ITimesheet, ITimesheetEntry } from './interfaces';
+import { IFieldValue, ITimesheet, ITimesheetEntry } from './interfaces';
 
 export function generateInitialEntries(startDate: Date, timesheet: ITimesheet, projects: any[]) {
   const hours: any = {};
@@ -68,4 +68,45 @@ export function updateEntries(original: any, changes: any[]) {
   });
 
   return newEntries;
+}
+
+/**
+ * Returns the hours to apply to the each field, so the entire week (8 hours daily) sums
+ * up 40 hours, with the selected projects.
+ */
+export function fillWeek({ hours }: any): IFieldValue[] {
+  const result: IFieldValue[] = [];
+  const list: string[] = Object.keys(hours);
+
+  list.forEach((projId: string) => {
+    const projHours: ITimesheetEntry = hours[projId];
+    Object.keys(projHours).forEach((date: string, index: number) => {
+      // Only workdays
+      if (index < 5) {
+        const [emptyDays, dayTotal] = getDayEntries(hours, date);
+
+        if (!hours[projId][date] && dayTotal < 8) {
+          result.push({ field: `hours.${projId}.${date}`, value: (8 - dayTotal) / emptyDays });
+        }
+      }
+    });
+  });
+  return result;
+}
+
+/**
+ * Return all the entries for a given date and the total.
+ */
+function getDayEntries(hours: any, date: string): [number, number] {
+  const projects: string[] = Object.keys(hours);
+  let total = 0;
+  let emptyDays = 0;
+  projects.forEach((projId: string) => {
+    const val = Number(hours[projId][date]);
+    total += val;
+    if (!val) {
+      emptyDays += 1;
+    }
+  });
+  return [emptyDays, total];
 }

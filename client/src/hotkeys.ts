@@ -1,15 +1,18 @@
 export default {
   timesheet: {
-    nextWeek: 'right',
-    prevWeek: 'left',
-    nextMonth: 'shift+right',
-    prevMonth: 'shift+left',
-    today: 't'
+    nextWeek: ['right', 'l'],
+    prevWeek: ['left', 'h'],
+    nextMonth: ['up', 'k'],
+    prevMonth: ['down', 'j'],
+    today: ['t', 'z z'],
+    fill: 'f',
+    add: 'o',
+    save: 'enter'
   },
   project: {
-    nextWeek: 'right',
-    prevWeek: 'left',
-    today: 't'
+    nextMonth: ['right', 'l'],
+    prevMonth: ['left', 'h'],
+    today: ['t', 'z z']
   },
   menu: {
     myTime: 'm',
@@ -20,9 +23,9 @@ export default {
     billing: 'b'
   },
   users: {
-    next: 'right',
-    prev: 'left',
-    today: 't'
+    next: ['right', 'l'],
+    prev: ['left', 'h'],
+    today: ['t', 'z z']
   },
   help: '?'
 };

@@ -55,8 +55,8 @@ export default function Projects() {
         onNext={next}
         onReset={reset}
         value={state.label}
-        hotkeyPrev={hotkeys.project.prevWeek}
-        hotkeyNext={hotkeys.project.nextWeek}
+        hotkeyPrev={hotkeys.project.prevMonth}
+        hotkeyNext={hotkeys.project.nextMonth}
         hotkeyReset={hotkeys.project.today}
       />
       <div className={classes(styles.container, state.loading && styles.loading)}>

@@ -4,7 +4,7 @@ import styles from './styles.module.scss';
 import classes from '../../../utils/classes';
 
 type Props = {
-  keys: string;
+  keys: string | string[];
 };
 
 export default function HotkeyHelp({ keys }: Props) {
@@ -17,8 +17,9 @@ export default function HotkeyHelp({ keys }: Props) {
   return <code className={classes(styles.hotkey, value.length === 1 && styles.small)}>{value}</code>;
 }
 
-function parseKeys(hotkey: string) {
-  const keys = hotkey.split('+');
+function parseKeys(hotkey: string | string[]) {
+  const firstKey = typeof hotkey === "object" ? hotkey[0] : hotkey;
+  const keys = firstKey.split('+');
   const result = keys.map(key => {
     switch (key) {
       case 'right':
@@ -27,6 +28,12 @@ function parseKeys(hotkey: string) {
         return '←';
       case 'shift':
         return '⇧';
+      case 'down':
+        return '↓';
+      case 'up':
+        return '↑';
+      case 'enter':
+        return '↵';
       default:
         return key;
     }

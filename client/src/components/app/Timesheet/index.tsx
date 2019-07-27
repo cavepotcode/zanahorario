@@ -1,19 +1,21 @@
 import React, { useReducer } from 'react';
-import { Form, Formik, FormikProps } from 'formik';
+import { Form, Formik, FormikActions, FormikProps } from 'formik';
 import useStoreon from 'storeon/react';
+import mousetrap from 'mousetrap';
 import CalendarHeader from './CalendarHeader';
 import ProjectLine from './ProjectLine';
 import NewProject from './NewProject';
 import { reducer, initialState } from './reducer';
 import styles from './styles.module.scss';
-import { getCompleteWeek, generateInitialEntries, getTimeChanges, updateEntries } from './helper';
+import { fillWeek, getCompleteWeek, generateInitialEntries, getTimeChanges, updateEntries } from './helper';
 import ValueSlider from '../../ui/ValueSlider';
 import Button from '../../ui/Button';
+import HotkeyHelp from '../../ui/HotkeyHelp';
 import api from '../../../utils/api';
 import { lastMonday } from '../../../utils/date';
 import { apiUrls } from '../../../urls';
 import useSnackbar from '../../Snackbar/useSnackbar';
-import { IProject, ITimesheet } from './interfaces';
+import { IFieldValue, IProject, ITimesheet } from './interfaces';
 import hotkeys from '../../../hotkeys';
 
 export default function Timesheet() {
@@ -48,6 +50,64 @@ export default function Timesheet() {
     }
   }, [state.date, projects.items, user, addNotification]);
 
+  const formElem = React.useRef(null);
+
+  const handleAddProject = React.useCallback(() => {
+    if (state.remainingProjects.length > 0) {
+      dispatch({ type: 'add_project' });
+    }
+  }, [state.remainingProjects.length]);
+
+  const fillTimesheet = React.useCallback(() => {
+    const form = formElem.current as any;
+    const changes = fillWeek(form.state.values);
+    changes.forEach(({ field, value }: IFieldValue) => {
+      form.setFieldValue(field, value);
+    });
+  }, []);
+
+  const handleSubmit = React.useCallback(async (values: ITimesheet, actions: FormikActions<ITimesheet>) => {
+    const { isValid, dirty } = (formElem.current as any).getFormikComputedProps();
+    if (!isValid || (isValid && !dirty)) {
+      return;
+    }
+
+    const changes = getTimeChanges(user.userId, state.entries, values.hours);
+    if (changes.length) {
+      const { meta } = await api.post(apiUrls.timesheets.index, { entries: changes });
+
+      const message = meta.code ? meta.message : 'Changes saved correctly';
+      addNotification(message);
+
+      if (!meta.code) {
+        actions.resetForm(values);
+        const newEntries = updateEntries(state.entries, changes);
+        dispatch({ type: 'set_entries', entries: newEntries });
+      }
+    } else {
+      actions.resetForm(values);
+    }
+  }, [addNotification, state.entries, user.userId]);
+
+  const submit = React.useCallback(async () => {
+    const form = formElem.current as any;
+    const values = form.state.values;
+    const actions = form.getFormikActions();
+    return await handleSubmit(values, actions);
+  }, [handleSubmit]);
+
+  React.useEffect(() => {
+    mousetrap.bind(hotkeys.timesheet.add, handleAddProject);
+    mousetrap.bind(hotkeys.timesheet.fill, fillTimesheet);
+    mousetrap.bind(hotkeys.timesheet.save, submit);
+
+    return () => {
+      mousetrap.unbind(hotkeys.timesheet.add);
+      mousetrap.unbind(hotkeys.timesheet.fill);
+      mousetrap.unbind(hotkeys.timesheet.save);
+    };
+  }, [handleAddProject, fillTimesheet, submit]);
+
   if (!state.ready) {
     return null;
   }
@@ -67,6 +127,7 @@ export default function Timesheet() {
       enableReinitialize
       initialValues={state.timesheet}
       onSubmit={handleSubmit}
+      ref={formElem}
       validateOnBlur
       validateOnChange={false}
       render={(props: FormikProps<ITimesheet>) => (
@@ -107,10 +168,12 @@ export default function Timesheet() {
             {state.remainingProjects.length > 0 && (
               <Button onClick={handleAddProject} type="button">
                 Add Project
+                <HotkeyHelp keys={hotkeys.timesheet.add} />
               </Button>
             )}
             <Button type="submit" disabled={!props.isValid || (props.isValid && !props.dirty)}>
               Save
+              <HotkeyHelp keys={hotkeys.timesheet.save} />
             </Button>
           </footer>
         </Form>
@@ -131,28 +194,6 @@ export default function Timesheet() {
       props.resetForm(timesheet);
     }
     dispatch({ type: 'set_timesheet', timesheet, projects: projects.items });
-  }
-
-  async function handleSubmit(values: ITimesheet, actions: any) {
-    const changes = getTimeChanges(user.userId, state.entries, values.hours);
-    if (changes.length) {
-      const { meta } = await api.post(apiUrls.timesheets.index, { entries: changes });
-
-      const message = meta.code ? meta.message : 'Changes saved correctly';
-      addNotification(message);
-
-      if (!meta.code) {
-        actions.resetForm(values);
-        const newEntries = updateEntries(state.entries, changes);
-        dispatch({ type: 'set_entries', entries: newEntries });
-      }
-    } else {
-      actions.resetForm(values);
-    }
-  }
-
-  function handleAddProject() {
-    dispatch({ type: 'add_project' });
   }
 
   function handleMonthChange(increment: number, resetForm: Function) {
