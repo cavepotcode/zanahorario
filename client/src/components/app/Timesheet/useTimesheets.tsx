@@ -6,7 +6,7 @@ import useSnackbar from '../../Snackbar/useSnackbar';
 import { generateInitialEntries } from './helper';
 import { ITimesheet } from './interfaces';
 
-export default function useTimesheets(user: IUserState, date: Date, projects: any[]) {
+export default function useTimesheets(user: IUserState, date: Date) {
   const [entries, setEntries] = React.useState([]);
   const [ready, setReady] = React.useState(false);
   const [timesheet, setTimesheet] = React.useState<ITimesheet>({ hours: {}});
@@ -24,7 +24,7 @@ export default function useTimesheets(user: IUserState, date: Date, projects: an
 
         setEntries(entries);
 
-        const timesheet = generateInitialEntries(date, entries, projects);
+        const timesheet = generateInitialEntries(date, entries);
         setReady(true);
         setTimesheet(timesheet);
       } catch (err) {
@@ -32,10 +32,8 @@ export default function useTimesheets(user: IUserState, date: Date, projects: an
       }
     }
 
-    if (projects.length) {
-      fetch();
-    }
-  }, [date, projects, user, addNotification]);
+    fetch();
+  }, [date, user, addNotification]);
 
   return { addNotification, entries, timesheet, ready, setTimesheet, setEntries };
 }

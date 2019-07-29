@@ -27,7 +27,7 @@ export default function Timesheet() {
   const [addingProject, setAddingProject] = React.useState(false);
   const [selectedDate, setSelectedDate] = React.useState(initialDate);
   const [monthLabel, setMonthLabel] = React.useState(getMonthLabel(selectedDate));
-  const { entries, timesheet, ready, setTimesheet, setEntries } = useTimesheets(user, selectedDate, projects.items);
+  const { entries, timesheet, ready, setTimesheet, setEntries } = useTimesheets(user, selectedDate);
   const { remainingProjects } = useRemainingProjects(timesheet.hours, projects.items);
 
   React.useEffect(() => {
@@ -56,6 +56,10 @@ export default function Timesheet() {
     hotkeyNext: hotkeys.timesheet.nextMonth,
     hotkeyReset: hotkeys.timesheet.today
   };
+
+  if (!projects || !projects.items) {
+    return null;
+  }
 
   return (
     <Formik

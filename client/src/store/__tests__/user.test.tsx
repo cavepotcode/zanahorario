@@ -7,10 +7,10 @@ describe('User Store', () => {
     const email = 'test@cavepot.com';
     const store = createStore([userStore]);
 
-    store.dispatch('authenticate', { email, token: 'token' });
+    store.dispatch('authenticate', { email, token: null });
     expect(navigate).toHaveBeenCalled();
     expect(navigate).toHaveBeenCalledWith('/projects');
 
-    expect(store.get().user).toEqual({ email, isAuthenticated: true });
+    expect(store.get().user).toEqual({ email, recentProjects: [], isAuthenticated: true });
   });
 });

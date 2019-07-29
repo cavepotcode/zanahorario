@@ -2,7 +2,7 @@ import update from 'immutability-helper';
 import { getMonthShortName } from '../../../utils/date';
 import { IFieldValue, ITimesheet, ITimesheetEntry } from './interfaces';
 
-export function generateInitialEntries(startDate: Date, timesheet: ITimesheet, projects: any[]) {
+export function generateInitialEntries(startDate: Date, timesheet: ITimesheet) {
   const hours: any = {};
   for (const [key, entries] of Object.entries(timesheet)) {
     hours[key] = getCompleteWeek(startDate, entries);
