@@ -1,7 +1,7 @@
 import React from 'react';
-import mousetrap from 'mousetrap';
 import HotkeyHelp from '../../ui/HotkeyHelp';
 import styles from './styles.module.scss';
+import useHotkey from '../../../hooks/useHotkey';
 
 type Props = {
   onNext: () => void;
@@ -15,36 +15,23 @@ type Props = {
 };
 
 function ValueSlider({ disabled, onReset, onPrev, onNext, value, hotkeyPrev, hotkeyNext, hotkeyReset }: Props) {
-  React.useEffect(() => {
-    mousetrap.bind(hotkeyPrev, (e: any) => {
-      e.preventDefault();
-      if (!disabled) {
-        onPrev();
-      }
-    });
-    mousetrap.bind(hotkeyNext, (e: any) => {
-      e.preventDefault();
-      if (!disabled) {
-        onNext();
-      }
-    });
-
-    if (onReset && hotkeyReset) {
-      mousetrap.bind(hotkeyReset, onReset);
+  useHotkey(hotkeyReset, onReset);
+  useHotkey(hotkeyPrev, (e: any) => {
+    e.preventDefault();
+    if (!disabled) {
+      onPrev();
     }
-
-    return () => {
-      mousetrap.unbind(hotkeyPrev);
-      mousetrap.unbind(hotkeyNext);
-      if (onReset && hotkeyReset) {
-        mousetrap.unbind(hotkeyReset);
-      }
-    };
-  }, [disabled, onPrev, onNext, onReset, hotkeyNext, hotkeyPrev, hotkeyReset]);
+  });
+  useHotkey(hotkeyNext, (e: any) => {
+    e.preventDefault();
+    if (!disabled) {
+      onNext();
+    }
+  });
 
   return (
     <div className={styles.container}>
-      <button onClick={onPrev} type="button" disabled={disabled} className="ripple">
+      <button onClick={onPrev} type="button" disabled={disabled}>
         <span>&lt;</span>
         <HotkeyHelp keys={hotkeyPrev} />
       </button>

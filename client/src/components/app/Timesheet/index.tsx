@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Formik, FormikActions, FormikProps } from 'formik';
 import useStoreon from 'storeon/react';
 import CalendarHeader from './CalendarHeader';
@@ -17,7 +17,7 @@ import { IFieldValue, IProject, ITimesheet } from './interfaces';
 import hotkeys from '../../../hotkeys';
 import useTimesheets from './useTimesheets';
 import useRemainingProjects from './useRemainingProjects';
-import useHotkey from './useHotkey';
+import useHotkey from '../../../hooks/useHotkey';
 
 export default function Timesheet() {
   const initialDate = lastMonday();
@@ -30,19 +30,13 @@ export default function Timesheet() {
   const { entries, timesheet, ready, setTimesheet, setEntries } = useTimesheets(user, selectedDate);
   const { remainingProjects } = useRemainingProjects(timesheet.hours, projects.items);
 
-  React.useEffect(() => {
-    dispatch('projects/fetch');
-  }, [dispatch]);
-
-  React.useEffect(() => {
-    setMonthLabel(getMonthLabel(selectedDate));
-  }, [selectedDate]);
-
+  useEffect(() => dispatch('projects/fetch'), [dispatch]);
+  useEffect(() => setMonthLabel(getMonthLabel(selectedDate)), [selectedDate]);
   useHotkey(hotkeys.timesheet.add, handleAddProject);
   useHotkey(hotkeys.timesheet.fill, fillTimesheet);
   useHotkey(hotkeys.timesheet.save, submit);
 
-  if (!ready) {
+  if (!ready || !projects || !projects.loaded) {
     return null;
   }
 
@@ -56,10 +50,6 @@ export default function Timesheet() {
     hotkeyNext: hotkeys.timesheet.nextMonth,
     hotkeyReset: hotkeys.timesheet.today
   };
-
-  if (!projects || !projects.items) {
-    return null;
-  }
 
   return (
     <Formik

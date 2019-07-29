@@ -1,8 +1,8 @@
 import React from 'react';
-import mousetrap from 'mousetrap';
 import { Link, LinkGetProps, navigate } from '@reach/router';
 import HotkeyHelp from '../../../ui/HotkeyHelp';
 import styles from './styles.module.scss';
+import useHotkey from '../../../../hooks/useHotkey';
 
 type MenuItemsProps = {
   to: string;
@@ -11,19 +11,11 @@ type MenuItemsProps = {
 };
 
 export default function MenuItem({ to, keys, title }: MenuItemsProps) {
+  useHotkey(keys, () => navigate(to));
+
   const isActive = ({ isCurrent }: LinkGetProps) => {
     return isCurrent ? { className: styles.active } : {};
   };
-
-  React.useEffect(() => {
-    mousetrap.bind(keys, () => {
-      navigate(to);
-    });
-
-    return () => {
-      mousetrap.unbind(keys);
-    };
-  }, [keys, to]);
 
   return (
     <li>
@@ -34,4 +26,3 @@ export default function MenuItem({ to, keys, title }: MenuItemsProps) {
     </li>
   );
 }
-
