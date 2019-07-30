@@ -1,3 +1,8 @@
+export function toSpanishFormat(date: Date | string) {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  return d.toLocaleDateString('es-UY');
+}
+
 export function getMonthShortName(date: Date) {
   return date.toLocaleString('en-us', { month: 'short' });
 }
