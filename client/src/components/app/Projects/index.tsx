@@ -1,35 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './styles.module.scss';
 import UsersCarousel from '../../ui/Carousel';
 import classes from '../../../utils/classes';
-import ValueSlider from '../../ui/ValueSlider';
-import { getMonthShortName } from '../../../utils/date';
+import ValueSlider, { useValueSlider } from '../../ui/ValueSlider';
 import hotkeys from '../../../hotkeys';
 import useProjects from './useProjects';
 
 const today = new Date();
 const initialDate = new Date(today.getFullYear(), today.getMonth(), 1);
-const initialLabel = getLabel(initialDate);
 
 export default function Projects() {
-  const [selectedDate, setSelectedDate] = useState(initialDate);
-  const [label, setLabel] = useState(initialLabel);
+  const { selectedDate, label, prevMonth, nextMonth, resetDate } = useValueSlider(initialDate);
   const { loading, projects } = useProjects(selectedDate);
 
-  const prev = React.useCallback(decrement, [selectedDate]);
-  const next = React.useCallback(increment, [selectedDate]);
-  const reset = React.useCallback(resetDate, [selectedDate]);
+  const projectHotkeys = {
+    prev: { key: hotkeys.project.prevMonth, handler: prevMonth },
+    next: { key: hotkeys.project.nextMonth, handler: nextMonth },
+    reset: { key: hotkeys.project.today, handler: resetDate }
+  };
   return (
     <>
-      <ValueSlider
-        onPrev={prev}
-        onNext={next}
-        onReset={reset}
-        value={label}
-        hotkeyPrev={hotkeys.project.prevMonth}
-        hotkeyNext={hotkeys.project.nextMonth}
-        hotkeyReset={hotkeys.project.today}
-      />
+      <ValueSlider value={label} hotkeys={projectHotkeys} />
       <div className={classes(styles.container, loading && styles.loading)}>
         {projects.map((item: any, index: number) => (
           <div
@@ -59,29 +50,4 @@ export default function Projects() {
       </div>
     </>
   );
-
-  function increment() {
-    const newDate = new Date(selectedDate);
-    newDate.setMonth(newDate.getMonth() + 1);
-    setSelectedDate(newDate);
-    setLabel(getLabel(newDate));
-  }
-
-  function decrement() {
-    const newDate = new Date(selectedDate);
-    newDate.setMonth(newDate.getMonth() - 1);
-    setSelectedDate(newDate);
-    setLabel(getLabel(newDate));
-  }
-
-  function resetDate() {
-    const newDate = new Date(initialDate);
-    setSelectedDate(newDate);
-    setLabel(getLabel(newDate));
-  }
-}
-
-function getLabel(date: Date) {
-  const monthName = getMonthShortName(date);
-  return `${monthName}, ${date.getFullYear()}`;
 }

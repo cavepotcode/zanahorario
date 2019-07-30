@@ -6,11 +6,10 @@ import ProjectLine from './ProjectLine';
 import NewProject from './NewProject';
 import styles from './styles.module.scss';
 import { fillWeek, getCompleteWeek, getMonthLabel, getTimeChanges, updateEntries } from './helper';
-import ValueSlider from '../../ui/ValueSlider';
+import ValueSlider, { useValueSlider } from '../../ui/ValueSlider';
 import Button from '../../ui/Button';
 import HotkeyHelp from '../../ui/HotkeyHelp';
 import api from '../../../utils/api';
-import { lastMonday } from '../../../utils/date';
 import { apiUrls } from '../../../urls';
 import useSnackbar from '../../Snackbar/useSnackbar';
 import { IFieldValue, IProject, ITimesheet } from './interfaces';
@@ -18,37 +17,38 @@ import hotkeys from '../../../hotkeys';
 import useTimesheets from './useTimesheets';
 import useRemainingProjects from './useRemainingProjects';
 import useHotkey from '../../../hooks/useHotkey';
+import { lastMonday } from '../../../utils/date';
 
 export default function Timesheet() {
-  const initialDate = lastMonday();
   const formElem = React.useRef(null);
   const { addNotification } = useSnackbar();
   const { dispatch, projects, user } = useStoreon('projects', 'user');
   const [addingProject, setAddingProject] = React.useState(false);
-  const [selectedDate, setSelectedDate] = React.useState(initialDate);
-  const [monthLabel, setMonthLabel] = React.useState(getMonthLabel(selectedDate));
+  const { selectedDate, prevMonthMonday, nextMonthMonday, prevWeek, nextWeek, resetDate } = useValueSlider(
+    lastMonday(),
+    () => (formElem.current as any).getFormikBag().dirty
+  );
   const { entries, timesheet, ready, setTimesheet, setEntries } = useTimesheets(user, selectedDate);
   const { remainingProjects } = useRemainingProjects(timesheet.hours, projects.items);
 
-  useEffect(() => dispatch('projects/fetch'), [dispatch]);
-  useEffect(() => setMonthLabel(getMonthLabel(selectedDate)), [selectedDate]);
   useHotkey(hotkeys.timesheet.add, handleAddProject);
   useHotkey(hotkeys.timesheet.fill, fillTimesheet);
   useHotkey(hotkeys.timesheet.save, submit);
+  useEffect(() => dispatch('projects/fetch'), [dispatch]);
 
   if (!ready || !projects || !projects.loaded) {
     return null;
   }
 
   const weekHotkeys = {
-    hotkeyPrev: hotkeys.timesheet.prevWeek,
-    hotkeyNext: hotkeys.timesheet.nextWeek,
-    hotkeyReset: hotkeys.timesheet.today
+    prev: { key: hotkeys.timesheet.prevWeek, handler: prevWeek },
+    next: { key: hotkeys.timesheet.nextWeek, handler: nextWeek },
+    reset: { key: hotkeys.timesheet.today, handler: resetDate }
   };
   const monthHotkeys = {
-    hotkeyPrev: hotkeys.timesheet.prevMonth,
-    hotkeyNext: hotkeys.timesheet.nextMonth,
-    hotkeyReset: hotkeys.timesheet.today
+    prev: { key: hotkeys.timesheet.prevMonth, handler: prevMonthMonday },
+    next: { key: hotkeys.timesheet.nextMonth, handler: nextMonthMonday },
+    reset: { key: '', handler: () => null }
   };
 
   return (
@@ -62,21 +62,8 @@ export default function Timesheet() {
       render={(props: FormikProps<ITimesheet>) => (
         <Form className={styles.container}>
           <header>
-            <ValueSlider
-              disabled={props.dirty}
-              onPrev={() => handleMonthChange(-1, props.resetForm)}
-              onNext={() => handleMonthChange(1, props.resetForm)}
-              value={monthLabel}
-              {...monthHotkeys}
-            />
-            <ValueSlider
-              disabled={props.dirty}
-              onPrev={() => handleWeekChange(-7, props.resetForm)}
-              onNext={() => handleWeekChange(7, props.resetForm)}
-              onReset={() => resetDate(props.resetForm)}
-              value="WEEK"
-              {...weekHotkeys}
-            />
+            <ValueSlider disabled={props.dirty} value={getMonthLabel(selectedDate)} hotkeys={monthHotkeys} />
+            <ValueSlider disabled={props.dirty} value="WEEK" hotkeys={weekHotkeys} />
           </header>
           <CalendarHeader startDate={selectedDate} />
           {Object.keys(timesheet.hours).map(projectId => (
@@ -124,26 +111,6 @@ export default function Timesheet() {
     }
     setTimesheet(timesheet);
     setAddingProject(false);
-  }
-
-  function handleMonthChange(increment: number, resetForm: Function) {
-    const newDate = new Date(selectedDate);
-    newDate.setMonth(selectedDate.getMonth() + increment);
-    setSelectedDate(lastMonday(newDate));
-    resetForm({});
-  }
-
-  function handleWeekChange(increment: number, resetForm: Function) {
-    const newDate = new Date(selectedDate);
-    newDate.setDate(selectedDate.getDate() + increment);
-    setSelectedDate(newDate);
-    resetForm({});
-  }
-
-  function resetDate(resetForm: Function) {
-    const newDate = new Date(initialDate);
-    setSelectedDate(newDate);
-    resetForm({});
   }
 
   async function submit() {

@@ -4,12 +4,12 @@ import styles from './styles.module.scss';
 import classes from '../../../utils/classes';
 
 type Props = {
-  keys: string | string[];
+  keys?: string | string[];
 };
 
 export default function HotkeyHelp({ keys }: Props) {
   const { help } = useStoreon('help');
-  if (!help) {
+  if (!help || !keys) {
     return null;
   }
 
