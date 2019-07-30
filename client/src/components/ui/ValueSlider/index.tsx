@@ -2,6 +2,7 @@ import React from 'react';
 import HotkeyHelp from '../../ui/HotkeyHelp';
 import styles from './styles.module.scss';
 import useHotkey from '../../../hooks/useHotkey';
+import classes from '../../../utils/classes';
 
 type HotkeyType = {
   key: string | string[];
@@ -9,6 +10,7 @@ type HotkeyType = {
 };
 
 type Props = {
+  className?: string;
   value: string;
   disabled?: boolean;
   hotkeys: {
@@ -18,14 +20,14 @@ type Props = {
   };
 };
 
-function ValueSlider({ disabled, value, hotkeys }: Props) {
+function ValueSlider({ className, disabled, value, hotkeys }: Props) {
   const { reset, prev, next } = hotkeys;
   useHotkey(reset.key, reset.handler);
   useHotkey(prev.key, prev.handler);
   useHotkey(next.key, next.handler);
 
   return (
-    <div className={styles.container}>
+    <div className={classes(styles.container, className)}>
       <button onClick={handlePrev} type="button" disabled={disabled}>
         <span>&lt;</span>
         <HotkeyHelp keys={prev.key} />

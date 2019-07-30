@@ -5,6 +5,7 @@ import classes from '../../../utils/classes';
 import ValueSlider, { useValueSlider } from '../../ui/ValueSlider';
 import hotkeys from '../../../hotkeys';
 import useProjects from './useProjects';
+import NewProject from './NewProject';
 
 const today = new Date();
 const initialDate = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -20,7 +21,10 @@ export default function Projects() {
   };
   return (
     <>
-      <ValueSlider value={label} hotkeys={projectHotkeys} />
+      <header className={styles.header}>
+        <ValueSlider value={label} hotkeys={projectHotkeys} className={styles.slider} />
+        <NewProject />
+      </header>
       <div className={classes(styles.container, loading && styles.loading)}>
         {projects.map((item: any, index: number) => (
           <div

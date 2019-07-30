@@ -12,7 +12,8 @@ export default {
   project: {
     nextMonth: ['right', 'l'],
     prevMonth: ['left', 'h'],
-    today: ['t', 'z z']
+    today: ['t', 'z z'],
+    new: 'n'
   },
   menu: {
     myTime: 'm',
