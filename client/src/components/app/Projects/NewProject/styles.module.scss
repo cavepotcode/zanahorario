@@ -1,0 +1,19 @@
+@import '../../../../styles/_palette';
+@import '../../../../styles/_variables';
+
+.container {
+  position: relative;
+
+  input {
+    border-radius: 6px;
+    border: 1px solid lightgray;
+    font-size: 12px;
+    margin: 0 4px;
+    padding: 4px;
+  }
+
+  button {
+    border: 0;
+    border-radius: $radius;
+  }
+}

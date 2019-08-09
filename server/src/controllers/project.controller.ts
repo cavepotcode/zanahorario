@@ -6,6 +6,7 @@ import { Log } from '../sdk/logs';
 import { ProjectDataInfo } from '../sdk/data_info/project/projectDataInfo';
 import { ProjectManager } from '../data_access/projectManager';
 import { ProjectService } from '../services/project.service';
+import { Project } from '../dto/project';
 
 @Authorize()
 @JsonController('/project')
@@ -18,22 +19,24 @@ export class ProjectController {
       const projects = await this.projectSvc.all();
       return new Response(ResponseCode.OK, '', projects);
     } catch (err) {
-      Log.logError('project/all', err);
+      Log.logError('project.all', err);
       return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);
     }
   }
 
-  @Put('/create')
-  public create(@Body() body: ProjectDataInfo) {
+  @Post('')
+  public async create(@Body() project: Project) {
     try {
-      return this.manager.create(body);
+      const { result, data } = await this.projectSvc.create(project);
+      const code = result === 'ok' ? ResponseCode.OK : ResponseCode.ERROR;
+      return new Response(code, result, data);
     } catch (err) {
-      Log.logError('project/create', err);
+      Log.logError('project.create', err);
       return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);
     }
   }
 
-  @Post('/update')
+  @Put('')
   public update(@Body() body: ProjectDataInfo) {
     try {
       return this.manager.update(body);

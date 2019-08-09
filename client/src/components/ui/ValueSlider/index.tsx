@@ -2,46 +2,58 @@ import React from 'react';
 import HotkeyHelp from '../../ui/HotkeyHelp';
 import styles from './styles.module.scss';
 import useHotkey from '../../../hooks/useHotkey';
+import classes from '../../../utils/classes';
 
-type Props = {
-  onNext: () => void;
-  onPrev: () => void;
-  value: string;
-  disabled?: boolean;
-  hotkeyNext: string | string[];
-  hotkeyPrev: string | string[];
-  hotkeyReset?: string | string[];
-  onReset?: () => void;
+type HotkeyType = {
+  key: string | string[];
+  handler: () => void;
 };
 
-function ValueSlider({ disabled, onReset, onPrev, onNext, value, hotkeyPrev, hotkeyNext, hotkeyReset }: Props) {
-  useHotkey(hotkeyReset, onReset);
-  useHotkey(hotkeyPrev, (e: any) => {
-    e.preventDefault();
-    if (!disabled) {
-      onPrev();
-    }
-  });
-  useHotkey(hotkeyNext, (e: any) => {
-    e.preventDefault();
-    if (!disabled) {
-      onNext();
-    }
-  });
+type Props = {
+  className?: string;
+  value: string;
+  disabled?: boolean;
+  hotkeys: {
+    prev: HotkeyType;
+    next: HotkeyType;
+    reset: HotkeyType;
+  };
+};
+
+function ValueSlider({ className, disabled, value, hotkeys }: Props) {
+  const { reset, prev, next } = hotkeys;
+  useHotkey(reset.key, reset.handler);
+  useHotkey(prev.key, prev.handler);
+  useHotkey(next.key, next.handler);
 
   return (
-    <div className={styles.container}>
-      <button onClick={onPrev} type="button" disabled={disabled}>
+    <div className={classes(styles.container, className)}>
+      <button onClick={handlePrev} type="button" disabled={disabled}>
         <span>&lt;</span>
-        <HotkeyHelp keys={hotkeyPrev} />
+        <HotkeyHelp keys={prev.key} />
       </button>
       <span>{value}</span>
-      <button onClick={onNext} type="button" disabled={disabled}>
+      <button onClick={handleNext} type="button" disabled={disabled}>
         <span>&gt;</span>
-        <HotkeyHelp keys={hotkeyNext} />
+        <HotkeyHelp keys={next.key} />
       </button>
     </div>
   );
+
+  function handlePrev(e: any) {
+    e.preventDefault();
+    if (!disabled) {
+      prev.handler();
+    }
+  }
+
+  function handleNext(e: any) {
+    e.preventDefault();
+    if (!disabled) {
+      next.handler();
+    }
+  }
 }
 
 export default React.memo(ValueSlider);
+export { useValueSlider } from './useValueSlider';
