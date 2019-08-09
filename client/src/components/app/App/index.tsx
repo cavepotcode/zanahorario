@@ -6,9 +6,12 @@ import Home from '../Home';
 import Login from '../Login';
 import SnackbarProvider from '../../Snackbar';
 import { store } from '../../../store';
-import './App.css';
+import hotkeys from '../../../hotkeys';
+import useHotkey from '../../../hooks/useHotkey';
 
 function App() {
+  useHotkey(hotkeys.help, () => store.dispatch('help/show'));
+
   return (
     <StoreContext.Provider value={store}>
       <SnackbarProvider>

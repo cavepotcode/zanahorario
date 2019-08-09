@@ -1,9 +1,9 @@
 import React from 'react';
-import Timesheet from './index';
-import api from '../../../utils/api';
-import * as utils from '../../../test-utils';
+import Timesheet from '../index';
+import api from '../../../../utils/api';
+import * as utils from '../../../../test-utils';
 
-jest.mock('../../../utils/api');
+jest.mock('../../../../utils/api');
 
 it('should fetch the timesheets', () => {
   utils.render(<Timesheet />);

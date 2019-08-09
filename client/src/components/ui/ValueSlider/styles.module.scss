@@ -6,14 +6,26 @@
 
   button {
     border: 0;
+    border-radius: 25px;
     background-color: $light-gray;
     cursor: pointer;
     font-size: inherit;
     outline: none;
+    overflow: visible;
+    position: relative;
     vertical-align: middle;
+
+    span {
+      line-height: 1;
+      vertical-align: top;
+    }
 
     &:disabled {
       cursor: default;
+    }
+
+    &:hover {
+      background-color: lightgray;
     }
   }
 }

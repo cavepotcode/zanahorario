@@ -7,6 +7,7 @@ import { apiUrls } from '../../../urls';
 import useSnackbar from '../../Snackbar/useSnackbar';
 import ValueSlider from '../../ui/ValueSlider';
 import { getMonthShortName } from '../../../utils/date';
+import hotkeys from '../../../hotkeys';
 
 const selectedDate = new Date();
 const label = getLabel(selectedDate);
@@ -44,12 +45,19 @@ export default function Projects() {
     fetch();
   }, [state.selectedDate, addNotification]);
 
+  const prev = React.useCallback(() => dispatch({ type: 'decrement' }), []);
+  const next = React.useCallback(() => dispatch({ type: 'increment' }), []);
+  const reset = React.useCallback(() => dispatch({ type: 'reset_date' }), []);
   return (
     <>
       <ValueSlider
-        onPrev={() => dispatch({ type: 'decrement' })}
-        onNext={() => dispatch({ type: 'increment' })}
+        onPrev={prev}
+        onNext={next}
+        onReset={reset}
         value={state.label}
+        hotkeyPrev={hotkeys.project.prevMonth}
+        hotkeyNext={hotkeys.project.nextMonth}
+        hotkeyReset={hotkeys.project.today}
       />
       <div className={classes(styles.container, state.loading && styles.loading)}>
         {state.projects.map((item: any, index: number) => (
@@ -98,6 +106,10 @@ function reducer(state: any, action: any) {
     case 'decrement': {
       const newDate = new Date(state.selectedDate);
       newDate.setMonth(newDate.getMonth() - 1);
+      return { ...state, selectedDate: newDate, label: getLabel(newDate) };
+    }
+    case 'reset_date': {
+      const newDate = new Date(initialState.selectedDate);
       return { ...state, selectedDate: newDate, label: getLabel(newDate) };
     }
     default:

@@ -9,6 +9,7 @@ import Projects from '../Projects';
 import Settings from '../Settings';
 import Timesheet from '../Timesheet';
 import Users from '../Users';
+import FooterTips from '../../ui/FooterTips';
 
 export default function Home() {
   return (
@@ -25,6 +26,7 @@ export default function Home() {
           <PublicRoute component={NotFound} path="*" default />
         </Router>
       </section>
+      <FooterTips />
     </div>
   );
 }

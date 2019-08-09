@@ -3,5 +3,8 @@ node_js:
   - 10
 install:
   - npm install
+branches:
+  only:
+    - "master"
 script:
   - npm run test
