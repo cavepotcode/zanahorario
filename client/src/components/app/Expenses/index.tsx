@@ -1,5 +1,3 @@
-import React from 'react';
+import Expenses from './Expenses';
 
-export default function Expenses() {
-  return <div>Expenses</div>;
-}
+export default Expenses;

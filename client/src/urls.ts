@@ -24,5 +24,12 @@ export const apiUrls = {
       const { year, month } = parseDate(date);
       return `${prefix}/user/?year=${year}&month=${month}`;
     }
+  },
+  expenses: {
+    index: `${prefix}/expense`,
+    expenses: (date: Date) => {
+      const { year, month } = parseDate(date);
+      return `${prefix}/expense/all?year=${year}&month=${month}`;
+    }
   }
 };

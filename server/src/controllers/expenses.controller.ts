@@ -1,32 +1,25 @@
-import { JsonController, Authorize, Get, Param, Put, Body } from 'kiwi-server';
+import { JsonController, Authorize, Get, Param, Put, Body, QueryParam } from 'kiwi-server';
 import { Response } from '../sdk/response';
 import { ResponseCode } from '../sdk/constants';
 import { environment } from '../../environment/environment';
 import { Log } from '../sdk/logs';
-import { ExpensesManager } from '../data_access/expensesManager';
-import { ExpenditureDataInfo } from '../sdk/data_info/expenditure/expenditureDataInfo';
+import { IDateFilter } from '../dto/date-filter.interface';
+import { AuthService } from '../services/auth.service';
+import { ExpenseService } from '../services/expense.service';
 
-@Authorize()
-@JsonController('/expenses')
+// @Authorize()
+@JsonController('/expense')
 export class ExpensesController {
-  constructor(private manager: ExpensesManager) {}
+  constructor(private expSvc: ExpenseService, private authSvc: AuthService) {}
 
-  @Get('/getAll/:month/:year')
-  public getAll(@Param('month') month: number, @Param('year') year: number) {
+  @Get('/all')
+  public async getExpenses(@QueryParam() params: IDateFilter) {
     try {
-      return this.manager.getAll(year, month);
+      const { year, month } = params;
+      const result = await this.expSvc.expense(year, month);
+      return new Response(ResponseCode.OK, '', result);
     } catch (err) {
-      Log.logError('category/getAll', err);
-      return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);
-    }
-  }
-
-  @Put('/create')
-  public create(@Body() body: ExpenditureDataInfo) {
-    try {
-      return this.manager.create(body);
-    } catch (err) {
-      Log.logError('expenses/create', err);
+      Log.logError('ExpensesController.getExpenses', err);
       return new Response(ResponseCode.ERROR, environment.common.genericErrorMessage);
     }
   }

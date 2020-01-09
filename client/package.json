@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.4.3",
+    "@material-ui/icons": "^4.4.3",
     "@reach/router": "^1.2.1",
+    "@types/jest": "^24.0.23",
     "formik": "^1.5.8",
     "immutability-helper": "^3.0.1",
     "mousetrap": "^1.6.3",

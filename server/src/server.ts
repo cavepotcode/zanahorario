@@ -37,7 +37,7 @@ const options: IKiwiOptions = {
     BillController
   ],
   authorization: validateAuthentication,
-  middlewares: [StaticMiddleware, RequestFilterMiddleware],
+  // middlewares: [StaticMiddleware, RequestFilterMiddleware],
   cors: {
     enabled: true,
     domains: ['']

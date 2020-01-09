@@ -1,0 +1,51 @@
+@import '../../../styles/palette';
+@import '../../../styles/variables';
+
+.container {
+  max-width: $max-width;
+  min-width: 580px;
+  margin: 16px auto;
+
+  .summary {
+    border: 1px solid $dark-gray;
+    border-radius: $radius;
+    padding: 16px;
+
+    .in {
+      color: $secondary;
+    }
+
+    .out {
+      color: $primary;
+    }
+
+    .image {
+      height: 150px;
+      width: 150px;
+      align-items: center;
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  .categories {
+    margin: 16px 0;
+
+    .item {
+      padding-right: 16px;
+      margin-bottom: 16px;
+
+      &:nth-child(4) {
+        padding-right: 0;
+      }
+    }
+
+    .item:nth-child(odd) {
+      color: $primary;
+    }
+
+    .item:nth-child(even) {
+      color: $secondary;
+    }
+  }
+}

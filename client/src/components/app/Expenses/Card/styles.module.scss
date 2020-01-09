@@ -1,0 +1,24 @@
+@import './../../../../styles/palette';
+@import './../../../../styles/variables';
+
+.container {
+  border: 1px solid $dark-gray;
+  border-radius: $radius;
+  padding: 24px;
+
+  .title {
+    cursor: pointer;
+
+    &:hover {
+      color: black;
+    }
+  }
+
+  .info {
+    margin-top: 16px;
+
+    .row {
+      margin-right: 0;
+    }
+  }
+}

@@ -279,39 +279,8 @@
                 ]
             }
         },
-        "/v1/expenses/getAll/:month/:year": {
+        "/v1/expense/all": {
             "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "month",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "Number"
-                        }
-                    },
-                    {
-                        "name": "year",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "Number"
-                        }
-                    }
-                ],
-                "tags": [
-                    "expenses"
-                ]
-            }
-        },
-        "/v1/expenses/create": {
-            "put": {
                 "consumes": [
                     "application/json"
                 ],
@@ -320,19 +289,8 @@
                 ],
                 "parameters": [],
                 "tags": [
-                    "expenses"
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ExpenditureDataInfo"
-                            }
-                        }
-                    },
-                    "description": "ExpenditureDataInfo",
-                    "required": true
-                }
+                    "expense"
+                ]
             }
         },
         "/v1/security/login": {

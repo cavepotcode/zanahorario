@@ -1,0 +1,20 @@
+@import '../../../../../styles/palette';
+@import '../../../../../styles/variables';
+
+.item {
+  margin-bottom: 8px;
+
+  span {
+    margin-right: 20px;
+  }
+
+  input {
+    border-radius: $radius;
+    border: 1px solid black;
+    background-color: white;
+    font-size: 18px;
+    padding: 4px;
+    width: 160px;
+    text-align: right;
+  }
+}

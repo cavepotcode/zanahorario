@@ -18,6 +18,7 @@ export class StaticMiddleware implements IMiddleware {
   }
 
   execute(request: IncomingMessage, response: ServerResponse, next: any) {
+    console.log('middleware');
     if (request.method !== 'GET' || request.url.includes(StaticMiddleware.config.prefix)) {
       return next();
     }
@@ -27,6 +28,7 @@ export class StaticMiddleware implements IMiddleware {
 
     stream.on('error', (err: any) => {
       if (!(err.statusCode < 500)) {
+        console.log('middleware', err);
         next(err);
         return;
       }
