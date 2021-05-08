@@ -11,7 +11,7 @@
     "mssql": "^4.2.1",
     "pg": "^7.11.0",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.2.18",
+    "typeorm": "^0.2.25",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
