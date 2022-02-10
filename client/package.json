@@ -7,7 +7,7 @@
     "formik": "^1.5.8",
     "immutability-helper": "^3.0.1",
     "mousetrap": "^1.6.3",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-notification": "^6.8.4",
